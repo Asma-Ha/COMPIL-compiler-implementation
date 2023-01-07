@@ -1,0 +1,80 @@
+# program hello
+
+$ to test something remove the comment marks chokran $ 
+
+def models{
+    $ fun fonction1 (g, h) : real {
+
+    } $ 
+
+    $ fun fonction2(g, pYg, o, h1) : str {
+        return(a);
+    } $
+
+    $ fun fonction3 () : bool {
+        var g : bool = 5;
+        var y : bool = g;
+        return(y);
+    } $
+};
+
+
+def main{
+
+    $ test : variable declaration $ 
+    $ var s : str;
+    var n : int = 5; $
+
+    $ test : constant declaration => pass $
+    $ const c : real = 6; 
+    const rl : real = 6.5; $
+      const c : bool = "true"; $ problem of next part $
+    
+
+    $ test : constant declaration => fail $
+    $  const bool : bool = Tr; $
+    $ const b : str; $
+    
+    $test : function call => pass $
+    $ sum(5, 6); 
+    mult(6, pos); $
+
+    $ test : assignment $
+    $ 
+        l = 5;
+        m = true;
+    $
+
+    $ test : condition 1 $
+    $ if (4) then {
+        var g : str;
+    } $
+
+    $ test : condition 2 $
+    $ if (4) then {
+        var g : str;
+    } else {
+        var l : bool = 6;
+    } $
+
+    $ test : list declaration and assignment $
+    $ var numlist{bool}[5]; $
+    $ var mixedlist{bool}[5] = ["hello", 5, 6]; $
+    $ var numlist{real}[5] = [7.6 , 5, 6]; $
+
+    $ test list element $
+    $ m = hello[6]; $
+    $ j = b["h"]; $ 
+    $ cutelist[5] = true; $ 
+    $ soup[v] = r; $ 
+
+
+
+
+    $ test $
+    $ var y : str = money(4,7, a); $
+
+};
+
+# end
+
