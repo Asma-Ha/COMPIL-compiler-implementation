@@ -1,15 +1,6 @@
 Terminals unused in grammar
 
    TYPES
-   AND
-   OR
-   NOT
-   SUP
-   SUPEQ
-   INF
-   INFEQ
-   EQ
-   NEQ
 
 
 Grammar
@@ -65,36 +56,43 @@ Grammar
    33 condition: KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART ins_seq CURLYEND
    34          | KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART ins_seq CURLYEND KEYELSE CURLYSTART ins_seq CURLYEND
 
-   35 EXP: IDENTIFIER PARENTESESTART arguments PARENTESEEND
-   36    | AEXP
+   35 EXP: TERM
+   36    | IDENTIFIER PARENTESESTART arguments PARENTESEEND
+   37    | EXP PLUS EXP
+   38    | EXP MINUS EXP
+   39    | EXP DIV EXP
+   40    | EXP MULT EXP
+   41    | MINUS EXP
+   42    | EXP SUP EXP
+   43    | EXP SUPEQ EXP
+   44    | EXP INF EXP
+   45    | EXP INFEQ EXP
+   46    | EXP EQ EXP
+   47    | EXP NEQ EXP
+   48    | EXP AND EXP
+   49    | EXP OR EXP
+   50    | NOT EXP
+   51    | PARENTESESTART EXP PARENTESEEND
 
-   37 AEXP: TERM
-   38     | AEXP PLUS AEXP
-   39     | AEXP MINUS AEXP
-   40     | AEXP DIV AEXP
-   41     | AEXP MULT AEXP
-   42     | PARENTESESTART AEXP PARENTESEEND
-   43     | MINUS AEXP
+   52 listelement: IDENTIFIER BRACKETSTART EXP BRACKETEND
 
-   44 listelement: IDENTIFIER BRACKETSTART EXP BRACKETEND
+   53 dectype: DECBOOL
+   54        | DECINT
+   55        | DECREAL
+   56        | DECSTR
 
-   45 dectype: DECBOOL
-   46        | DECINT
-   47        | DECREAL
-   48        | DECSTR
+   57 type: TYPEBOOL
+   58     | TYPEINT
+   59     | TYPEREAL
+   60     | TYPESTR
 
-   49 type: TYPEBOOL
-   50     | TYPEINT
-   51     | TYPEREAL
-   52     | TYPESTR
+   61 types: type
+   62      | types COMMA type
+   63      | /* empty */
 
-   53 types: type
-   54      | types COMMA type
-   55      | /* empty */
-
-   56 TERM: IDENTIFIER
-   57     | type
-   58     | listelement
+   64 TERM: IDENTIFIER
+   65     | type
+   66     | listelement
 
 
 Terminals, with rules where they appear
@@ -110,7 +108,7 @@ TYPES (263)
 MODELS (264) 1
 MAIN (265) 1
 END (266) 1 19 20 26 27 28 29 30 31 32
-IDENTIFIER (267) 2 5 7 8 20 26 27 28 29 30 31 35 44 56
+IDENTIFIER (267) 2 5 7 8 20 26 27 28 29 30 31 36 52 64
 ENDPROG (268) 1
 FUNKEY (269) 5
 ASSIGN (270) 27 29 30 31 32
@@ -119,34 +117,34 @@ KEYCONST (272) 30
 KEYIF (273) 33 34
 KEYELSE (274) 34
 KEYTHEN (275) 33 34
-TYPEINT (276) 50
-TYPEREAL (277) 51
-TYPEBOOL (278) 49
-TYPESTR (279) 52
+TYPEINT (276) 58
+TYPEREAL (277) 59
+TYPEBOOL (278) 57
+TYPESTR (279) 60
 TWODOTS (280) 5 26 27 30
-DECINT (281) 11 46
-DECREAL (282) 12 47
-DECBOOL (283) 10 45
-DECSTR (284) 13 48
-COMMA (285) 8 22 54
+DECINT (281) 11 54
+DECREAL (282) 12 55
+DECBOOL (283) 10 53
+DECSTR (284) 13 56
+COMMA (285) 8 22 62
 RETURNKEY (286) 19
-BRACKETSTART (287) 28 29 44
-BRACKETEND (288) 28 29 44
-PARENTESESTART (289) 5 19 20 33 34 35 42
-PARENTESEEND (290) 5 19 20 33 34 35 42
-AND (291)
-OR (292)
-NOT (293)
-PLUS (294) 38
-MINUS (295) 39 43
-MULT (296) 41
-DIV (297) 40
-SUP (298)
-SUPEQ (299)
-INF (300)
-INFEQ (301)
-EQ (302)
-NEQ (303)
+BRACKETSTART (287) 28 29 52
+BRACKETEND (288) 28 29 52
+PARENTESESTART (289) 5 19 20 33 34 36 51
+PARENTESEEND (290) 5 19 20 33 34 36 51
+AND (291) 48
+OR (292) 49
+NOT (293) 50
+PLUS (294) 37
+MINUS (295) 38 41
+MULT (296) 40
+DIV (297) 39
+SUP (298) 42
+SUPEQ (299) 43
+INF (300) 44
+INFEQ (301) 45
+EQ (302) 46
+NEQ (303) 47
 NEG (304)
 
 
@@ -173,7 +171,7 @@ return (58)
 funcall (59)
     on left: 20, on right: 18
 arguments (60)
-    on left: 21 22 23, on right: 20 22 35
+    on left: 21 22 23, on right: 20 22 36
 declaration (61)
     on left: 24 25, on right: 14
 vardeclaration (62)
@@ -185,19 +183,19 @@ assignment (64)
 condition (65)
     on left: 33 34, on right: 16
 EXP (66)
-    on left: 35 36, on right: 19 21 22 27 28 29 30 31 32 33 34 44
-AEXP (67)
-    on left: 37 38 39 40 41 42 43, on right: 36 38 39 40 41 42 43
-listelement (68)
-    on left: 44, on right: 32 58
-dectype (69)
-    on left: 45 46 47 48, on right: 26 27 28 29 30
-type (70)
-    on left: 49 50 51 52, on right: 53 54 57
-types (71)
-    on left: 53 54 55, on right: 29 54
-TERM (72)
-    on left: 56 57 58, on right: 37
+    on left: 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51, on right:
+    19 21 22 27 28 29 30 31 32 33 34 37 38 39 40 41 42 43 44 45 46
+    47 48 49 50 51 52
+listelement (67)
+    on left: 52, on right: 32 66
+dectype (68)
+    on left: 53 54 55 56, on right: 26 27 28 29 30
+type (69)
+    on left: 57 58 59 60, on right: 61 62 65
+types (70)
+    on left: 61 62 63, on right: 29 62
+TERM (71)
+    on left: 64 65 66, on right: 35
 
 
 State 0
@@ -449,7 +447,7 @@ State 30
 
    20 funcall: IDENTIFIER . PARENTESESTART arguments PARENTESEEND END
    31 assignment: IDENTIFIER . ASSIGN EXP END
-   44 listelement: IDENTIFIER . BRACKETSTART EXP BRACKETEND
+   52 listelement: IDENTIFIER . BRACKETSTART EXP BRACKETEND
 
     ASSIGN          shift, and go to state 46
     BRACKETSTART    shift, and go to state 47
@@ -609,10 +607,10 @@ State 46
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
-    EXP          go to state 64
-    AEXP         go to state 65
+    EXP          go to state 65
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
@@ -620,7 +618,7 @@ State 46
 
 State 47
 
-   44 listelement: IDENTIFIER BRACKETSTART . EXP BRACKETEND
+   52 listelement: IDENTIFIER BRACKETSTART . EXP BRACKETEND
 
     IDENTIFIER      shift, and go to state 57
     TYPEINT         shift, and go to state 58
@@ -628,10 +626,10 @@ State 47
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
     EXP          go to state 69
-    AEXP         go to state 65
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
@@ -647,13 +645,13 @@ State 48
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
     $default  reduce using rule 23 (arguments)
 
     arguments    go to state 70
     EXP          go to state 71
-    AEXP         go to state 65
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
@@ -688,10 +686,10 @@ State 51
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
     EXP          go to state 75
-    AEXP         go to state 65
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
@@ -707,10 +705,10 @@ State 52
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
     EXP          go to state 76
-    AEXP         go to state 65
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
@@ -740,10 +738,10 @@ State 55
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
     EXP          go to state 78
-    AEXP         go to state 65
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
@@ -758,57 +756,58 @@ State 56
 
 State 57
 
-   35 EXP: IDENTIFIER . PARENTESESTART arguments PARENTESEEND
-   44 listelement: IDENTIFIER . BRACKETSTART EXP BRACKETEND
-   56 TERM: IDENTIFIER .
+   36 EXP: IDENTIFIER . PARENTESESTART arguments PARENTESEEND
+   52 listelement: IDENTIFIER . BRACKETSTART EXP BRACKETEND
+   64 TERM: IDENTIFIER .
 
     BRACKETSTART    shift, and go to state 47
     PARENTESESTART  shift, and go to state 80
 
-    $default  reduce using rule 56 (TERM)
+    $default  reduce using rule 64 (TERM)
 
 
 State 58
 
-   50 type: TYPEINT .
+   58 type: TYPEINT .
 
-    $default  reduce using rule 50 (type)
+    $default  reduce using rule 58 (type)
 
 
 State 59
 
-   51 type: TYPEREAL .
+   59 type: TYPEREAL .
 
-    $default  reduce using rule 51 (type)
+    $default  reduce using rule 59 (type)
 
 
 State 60
 
-   49 type: TYPEBOOL .
+   57 type: TYPEBOOL .
 
-    $default  reduce using rule 49 (type)
+    $default  reduce using rule 57 (type)
 
 
 State 61
 
-   52 type: TYPESTR .
+   60 type: TYPESTR .
 
-    $default  reduce using rule 52 (type)
+    $default  reduce using rule 60 (type)
 
 
 State 62
 
-   42 AEXP: PARENTESESTART . AEXP PARENTESEEND
+   51 EXP: PARENTESESTART . EXP PARENTESEEND
 
-    IDENTIFIER      shift, and go to state 81
+    IDENTIFIER      shift, and go to state 57
     TYPEINT         shift, and go to state 58
     TYPEREAL        shift, and go to state 59
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
-    AEXP         go to state 82
+    EXP          go to state 81
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
@@ -816,17 +815,18 @@ State 62
 
 State 63
 
-   43 AEXP: MINUS . AEXP
+   50 EXP: NOT . EXP
 
-    IDENTIFIER      shift, and go to state 81
+    IDENTIFIER      shift, and go to state 57
     TYPEINT         shift, and go to state 58
     TYPEREAL        shift, and go to state 59
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
-    AEXP         go to state 83
+    EXP          go to state 82
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
@@ -834,53 +834,104 @@ State 63
 
 State 64
 
-   31 assignment: IDENTIFIER ASSIGN EXP . END
+   41 EXP: MINUS . EXP
 
-    END  shift, and go to state 84
+    IDENTIFIER      shift, and go to state 57
+    TYPEINT         shift, and go to state 58
+    TYPEREAL        shift, and go to state 59
+    TYPEBOOL        shift, and go to state 60
+    TYPESTR         shift, and go to state 61
+    PARENTESESTART  shift, and go to state 62
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
+
+    EXP          go to state 83
+    listelement  go to state 66
+    type         go to state 67
+    TERM         go to state 68
 
 
 State 65
 
-   36 EXP: AEXP .
-   38 AEXP: AEXP . PLUS AEXP
-   39     | AEXP . MINUS AEXP
-   40     | AEXP . DIV AEXP
-   41     | AEXP . MULT AEXP
+   31 assignment: IDENTIFIER ASSIGN EXP . END
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
 
-    PLUS   shift, and go to state 85
-    MINUS  shift, and go to state 86
-    MULT   shift, and go to state 87
-    DIV    shift, and go to state 88
-
-    $default  reduce using rule 36 (EXP)
+    END    shift, and go to state 84
+    AND    shift, and go to state 85
+    OR     shift, and go to state 86
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+    SUP    shift, and go to state 91
+    SUPEQ  shift, and go to state 92
+    INF    shift, and go to state 93
+    INFEQ  shift, and go to state 94
+    EQ     shift, and go to state 95
+    NEQ    shift, and go to state 96
 
 
 State 66
 
-   58 TERM: listelement .
+   66 TERM: listelement .
 
-    $default  reduce using rule 58 (TERM)
+    $default  reduce using rule 66 (TERM)
 
 
 State 67
 
-   57 TERM: type .
+   65 TERM: type .
 
-    $default  reduce using rule 57 (TERM)
+    $default  reduce using rule 65 (TERM)
 
 
 State 68
 
-   37 AEXP: TERM .
+   35 EXP: TERM .
 
-    $default  reduce using rule 37 (AEXP)
+    $default  reduce using rule 35 (EXP)
 
 
 State 69
 
-   44 listelement: IDENTIFIER BRACKETSTART EXP . BRACKETEND
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+   52 listelement: IDENTIFIER BRACKETSTART EXP . BRACKETEND
 
-    BRACKETEND  shift, and go to state 89
+    BRACKETEND  shift, and go to state 97
+    AND         shift, and go to state 85
+    OR          shift, and go to state 86
+    PLUS        shift, and go to state 87
+    MINUS       shift, and go to state 88
+    MULT        shift, and go to state 89
+    DIV         shift, and go to state 90
+    SUP         shift, and go to state 91
+    SUPEQ       shift, and go to state 92
+    INF         shift, and go to state 93
+    INFEQ       shift, and go to state 94
+    EQ          shift, and go to state 95
+    NEQ         shift, and go to state 96
 
 
 State 70
@@ -888,13 +939,38 @@ State 70
    20 funcall: IDENTIFIER PARENTESESTART arguments . PARENTESEEND END
    22 arguments: arguments . COMMA EXP
 
-    COMMA         shift, and go to state 90
-    PARENTESEEND  shift, and go to state 91
+    COMMA         shift, and go to state 98
+    PARENTESEEND  shift, and go to state 99
 
 
 State 71
 
    21 arguments: EXP .
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+
+    AND    shift, and go to state 85
+    OR     shift, and go to state 86
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+    SUP    shift, and go to state 91
+    SUPEQ  shift, and go to state 92
+    INF    shift, and go to state 93
+    INFEQ  shift, and go to state 94
+    EQ     shift, and go to state 95
+    NEQ    shift, and go to state 96
 
     $default  reduce using rule 21 (arguments)
 
@@ -904,12 +980,12 @@ State 72
    28 vardeclaration: KEYVAR IDENTIFIER CURLYSTART . dectype CURLYEND BRACKETSTART EXP BRACKETEND END
    29               | KEYVAR IDENTIFIER CURLYSTART . dectype CURLYEND BRACKETSTART EXP BRACKETEND ASSIGN BRACKETSTART types BRACKETEND END
 
-    DECINT   shift, and go to state 92
-    DECREAL  shift, and go to state 93
-    DECBOOL  shift, and go to state 94
-    DECSTR   shift, and go to state 95
+    DECINT   shift, and go to state 100
+    DECREAL  shift, and go to state 101
+    DECBOOL  shift, and go to state 102
+    DECSTR   shift, and go to state 103
 
-    dectype  go to state 96
+    dectype  go to state 104
 
 
 State 73
@@ -917,53 +993,125 @@ State 73
    26 vardeclaration: KEYVAR IDENTIFIER TWODOTS . dectype END
    27               | KEYVAR IDENTIFIER TWODOTS . dectype ASSIGN EXP END
 
-    DECINT   shift, and go to state 92
-    DECREAL  shift, and go to state 93
-    DECBOOL  shift, and go to state 94
-    DECSTR   shift, and go to state 95
+    DECINT   shift, and go to state 100
+    DECREAL  shift, and go to state 101
+    DECBOOL  shift, and go to state 102
+    DECSTR   shift, and go to state 103
 
-    dectype  go to state 97
+    dectype  go to state 105
 
 
 State 74
 
    30 constdeclaration: KEYCONST IDENTIFIER TWODOTS . dectype ASSIGN EXP END
 
-    DECINT   shift, and go to state 92
-    DECREAL  shift, and go to state 93
-    DECBOOL  shift, and go to state 94
-    DECSTR   shift, and go to state 95
+    DECINT   shift, and go to state 100
+    DECREAL  shift, and go to state 101
+    DECBOOL  shift, and go to state 102
+    DECSTR   shift, and go to state 103
 
-    dectype  go to state 98
+    dectype  go to state 106
 
 
 State 75
 
    33 condition: KEYIF PARENTESESTART EXP . PARENTESEEND KEYTHEN CURLYSTART ins_seq CURLYEND
    34          | KEYIF PARENTESESTART EXP . PARENTESEEND KEYTHEN CURLYSTART ins_seq CURLYEND KEYELSE CURLYSTART ins_seq CURLYEND
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
 
-    PARENTESEEND  shift, and go to state 99
+    PARENTESEEND  shift, and go to state 107
+    AND           shift, and go to state 85
+    OR            shift, and go to state 86
+    PLUS          shift, and go to state 87
+    MINUS         shift, and go to state 88
+    MULT          shift, and go to state 89
+    DIV           shift, and go to state 90
+    SUP           shift, and go to state 91
+    SUPEQ         shift, and go to state 92
+    INF           shift, and go to state 93
+    INFEQ         shift, and go to state 94
+    EQ            shift, and go to state 95
+    NEQ           shift, and go to state 96
 
 
 State 76
 
    19 return: RETURNKEY PARENTESESTART EXP . PARENTESEEND END
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
 
-    PARENTESEEND  shift, and go to state 100
+    PARENTESEEND  shift, and go to state 108
+    AND           shift, and go to state 85
+    OR            shift, and go to state 86
+    PLUS          shift, and go to state 87
+    MINUS         shift, and go to state 88
+    MULT          shift, and go to state 89
+    DIV           shift, and go to state 90
+    SUP           shift, and go to state 91
+    SUPEQ         shift, and go to state 92
+    INF           shift, and go to state 93
+    INFEQ         shift, and go to state 94
+    EQ            shift, and go to state 95
+    NEQ           shift, and go to state 96
 
 
 State 77
 
     1 program: header SECTDEFKEY MODELS CURLYSTART functions CURLYEND END SECTDEFKEY MAIN CURLYSTART ins_seq CURLYEND END . KEY ENDPROG
 
-    KEY  shift, and go to state 101
+    KEY  shift, and go to state 109
 
 
 State 78
 
    32 assignment: listelement ASSIGN EXP . END
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
 
-    END  shift, and go to state 102
+    END    shift, and go to state 110
+    AND    shift, and go to state 85
+    OR     shift, and go to state 86
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+    SUP    shift, and go to state 91
+    SUPEQ  shift, and go to state 92
+    INF    shift, and go to state 93
+    INFEQ  shift, and go to state 94
+    EQ     shift, and go to state 95
+    NEQ    shift, and go to state 96
 
 
 State 79
@@ -975,7 +1123,7 @@ State 79
 
 State 80
 
-   35 EXP: IDENTIFIER PARENTESESTART . arguments PARENTESEEND
+   36 EXP: IDENTIFIER PARENTESESTART . arguments PARENTESEEND
 
     IDENTIFIER      shift, and go to state 57
     TYPEINT         shift, and go to state 58
@@ -983,13 +1131,13 @@ State 80
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
     $default  reduce using rule 23 (arguments)
 
-    arguments    go to state 103
+    arguments    go to state 111
     EXP          go to state 71
-    AEXP         go to state 65
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
@@ -997,38 +1145,82 @@ State 80
 
 State 81
 
-   44 listelement: IDENTIFIER . BRACKETSTART EXP BRACKETEND
-   56 TERM: IDENTIFIER .
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+   51    | PARENTESESTART EXP . PARENTESEEND
 
-    BRACKETSTART  shift, and go to state 47
-
-    $default  reduce using rule 56 (TERM)
+    PARENTESEEND  shift, and go to state 112
+    AND           shift, and go to state 85
+    OR            shift, and go to state 86
+    PLUS          shift, and go to state 87
+    MINUS         shift, and go to state 88
+    MULT          shift, and go to state 89
+    DIV           shift, and go to state 90
+    SUP           shift, and go to state 91
+    SUPEQ         shift, and go to state 92
+    INF           shift, and go to state 93
+    INFEQ         shift, and go to state 94
+    EQ            shift, and go to state 95
+    NEQ           shift, and go to state 96
 
 
 State 82
 
-   38 AEXP: AEXP . PLUS AEXP
-   39     | AEXP . MINUS AEXP
-   40     | AEXP . DIV AEXP
-   41     | AEXP . MULT AEXP
-   42     | PARENTESESTART AEXP . PARENTESEEND
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+   50    | NOT EXP .
 
-    PARENTESEEND  shift, and go to state 104
-    PLUS          shift, and go to state 85
-    MINUS         shift, and go to state 86
-    MULT          shift, and go to state 87
-    DIV           shift, and go to state 88
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+    SUP    shift, and go to state 91
+    SUPEQ  shift, and go to state 92
+    INF    shift, and go to state 93
+    INFEQ  shift, and go to state 94
+    EQ     shift, and go to state 95
+    NEQ    shift, and go to state 96
+
+    $default  reduce using rule 50 (EXP)
 
 
 State 83
 
-   38 AEXP: AEXP . PLUS AEXP
-   39     | AEXP . MINUS AEXP
-   40     | AEXP . DIV AEXP
-   41     | AEXP . MULT AEXP
-   43     | MINUS AEXP .
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   41    | MINUS EXP .
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
 
-    $default  reduce using rule 43 (AEXP)
+    $default  reduce using rule 41 (EXP)
 
 
 State 84
@@ -1040,17 +1232,18 @@ State 84
 
 State 85
 
-   38 AEXP: AEXP PLUS . AEXP
+   48 EXP: EXP AND . EXP
 
-    IDENTIFIER      shift, and go to state 81
+    IDENTIFIER      shift, and go to state 57
     TYPEINT         shift, and go to state 58
     TYPEREAL        shift, and go to state 59
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
-    AEXP         go to state 105
+    EXP          go to state 113
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
@@ -1058,17 +1251,18 @@ State 85
 
 State 86
 
-   39 AEXP: AEXP MINUS . AEXP
+   49 EXP: EXP OR . EXP
 
-    IDENTIFIER      shift, and go to state 81
+    IDENTIFIER      shift, and go to state 57
     TYPEINT         shift, and go to state 58
     TYPEREAL        shift, and go to state 59
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
-    AEXP         go to state 106
+    EXP          go to state 114
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
@@ -1076,17 +1270,18 @@ State 86
 
 State 87
 
-   41 AEXP: AEXP MULT . AEXP
+   37 EXP: EXP PLUS . EXP
 
-    IDENTIFIER      shift, and go to state 81
+    IDENTIFIER      shift, and go to state 57
     TYPEINT         shift, and go to state 58
     TYPEREAL        shift, and go to state 59
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
-    AEXP         go to state 107
+    EXP          go to state 115
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
@@ -1094,17 +1289,18 @@ State 87
 
 State 88
 
-   40 AEXP: AEXP DIV . AEXP
+   38 EXP: EXP MINUS . EXP
 
-    IDENTIFIER      shift, and go to state 81
+    IDENTIFIER      shift, and go to state 57
     TYPEINT         shift, and go to state 58
     TYPEREAL        shift, and go to state 59
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
-    AEXP         go to state 108
+    EXP          go to state 116
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
@@ -1112,12 +1308,164 @@ State 88
 
 State 89
 
-   44 listelement: IDENTIFIER BRACKETSTART EXP BRACKETEND .
+   40 EXP: EXP MULT . EXP
 
-    $default  reduce using rule 44 (listelement)
+    IDENTIFIER      shift, and go to state 57
+    TYPEINT         shift, and go to state 58
+    TYPEREAL        shift, and go to state 59
+    TYPEBOOL        shift, and go to state 60
+    TYPESTR         shift, and go to state 61
+    PARENTESESTART  shift, and go to state 62
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
+
+    EXP          go to state 117
+    listelement  go to state 66
+    type         go to state 67
+    TERM         go to state 68
 
 
 State 90
+
+   39 EXP: EXP DIV . EXP
+
+    IDENTIFIER      shift, and go to state 57
+    TYPEINT         shift, and go to state 58
+    TYPEREAL        shift, and go to state 59
+    TYPEBOOL        shift, and go to state 60
+    TYPESTR         shift, and go to state 61
+    PARENTESESTART  shift, and go to state 62
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
+
+    EXP          go to state 118
+    listelement  go to state 66
+    type         go to state 67
+    TERM         go to state 68
+
+
+State 91
+
+   42 EXP: EXP SUP . EXP
+
+    IDENTIFIER      shift, and go to state 57
+    TYPEINT         shift, and go to state 58
+    TYPEREAL        shift, and go to state 59
+    TYPEBOOL        shift, and go to state 60
+    TYPESTR         shift, and go to state 61
+    PARENTESESTART  shift, and go to state 62
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
+
+    EXP          go to state 119
+    listelement  go to state 66
+    type         go to state 67
+    TERM         go to state 68
+
+
+State 92
+
+   43 EXP: EXP SUPEQ . EXP
+
+    IDENTIFIER      shift, and go to state 57
+    TYPEINT         shift, and go to state 58
+    TYPEREAL        shift, and go to state 59
+    TYPEBOOL        shift, and go to state 60
+    TYPESTR         shift, and go to state 61
+    PARENTESESTART  shift, and go to state 62
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
+
+    EXP          go to state 120
+    listelement  go to state 66
+    type         go to state 67
+    TERM         go to state 68
+
+
+State 93
+
+   44 EXP: EXP INF . EXP
+
+    IDENTIFIER      shift, and go to state 57
+    TYPEINT         shift, and go to state 58
+    TYPEREAL        shift, and go to state 59
+    TYPEBOOL        shift, and go to state 60
+    TYPESTR         shift, and go to state 61
+    PARENTESESTART  shift, and go to state 62
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
+
+    EXP          go to state 121
+    listelement  go to state 66
+    type         go to state 67
+    TERM         go to state 68
+
+
+State 94
+
+   45 EXP: EXP INFEQ . EXP
+
+    IDENTIFIER      shift, and go to state 57
+    TYPEINT         shift, and go to state 58
+    TYPEREAL        shift, and go to state 59
+    TYPEBOOL        shift, and go to state 60
+    TYPESTR         shift, and go to state 61
+    PARENTESESTART  shift, and go to state 62
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
+
+    EXP          go to state 122
+    listelement  go to state 66
+    type         go to state 67
+    TERM         go to state 68
+
+
+State 95
+
+   46 EXP: EXP EQ . EXP
+
+    IDENTIFIER      shift, and go to state 57
+    TYPEINT         shift, and go to state 58
+    TYPEREAL        shift, and go to state 59
+    TYPEBOOL        shift, and go to state 60
+    TYPESTR         shift, and go to state 61
+    PARENTESESTART  shift, and go to state 62
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
+
+    EXP          go to state 123
+    listelement  go to state 66
+    type         go to state 67
+    TERM         go to state 68
+
+
+State 96
+
+   47 EXP: EXP NEQ . EXP
+
+    IDENTIFIER      shift, and go to state 57
+    TYPEINT         shift, and go to state 58
+    TYPEREAL        shift, and go to state 59
+    TYPEBOOL        shift, and go to state 60
+    TYPESTR         shift, and go to state 61
+    PARENTESESTART  shift, and go to state 62
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
+
+    EXP          go to state 124
+    listelement  go to state 66
+    type         go to state 67
+    TERM         go to state 68
+
+
+State 97
+
+   52 listelement: IDENTIFIER BRACKETSTART EXP BRACKETEND .
+
+    $default  reduce using rule 52 (listelement)
+
+
+State 98
 
    22 arguments: arguments COMMA . EXP
 
@@ -1127,199 +1475,469 @@ State 90
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
-    EXP          go to state 109
-    AEXP         go to state 65
+    EXP          go to state 125
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
 
 
-State 91
+State 99
 
    20 funcall: IDENTIFIER PARENTESESTART arguments PARENTESEEND . END
 
-    END  shift, and go to state 110
-
-
-State 92
-
-   46 dectype: DECINT .
-
-    $default  reduce using rule 46 (dectype)
-
-
-State 93
-
-   47 dectype: DECREAL .
-
-    $default  reduce using rule 47 (dectype)
-
-
-State 94
-
-   45 dectype: DECBOOL .
-
-    $default  reduce using rule 45 (dectype)
-
-
-State 95
-
-   48 dectype: DECSTR .
-
-    $default  reduce using rule 48 (dectype)
-
-
-State 96
-
-   28 vardeclaration: KEYVAR IDENTIFIER CURLYSTART dectype . CURLYEND BRACKETSTART EXP BRACKETEND END
-   29               | KEYVAR IDENTIFIER CURLYSTART dectype . CURLYEND BRACKETSTART EXP BRACKETEND ASSIGN BRACKETSTART types BRACKETEND END
-
-    CURLYEND  shift, and go to state 111
-
-
-State 97
-
-   26 vardeclaration: KEYVAR IDENTIFIER TWODOTS dectype . END
-   27               | KEYVAR IDENTIFIER TWODOTS dectype . ASSIGN EXP END
-
-    END     shift, and go to state 112
-    ASSIGN  shift, and go to state 113
-
-
-State 98
-
-   30 constdeclaration: KEYCONST IDENTIFIER TWODOTS dectype . ASSIGN EXP END
-
-    ASSIGN  shift, and go to state 114
-
-
-State 99
-
-   33 condition: KEYIF PARENTESESTART EXP PARENTESEEND . KEYTHEN CURLYSTART ins_seq CURLYEND
-   34          | KEYIF PARENTESESTART EXP PARENTESEEND . KEYTHEN CURLYSTART ins_seq CURLYEND KEYELSE CURLYSTART ins_seq CURLYEND
-
-    KEYTHEN  shift, and go to state 115
+    END  shift, and go to state 126
 
 
 State 100
 
-   19 return: RETURNKEY PARENTESESTART EXP PARENTESEEND . END
+   54 dectype: DECINT .
 
-    END  shift, and go to state 116
+    $default  reduce using rule 54 (dectype)
 
 
 State 101
 
-    1 program: header SECTDEFKEY MODELS CURLYSTART functions CURLYEND END SECTDEFKEY MAIN CURLYSTART ins_seq CURLYEND END KEY . ENDPROG
+   55 dectype: DECREAL .
 
-    ENDPROG  shift, and go to state 117
+    $default  reduce using rule 55 (dectype)
 
 
 State 102
+
+   53 dectype: DECBOOL .
+
+    $default  reduce using rule 53 (dectype)
+
+
+State 103
+
+   56 dectype: DECSTR .
+
+    $default  reduce using rule 56 (dectype)
+
+
+State 104
+
+   28 vardeclaration: KEYVAR IDENTIFIER CURLYSTART dectype . CURLYEND BRACKETSTART EXP BRACKETEND END
+   29               | KEYVAR IDENTIFIER CURLYSTART dectype . CURLYEND BRACKETSTART EXP BRACKETEND ASSIGN BRACKETSTART types BRACKETEND END
+
+    CURLYEND  shift, and go to state 127
+
+
+State 105
+
+   26 vardeclaration: KEYVAR IDENTIFIER TWODOTS dectype . END
+   27               | KEYVAR IDENTIFIER TWODOTS dectype . ASSIGN EXP END
+
+    END     shift, and go to state 128
+    ASSIGN  shift, and go to state 129
+
+
+State 106
+
+   30 constdeclaration: KEYCONST IDENTIFIER TWODOTS dectype . ASSIGN EXP END
+
+    ASSIGN  shift, and go to state 130
+
+
+State 107
+
+   33 condition: KEYIF PARENTESESTART EXP PARENTESEEND . KEYTHEN CURLYSTART ins_seq CURLYEND
+   34          | KEYIF PARENTESESTART EXP PARENTESEEND . KEYTHEN CURLYSTART ins_seq CURLYEND KEYELSE CURLYSTART ins_seq CURLYEND
+
+    KEYTHEN  shift, and go to state 131
+
+
+State 108
+
+   19 return: RETURNKEY PARENTESESTART EXP PARENTESEEND . END
+
+    END  shift, and go to state 132
+
+
+State 109
+
+    1 program: header SECTDEFKEY MODELS CURLYSTART functions CURLYEND END SECTDEFKEY MAIN CURLYSTART ins_seq CURLYEND END KEY . ENDPROG
+
+    ENDPROG  shift, and go to state 133
+
+
+State 110
 
    32 assignment: listelement ASSIGN EXP END .
 
     $default  reduce using rule 32 (assignment)
 
 
-State 103
+State 111
 
    22 arguments: arguments . COMMA EXP
-   35 EXP: IDENTIFIER PARENTESESTART arguments . PARENTESEEND
+   36 EXP: IDENTIFIER PARENTESESTART arguments . PARENTESEEND
 
-    COMMA         shift, and go to state 90
-    PARENTESEEND  shift, and go to state 118
-
-
-State 104
-
-   42 AEXP: PARENTESESTART AEXP PARENTESEEND .
-
-    $default  reduce using rule 42 (AEXP)
+    COMMA         shift, and go to state 98
+    PARENTESEEND  shift, and go to state 134
 
 
-State 105
+State 112
 
-   38 AEXP: AEXP . PLUS AEXP
-   38     | AEXP PLUS AEXP .
-   39     | AEXP . MINUS AEXP
-   40     | AEXP . DIV AEXP
-   41     | AEXP . MULT AEXP
+   51 EXP: PARENTESESTART EXP PARENTESEEND .
 
-    MULT  shift, and go to state 87
-    DIV   shift, and go to state 88
-
-    $default  reduce using rule 38 (AEXP)
+    $default  reduce using rule 51 (EXP)
 
 
-State 106
+State 113
 
-   38 AEXP: AEXP . PLUS AEXP
-   39     | AEXP . MINUS AEXP
-   39     | AEXP MINUS AEXP .
-   40     | AEXP . DIV AEXP
-   41     | AEXP . MULT AEXP
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   48    | EXP AND EXP .
+   49    | EXP . OR EXP
 
-    MULT  shift, and go to state 87
-    DIV   shift, and go to state 88
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+    SUP    shift, and go to state 91
+    SUPEQ  shift, and go to state 92
+    INF    shift, and go to state 93
+    INFEQ  shift, and go to state 94
+    EQ     shift, and go to state 95
+    NEQ    shift, and go to state 96
 
-    $default  reduce using rule 39 (AEXP)
-
-
-State 107
-
-   38 AEXP: AEXP . PLUS AEXP
-   39     | AEXP . MINUS AEXP
-   40     | AEXP . DIV AEXP
-   41     | AEXP . MULT AEXP
-   41     | AEXP MULT AEXP .
-
-    $default  reduce using rule 41 (AEXP)
-
-
-State 108
-
-   38 AEXP: AEXP . PLUS AEXP
-   39     | AEXP . MINUS AEXP
-   40     | AEXP . DIV AEXP
-   40     | AEXP DIV AEXP .
-   41     | AEXP . MULT AEXP
-
-    $default  reduce using rule 40 (AEXP)
+    $default  reduce using rule 48 (EXP)
 
 
-State 109
+State 114
+
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+   49    | EXP OR EXP .
+
+    AND    shift, and go to state 85
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+    SUP    shift, and go to state 91
+    SUPEQ  shift, and go to state 92
+    INF    shift, and go to state 93
+    INFEQ  shift, and go to state 94
+    EQ     shift, and go to state 95
+    NEQ    shift, and go to state 96
+
+    $default  reduce using rule 49 (EXP)
+
+
+State 115
+
+   37 EXP: EXP . PLUS EXP
+   37    | EXP PLUS EXP .
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+
+    MULT  shift, and go to state 89
+    DIV   shift, and go to state 90
+
+    $default  reduce using rule 37 (EXP)
+
+
+State 116
+
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   38    | EXP MINUS EXP .
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+
+    MULT  shift, and go to state 89
+    DIV   shift, and go to state 90
+
+    $default  reduce using rule 38 (EXP)
+
+
+State 117
+
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   40    | EXP MULT EXP .
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+
+    $default  reduce using rule 40 (EXP)
+
+
+State 118
+
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   39    | EXP DIV EXP .
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+
+    $default  reduce using rule 39 (EXP)
+
+
+State 119
+
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   42    | EXP SUP EXP .
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+    EQ     shift, and go to state 95
+    NEQ    shift, and go to state 96
+
+    $default  reduce using rule 42 (EXP)
+
+
+State 120
+
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   43    | EXP SUPEQ EXP .
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+    EQ     shift, and go to state 95
+    NEQ    shift, and go to state 96
+
+    $default  reduce using rule 43 (EXP)
+
+
+State 121
+
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   44    | EXP INF EXP .
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+    EQ     shift, and go to state 95
+    NEQ    shift, and go to state 96
+
+    $default  reduce using rule 44 (EXP)
+
+
+State 122
+
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   45    | EXP INFEQ EXP .
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+    EQ     shift, and go to state 95
+    NEQ    shift, and go to state 96
+
+    $default  reduce using rule 45 (EXP)
+
+
+State 123
+
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   46    | EXP EQ EXP .
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+
+    $default  reduce using rule 46 (EXP)
+
+
+State 124
+
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   47    | EXP NEQ EXP .
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+
+    $default  reduce using rule 47 (EXP)
+
+
+State 125
 
    22 arguments: arguments COMMA EXP .
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
+
+    AND    shift, and go to state 85
+    OR     shift, and go to state 86
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+    SUP    shift, and go to state 91
+    SUPEQ  shift, and go to state 92
+    INF    shift, and go to state 93
+    INFEQ  shift, and go to state 94
+    EQ     shift, and go to state 95
+    NEQ    shift, and go to state 96
 
     $default  reduce using rule 22 (arguments)
 
 
-State 110
+State 126
 
    20 funcall: IDENTIFIER PARENTESESTART arguments PARENTESEEND END .
 
     $default  reduce using rule 20 (funcall)
 
 
-State 111
+State 127
 
    28 vardeclaration: KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND . BRACKETSTART EXP BRACKETEND END
    29               | KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND . BRACKETSTART EXP BRACKETEND ASSIGN BRACKETSTART types BRACKETEND END
 
-    BRACKETSTART  shift, and go to state 119
+    BRACKETSTART  shift, and go to state 135
 
 
-State 112
+State 128
 
    26 vardeclaration: KEYVAR IDENTIFIER TWODOTS dectype END .
 
     $default  reduce using rule 26 (vardeclaration)
 
 
-State 113
+State 129
 
    27 vardeclaration: KEYVAR IDENTIFIER TWODOTS dectype ASSIGN . EXP END
 
@@ -1329,16 +1947,16 @@ State 113
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
-    EXP          go to state 120
-    AEXP         go to state 65
+    EXP          go to state 136
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
 
 
-State 114
+State 130
 
    30 constdeclaration: KEYCONST IDENTIFIER TWODOTS dectype ASSIGN . EXP END
 
@@ -1348,45 +1966,45 @@ State 114
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
-    EXP          go to state 121
-    AEXP         go to state 65
+    EXP          go to state 137
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
 
 
-State 115
+State 131
 
    33 condition: KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN . CURLYSTART ins_seq CURLYEND
    34          | KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN . CURLYSTART ins_seq CURLYEND KEYELSE CURLYSTART ins_seq CURLYEND
 
-    CURLYSTART  shift, and go to state 122
+    CURLYSTART  shift, and go to state 138
 
 
-State 116
+State 132
 
    19 return: RETURNKEY PARENTESESTART EXP PARENTESEEND END .
 
     $default  reduce using rule 19 (return)
 
 
-State 117
+State 133
 
     1 program: header SECTDEFKEY MODELS CURLYSTART functions CURLYEND END SECTDEFKEY MAIN CURLYSTART ins_seq CURLYEND END KEY ENDPROG .
 
     $default  reduce using rule 1 (program)
 
 
-State 118
+State 134
 
-   35 EXP: IDENTIFIER PARENTESESTART arguments PARENTESEEND .
+   36 EXP: IDENTIFIER PARENTESESTART arguments PARENTESEEND .
 
-    $default  reduce using rule 35 (EXP)
+    $default  reduce using rule 36 (EXP)
 
 
-State 119
+State 135
 
    28 vardeclaration: KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART . EXP BRACKETEND END
    29               | KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART . EXP BRACKETEND ASSIGN BRACKETSTART types BRACKETEND END
@@ -1397,30 +2015,78 @@ State 119
     TYPEBOOL        shift, and go to state 60
     TYPESTR         shift, and go to state 61
     PARENTESESTART  shift, and go to state 62
-    MINUS           shift, and go to state 63
+    NOT             shift, and go to state 63
+    MINUS           shift, and go to state 64
 
-    EXP          go to state 123
-    AEXP         go to state 65
+    EXP          go to state 139
     listelement  go to state 66
     type         go to state 67
     TERM         go to state 68
 
 
-State 120
+State 136
 
    27 vardeclaration: KEYVAR IDENTIFIER TWODOTS dectype ASSIGN EXP . END
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
 
-    END  shift, and go to state 124
+    END    shift, and go to state 140
+    AND    shift, and go to state 85
+    OR     shift, and go to state 86
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+    SUP    shift, and go to state 91
+    SUPEQ  shift, and go to state 92
+    INF    shift, and go to state 93
+    INFEQ  shift, and go to state 94
+    EQ     shift, and go to state 95
+    NEQ    shift, and go to state 96
 
 
-State 121
+State 137
 
    30 constdeclaration: KEYCONST IDENTIFIER TWODOTS dectype ASSIGN EXP . END
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
 
-    END  shift, and go to state 125
+    END    shift, and go to state 141
+    AND    shift, and go to state 85
+    OR     shift, and go to state 86
+    PLUS   shift, and go to state 87
+    MINUS  shift, and go to state 88
+    MULT   shift, and go to state 89
+    DIV    shift, and go to state 90
+    SUP    shift, and go to state 91
+    SUPEQ  shift, and go to state 92
+    INF    shift, and go to state 93
+    INFEQ  shift, and go to state 94
+    EQ     shift, and go to state 95
+    NEQ    shift, and go to state 96
 
 
-State 122
+State 138
 
    33 condition: KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART . ins_seq CURLYEND
    34          | KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART . ins_seq CURLYEND KEYELSE CURLYSTART ins_seq CURLYEND
@@ -1433,7 +2099,7 @@ State 122
 
     $default  reduce using rule 3 (ins_seq)
 
-    ins_seq           go to state 126
+    ins_seq           go to state 142
     instruction       go to state 36
     return            go to state 37
     funcall           go to state 38
@@ -1445,77 +2111,101 @@ State 122
     listelement       go to state 44
 
 
-State 123
+State 139
 
    28 vardeclaration: KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP . BRACKETEND END
    29               | KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP . BRACKETEND ASSIGN BRACKETSTART types BRACKETEND END
+   37 EXP: EXP . PLUS EXP
+   38    | EXP . MINUS EXP
+   39    | EXP . DIV EXP
+   40    | EXP . MULT EXP
+   42    | EXP . SUP EXP
+   43    | EXP . SUPEQ EXP
+   44    | EXP . INF EXP
+   45    | EXP . INFEQ EXP
+   46    | EXP . EQ EXP
+   47    | EXP . NEQ EXP
+   48    | EXP . AND EXP
+   49    | EXP . OR EXP
 
-    BRACKETEND  shift, and go to state 127
+    BRACKETEND  shift, and go to state 143
+    AND         shift, and go to state 85
+    OR          shift, and go to state 86
+    PLUS        shift, and go to state 87
+    MINUS       shift, and go to state 88
+    MULT        shift, and go to state 89
+    DIV         shift, and go to state 90
+    SUP         shift, and go to state 91
+    SUPEQ       shift, and go to state 92
+    INF         shift, and go to state 93
+    INFEQ       shift, and go to state 94
+    EQ          shift, and go to state 95
+    NEQ         shift, and go to state 96
 
 
-State 124
+State 140
 
    27 vardeclaration: KEYVAR IDENTIFIER TWODOTS dectype ASSIGN EXP END .
 
     $default  reduce using rule 27 (vardeclaration)
 
 
-State 125
+State 141
 
    30 constdeclaration: KEYCONST IDENTIFIER TWODOTS dectype ASSIGN EXP END .
 
     $default  reduce using rule 30 (constdeclaration)
 
 
-State 126
+State 142
 
    33 condition: KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART ins_seq . CURLYEND
    34          | KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART ins_seq . CURLYEND KEYELSE CURLYSTART ins_seq CURLYEND
 
-    CURLYEND  shift, and go to state 128
+    CURLYEND  shift, and go to state 144
 
 
-State 127
+State 143
 
    28 vardeclaration: KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND . END
    29               | KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND . ASSIGN BRACKETSTART types BRACKETEND END
 
-    END     shift, and go to state 129
-    ASSIGN  shift, and go to state 130
+    END     shift, and go to state 145
+    ASSIGN  shift, and go to state 146
 
 
-State 128
+State 144
 
    33 condition: KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART ins_seq CURLYEND .
    34          | KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART ins_seq CURLYEND . KEYELSE CURLYSTART ins_seq CURLYEND
 
-    KEYELSE  shift, and go to state 131
+    KEYELSE  shift, and go to state 147
 
     $default  reduce using rule 33 (condition)
 
 
-State 129
+State 145
 
    28 vardeclaration: KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND END .
 
     $default  reduce using rule 28 (vardeclaration)
 
 
-State 130
+State 146
 
    29 vardeclaration: KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND ASSIGN . BRACKETSTART types BRACKETEND END
 
-    BRACKETSTART  shift, and go to state 132
+    BRACKETSTART  shift, and go to state 148
 
 
-State 131
+State 147
 
    34 condition: KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART ins_seq CURLYEND KEYELSE . CURLYSTART ins_seq CURLYEND
 
-    CURLYSTART  shift, and go to state 133
+    CURLYSTART  shift, and go to state 149
 
 
-State 132
+State 148
 
    29 vardeclaration: KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND ASSIGN BRACKETSTART . types BRACKETEND END
 
@@ -1524,13 +2214,13 @@ State 132
     TYPEBOOL  shift, and go to state 60
     TYPESTR   shift, and go to state 61
 
-    $default  reduce using rule 55 (types)
+    $default  reduce using rule 63 (types)
 
-    type   go to state 134
-    types  go to state 135
+    type   go to state 150
+    types  go to state 151
 
 
-State 133
+State 149
 
    34 condition: KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART ins_seq CURLYEND KEYELSE CURLYSTART . ins_seq CURLYEND
 
@@ -1542,7 +2232,7 @@ State 133
 
     $default  reduce using rule 3 (ins_seq)
 
-    ins_seq           go to state 136
+    ins_seq           go to state 152
     instruction       go to state 36
     return            go to state 37
     funcall           go to state 38
@@ -1554,63 +2244,63 @@ State 133
     listelement       go to state 44
 
 
-State 134
+State 150
 
-   53 types: type .
+   61 types: type .
 
-    $default  reduce using rule 53 (types)
+    $default  reduce using rule 61 (types)
 
 
-State 135
+State 151
 
    29 vardeclaration: KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND ASSIGN BRACKETSTART types . BRACKETEND END
-   54 types: types . COMMA type
+   62 types: types . COMMA type
 
-    COMMA       shift, and go to state 137
-    BRACKETEND  shift, and go to state 138
+    COMMA       shift, and go to state 153
+    BRACKETEND  shift, and go to state 154
 
 
-State 136
+State 152
 
    34 condition: KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART ins_seq CURLYEND KEYELSE CURLYSTART ins_seq . CURLYEND
 
-    CURLYEND  shift, and go to state 139
+    CURLYEND  shift, and go to state 155
 
 
-State 137
+State 153
 
-   54 types: types COMMA . type
+   62 types: types COMMA . type
 
     TYPEINT   shift, and go to state 58
     TYPEREAL  shift, and go to state 59
     TYPEBOOL  shift, and go to state 60
     TYPESTR   shift, and go to state 61
 
-    type  go to state 140
+    type  go to state 156
 
 
-State 138
+State 154
 
    29 vardeclaration: KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND ASSIGN BRACKETSTART types BRACKETEND . END
 
-    END  shift, and go to state 141
+    END  shift, and go to state 157
 
 
-State 139
+State 155
 
    34 condition: KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART ins_seq CURLYEND KEYELSE CURLYSTART ins_seq CURLYEND .
 
     $default  reduce using rule 34 (condition)
 
 
-State 140
+State 156
 
-   54 types: types COMMA type .
+   62 types: types COMMA type .
 
-    $default  reduce using rule 54 (types)
+    $default  reduce using rule 62 (types)
 
 
-State 141
+State 157
 
    29 vardeclaration: KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND ASSIGN BRACKETSTART types BRACKETEND END .
 

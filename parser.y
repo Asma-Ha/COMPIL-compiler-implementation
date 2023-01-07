@@ -45,10 +45,14 @@ int yyerror(const char *s);
 %token PLUS MINUS MULT DIV
 %token SUP SUPEQ INF INFEQ EQ NEQ
 
+%left OR
+%left AND
+%left NOT
+%left SUP SUPEQ INF INFEQ
+%left EQ NEQ
 %left PLUS MINUS
 %left MULT DIV
 %left NEG
-
 %start program
 
 
@@ -138,20 +142,22 @@ condition :
     ;
 
 EXP : 
-     IDENTIFIER PARENTESESTART arguments PARENTESEEND /* function call */
-     | AEXP
+     TERM
+     | IDENTIFIER PARENTESESTART arguments PARENTESEEND /* function call */
+     | EXP PLUS EXP | EXP MINUS EXP
+     | EXP DIV EXP | EXP MULT EXP
+     | MINUS EXP %prec NEG
+     | EXP SUP EXP
+     | EXP SUPEQ EXP
+     | EXP INF EXP
+     | EXP INFEQ EXP
+     | EXP EQ EXP
+     | EXP NEQ EXP
+     | EXP AND EXP
+     | EXP OR EXP 
+     | NOT EXP
+     | PARENTESESTART EXP PARENTESEEND
     ;
-
-AEXP : 
-    TERM 
-    | AEXP PLUS AEXP
-    | AEXP MINUS AEXP
-    | AEXP DIV AEXP
-    | AEXP MULT AEXP
-    | PARENTESESTART AEXP PARENTESEEND
-    | MINUS AEXP %prec NEG
-    ;
-
 listelement :
     IDENTIFIER BRACKETSTART EXP BRACKETEND
     ;
