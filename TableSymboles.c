@@ -1,41 +1,24 @@
+#include "TableSymboles.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
 
-typedef struct NodeInfo
-{
-    char Nom[255];
-    char Type[255]; //A revoir 
-    int size;
-    int ligneDeclaration; 
-    int address; 
-} NODEINFO;
-
-//Structure d'une entrée 
-typedef struct NodeSymTable
-{
-    struct NodeInfo info;
-    struct NodeSymTable *next;
-} NODESYMTABLE;
-
-//Structure d'une table des Symboles 
-typedef struct SymTable
-{
-    struct NodeSymTable *head;
-    struct NodeSymTable *tail;
-    int size;
-} SYMTABLE;
+//Fonction d'initialisation d'une TS
+SYMTABLE *initialiserTS(){
+    SYMTABLE *symboleTable = malloc(sizeof(SYMTABLE));
+    symboleTable->head = NULL;
+    symboleTable->size = 0;
+    printf("initialisaiton done\n");
+    return symboleTable;
+}
 
 
 //Fonction de recherche 
-NODESYMTABLE *rechercher(SYMTABLE *TS, char nom[]) {
-    if(TS == NULL) {
-        return NULL;
-    }
+NODESYMTABLE *rechercher(SYMTABLE *TS, char nom[]){
     NODESYMTABLE *n = TS->head;
     while (n != NULL) {
-        if(strcmp(n->info.Nom, nom) == 0) {
+        if(strcmp(n->info.Token, nom) == 0) {
             return n;
         } else {
             n = n->next;
@@ -43,72 +26,17 @@ NODESYMTABLE *rechercher(SYMTABLE *TS, char nom[]) {
     }
 }
 
-//Fonction de suppression d'un noeud
-SYMTABLE* supprimer(SYMTABLE *TS, char nom[]) {
-    NODESYMTABLE *n = rechercher(TS, nom);
-    if(n == NULL) {
-        printf("ERROR, cant find node \n");
-        return TS;
-    }
-    NODESYMTABLE *head = TS->head;
-
-    if(n == head) {
-        TS->head = head->next;
-        free(n);
-        return TS;
-    }
-
-    else {
-        NODESYMTABLE *tmp = head;
-        while(tmp != NULL) 
-        {
-            if (tmp->next == n) {
-                tmp->next = n->next;
-                free(n);
-                return TS;
-            }
-            else {
-                tmp = tmp->next;
-            }
-        }
-    }
-}
-
-
-//Fonction d'initialisation d'une TS
-SYMTABLE *InitialiserTS(){
-    struct SymTable *symboleTable = malloc(sizeof(SYMTABLE));
-    symboleTable->head = NULL;
-    symboleTable->tail = NULL;
-    symboleTable->size = 0;
-    //printf("initialisaiton done\n");
-    return symboleTable;
-}
-
 
 //Fonction d'insertion
-SYMTABLE *inserer(SYMTABLE *TS, char nom[], char type[]){
-    if(TS == NULL) {
-        TS = InitialiserTS();
-        //printf("hello new token :) \n");
-        NODESYMTABLE *head = malloc(sizeof(NODESYMTABLE));
-        strcpy(head->info.Nom, nom);
-        strcpy(head->info.Type, type);
-        TS->head = head;
-        TS->tail = head;
-        TS->size = 1;
-        return TS;
-    }
-    else {
-        //printf("another token :) \n");
-        NODESYMTABLE *node = malloc(sizeof(NODESYMTABLE));
-        strcpy(node->info.Nom, nom);
-        strcpy(node->info.Type, type);
-        TS->tail->next = node;
-        TS->tail = node;
-        TS->size++;
-        return TS;
-    }
+NODESYMTABLE *inserer(SYMTABLE *TS, char nom[]){
+    NODESYMTABLE *node = malloc(sizeof(NODESYMTABLE));
+    strcpy(node->info.Token, nom);
+    node->info.Type = -1;
+    node->info.TokenType = -1;
+    node->next = TS->head;
+    TS->head = node;
+    TS->size++;
+    return node;
 }
 
 
@@ -126,12 +54,48 @@ int supprimerTS(SYMTABLE *TS){
 
 //Affichage 
 void afficherTS(SYMTABLE *TS) {
+    printf("\n \nTable des symboles \n \n");
     NODESYMTABLE *n = TS->head;
     int i = 0;
     while(n != NULL) {
-        printf("%s (%d) => ", n->info.Nom, i);
+        printf("(%d) %s : %d %d ", i, n->info.Token, n->info.Type, n->info.TokenType);
+        printf("\n");
         i++;
         n = n->next;
     }
-    printf("\n");
+    printf("\n\n");
+}
+
+//get the array of values of an array
+ARRAYCONTENT *accessArray(SYMTABLE *TS, char nomArray[]){
+    NODESYMTABLE *node = rechercher(TS, nomArray);
+    return node->info.arraycontent;
+    
+}
+
+void setType(SYMTABLE *TS, char name[], int type){
+    NODESYMTABLE *TOKEN = rechercher(TS, name);
+    if(TOKEN != NULL){
+        TOKEN->info.Type = type;
+    }
+    return;
+}
+
+
+/*void setType(NODESYMTABLE **TOKEN, int type){
+    if(*TOKEN != NULL){
+        (*TOKEN)->info.Type = type;
+        printf("done here");
+        
+    }
+    return;
+}*/
+
+
+void setTokenType(SYMTABLE *TS, char name[], int TokenType){
+    NODESYMTABLE *TOKEN = rechercher(TS, name);
+    if(TOKEN != NULL){
+        TOKEN->info.TokenType = TokenType;
+    }
+    return;
 }

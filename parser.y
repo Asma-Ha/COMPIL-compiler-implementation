@@ -1,41 +1,48 @@
 %{
+#include "TableSymboles.h"
 #include <stdio.h>
 #include <stdlib.h>
-extern FILE *yyin;
 int yylex();
+extern FILE *yyin;
 int yyerror(const char *s);
 
+SYMTABLE *TS;
 %}
-
 
 %union {
     double real;
     int integer;
+    int boolean;
+    NODESYMTABLE *id;
     char *string;
-    char type[255];
+    int type;
 }
+
 
 %token KEY
 %token PROGKEY
 %token SECTDEFKEY
 %token CURLYSTART
 %token CURLYEND
-%token TYPES
 %token MODELS
 %token MAIN
 %token END
-%token IDENTIFIER
-%token ENDPROG
-%token FUNKEY
+%token <id>IDENTIFIER
+%token <type>ENDPROG
+%token <type>KEYFUN
+token KEYARRAY
 %token ASSIGN
-%token KEYVAR
-%token KEYCONST
+%token <type>KEYVAR
+%token <type>KEYCONST
 %token KEYIF
 %token KEYELSE
 %token KEYTHEN
 %token TYPEINT TYPEREAL TYPEBOOL TYPESTR
 %token TWODOTS
-%token  DECINT DECREAL DECBOOL DECSTR
+%token DECINT 
+%token DECREAL 
+%token DECBOOL 
+%token DECSTR
 %token COMMA
 %token RETURNKEY
 %token BRACKETSTART
@@ -44,7 +51,7 @@ int yyerror(const char *s);
 %token AND OR NOT
 %token PLUS MINUS MULT DIV
 %token SUP SUPEQ INF INFEQ EQ NEQ
-
+%type <type>dectype
 %left OR
 %left AND
 %left NOT
@@ -59,10 +66,11 @@ int yyerror(const char *s);
 %%
 
 program : 
+    {TS = initialiserTS();}
     header
     SECTDEFKEY MODELS CURLYSTART functions CURLYEND END
     SECTDEFKEY MAIN CURLYSTART ins_seq CURLYEND END
-    KEY ENDPROG {printf("u got it right\n");}
+    KEY ENDPROG {printf("u got it right\n"); afficherTS(TS); }
     ;
 
 header :  
@@ -74,7 +82,7 @@ ins_seq :
     ;
 
 functions : 
-    FUNKEY IDENTIFIER PARENTESESTART parameters PARENTESEEND TWODOTS returntype CURLYSTART ins_seq CURLYEND
+    KEYFUN IDENTIFIER PARENTESESTART parameters PARENTESEEND TWODOTS returntype CURLYSTART ins_seq CURLYEND
     |
     ;
 
@@ -120,15 +128,15 @@ declaration :
     ;
 
 vardeclaration :
-    KEYVAR IDENTIFIER TWODOTS dectype END
-    | KEYVAR IDENTIFIER TWODOTS dectype ASSIGN EXP END 
-    | KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND END
-    | KEYVAR IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND ASSIGN BRACKETSTART types BRACKETEND END
+    KEYVAR IDENTIFIER TWODOTS dectype END {setType(TS, $2->info.Token, $4); setTokenType(TS, $2->info.Token, $1);}
+    | KEYVAR IDENTIFIER TWODOTS dectype ASSIGN EXP END {setTokenType(TS, $2->info.Token, $1);}
+    | KEYARRAY IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND END {setType(TS, $2->info.Token, $4); setTokenType(TS, $2->info.Token, $1);}//array 
+    | KEYARRAY IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND ASSIGN BRACKETSTART types BRACKETEND END  {setTokenType(TS, $2->info.Token, $1);}//array
 
     ;
 
 constdeclaration : 
-    KEYCONST IDENTIFIER TWODOTS dectype ASSIGN EXP END 
+    KEYCONST IDENTIFIER TWODOTS dectype ASSIGN EXP END {setTokenType(TS, $2->info.Token, $1);}
     ;
 
 assignment : 
@@ -163,10 +171,10 @@ listelement :
     ;
 
 dectype : 
-    DECBOOL
-    | DECINT
-    | DECREAL
-    | DECSTR
+    DECBOOL {$$ = yylval.type;}
+    | DECINT {$$ = yylval.type;}
+    | DECREAL {$$ = yylval.type;}
+    | DECSTR {$$ = yylval.type;}
     ;
 
 type : 
@@ -193,7 +201,7 @@ int yyerror(const char *s) {
 }
 
 int main(int argc, char *argv[]) {
-    yyin = fopen("test_expressions.txt", "r");
+    yyin = fopen("testTS.txt", "r");
     yyparse();
     fclose(yyin);
     return 0;

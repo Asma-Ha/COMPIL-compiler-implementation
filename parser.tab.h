@@ -51,48 +51,49 @@ extern int yydebug;
      SECTDEFKEY = 260,
      CURLYSTART = 261,
      CURLYEND = 262,
-     TYPES = 263,
-     MODELS = 264,
-     MAIN = 265,
-     END = 266,
-     IDENTIFIER = 267,
-     ENDPROG = 268,
-     FUNKEY = 269,
-     ASSIGN = 270,
-     KEYVAR = 271,
-     KEYCONST = 272,
-     KEYIF = 273,
-     KEYELSE = 274,
-     KEYTHEN = 275,
-     TYPEINT = 276,
-     TYPEREAL = 277,
-     TYPEBOOL = 278,
-     TYPESTR = 279,
-     TWODOTS = 280,
-     DECINT = 281,
-     DECREAL = 282,
-     DECBOOL = 283,
-     DECSTR = 284,
-     COMMA = 285,
-     RETURNKEY = 286,
-     BRACKETSTART = 287,
-     BRACKETEND = 288,
-     PARENTESESTART = 289,
-     PARENTESEEND = 290,
-     AND = 291,
-     OR = 292,
-     NOT = 293,
-     PLUS = 294,
-     MINUS = 295,
-     MULT = 296,
-     DIV = 297,
-     SUP = 298,
-     SUPEQ = 299,
-     INF = 300,
-     INFEQ = 301,
-     EQ = 302,
-     NEQ = 303,
-     NEG = 304
+     MODELS = 263,
+     MAIN = 264,
+     END = 265,
+     IDENTIFIER = 266,
+     ENDPROG = 267,
+     KEYFUN = 268,
+     token = 269,
+     KEYARRAY = 270,
+     ASSIGN = 271,
+     KEYVAR = 272,
+     KEYCONST = 273,
+     KEYIF = 274,
+     KEYELSE = 275,
+     KEYTHEN = 276,
+     TYPEINT = 277,
+     TYPEREAL = 278,
+     TYPEBOOL = 279,
+     TYPESTR = 280,
+     TWODOTS = 281,
+     DECINT = 282,
+     DECREAL = 283,
+     DECBOOL = 284,
+     DECSTR = 285,
+     COMMA = 286,
+     RETURNKEY = 287,
+     BRACKETSTART = 288,
+     BRACKETEND = 289,
+     PARENTESESTART = 290,
+     PARENTESEEND = 291,
+     AND = 292,
+     OR = 293,
+     NOT = 294,
+     PLUS = 295,
+     MINUS = 296,
+     MULT = 297,
+     DIV = 298,
+     SUP = 299,
+     SUPEQ = 300,
+     INF = 301,
+     INFEQ = 302,
+     EQ = 303,
+     NEQ = 304,
+     NEG = 305
    };
 #endif
 
@@ -101,16 +102,18 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 11 "parser.y"
+#line 12 "parser.y"
 
     double real;
     int integer;
+    int boolean;
+    NODESYMTABLE *id;
     char *string;
-    char type[255];
+    int type;
 
 
 /* Line 2058 of yacc.c  */
-#line 114 "parser.tab.h"
+#line 117 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

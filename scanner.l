@@ -1,11 +1,11 @@
 %{
     /*definition section */
-    #include "parser.tab.h"
     #include <stdio.h>
-    #include "TableSymboles.c"
-    SYMTABLE *TS; 
+    #include "TableSymboles.h"
+    #include "parser.tab.h"
     int yyerror(const char *s);
     int cptLigne;
+    extern SYMTABLE *TS;
 %}
 
 %option noyywrap 
@@ -15,7 +15,6 @@ MAJ [A-Z]
 MIN [a-z]
 DIGIT [0-9]
 EOL [\n]
-TYPES types
 MODELS models
 MAIN main
 
@@ -54,40 +53,53 @@ STRING \".*\"
 <comment>"$" {BEGIN(INITIAL); /*when finding a $ => go back to regular state*/}
 <comment>\n {/* do nothing */}
 <comment>. {/* do nothing */}
-{TYPES} return (TYPES);
 {MODELS} return (MODELS);
 {MAIN} return (MAIN);
 {blank}  { /* ignore whitespace */ }
 ";" return (END);
 {EOL} { cptLigne++; /* ignore lines */ };
-"var" return (KEYVAR);
-"const" return (KEYCONST);
+"var" {
+    yylval.type = VAR;
+    return (KEYVAR);}
+"const" {
+    yylval.type = CONST;
+    return (KEYCONST);}
 "if" return (KEYIF);
 "then" return (KEYTHEN);
 "else" return (KEYELSE);
 ":" return (TWODOTS);
 "=" return (ASSIGN);
-"fun" return (FUNKEY);
+"fun" {
+    yylval.type = FUN;
+    return (KEYFUN);}
 "," return (COMMA);
+
+"array" {
+    yylval.type = ARRAY;
+    return (KEYARRAY);}
+
+
 "return" return (RETURNKEY);
 
 "str" {
     //declarative keyword : str
-    strcpy(yylval.type, "str");
+
+    yylval.type = STR;
     return (DECSTR);
     }
 
 "int" {
-    strcpy(yylval.type, "int");
+    yylval.type = INT;
     return (DECINT);
 }
 "bool" {
-    strcpy(yylval.type, "bool");
+    yylval.type = BOOL;
+    //printf("found a %d", yylval.type);
     return (DECBOOL);
 }
 
 "real" {
-    strcpy(yylval.type, "real");
+    yylval.type = REAL;
     return (DECREAL);
 }
 
@@ -108,7 +120,16 @@ STRING \".*\"
     }
 
 {MIN}({MIN}*{MAJ}*{DIGIT}*)* {
-    TS = inserer(TS, yytext, "id");
+    printf("found an identifier %s \n", yytext);
+    NODESYMTABLE* identifier = rechercher(TS, yytext);
+    if (identifier == NULL){
+        printf("it's not in the ts\n");
+        identifier = inserer(TS, yytext);
+        yylval.id = identifier;
+        if(yylval.id != NULL){
+            printf("%s\n", yylval.id->info.Token);
+        }
+    }
     return (IDENTIFIER);
 }
 

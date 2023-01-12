@@ -1,0 +1,17 @@
+# program hello
+
+$ to test something remove the comment marks chokran $ 
+
+def models{
+};
+
+
+def main{
+    var g : bool;
+    var h : str;
+    var t : int;
+    array hi{int}[6];
+};
+
+# end
+
