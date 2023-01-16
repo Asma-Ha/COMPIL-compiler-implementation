@@ -1112,7 +1112,7 @@ YY_RULE_SETUP
 {
    // yylval.integer = atoi(yytext);
    yylval.value = strdup(yytext);
-   printf(yylval.value);
+   //printf(yylval.value);
     return (TYPEINT);
 }
 	YY_BREAK
@@ -1122,7 +1122,7 @@ YY_RULE_SETUP
 {
     //yylval.real = strtod(yytext, NULL);
     yylval.value = strdup(yytext);
-    printf(yylval.value);
+    //printf(yylval.value);
     return (TYPEREAL);
     }
 	YY_BREAK
@@ -1131,7 +1131,7 @@ YY_RULE_SETUP
 #line 121 "scanner.l"
 {
      yylval.value = strdup(yytext);
-    printf(yylval.value);
+    //printf(yylval.value);
     return (TYPEBOOL);
 }
 	YY_BREAK
@@ -1140,7 +1140,7 @@ YY_RULE_SETUP
 #line 126 "scanner.l"
 {
     yylval.value = yytext;
-    printf(yylval.value);
+    //printf(yylval.value);
     return (TYPESTR);
     }
 	YY_BREAK
@@ -1148,16 +1148,16 @@ case 52:
 YY_RULE_SETUP
 #line 132 "scanner.l"
 {
-    //printf("found an identifier %s \n", yytext);
-    NODESYMTABLE* identifier = rechercher(TS, yytext);
+    NODESYMTABLE* identifier = rechercher(TS, strdup(yytext));
     if (identifier == NULL){
         //printf("it's not in the ts\n");
-        identifier = inserer(TS, yytext);
-        yylval.id =  identifier;
+        identifier = inserer(TS, strdup(yytext));
+        
         /*if(yylval.id != NULL){
             printf("%s\n", yylval.id->info.Token);
         }*/
     }
+    yylval.id =  strdup(yytext);
     return (IDENTIFIER);
 }
 	YY_BREAK

@@ -102,16 +102,22 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 17 "parser.y"
+#line 12 "parser.y"
 
+    char *value;
+    char *id;
+    int type;
+    struct {
+        char* value;
+        char* id;
+        int type;
+    } compose;
 
-    char *value;  //used to get values of terminals and expressions 
-    NODESYMTABLE *id; //used to get value of identifiers
-    char *type; //To determine the types of expressions
+    
 
 
 /* Line 2058 of yacc.c  */
-#line 115 "parser.tab.h"
+#line 121 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

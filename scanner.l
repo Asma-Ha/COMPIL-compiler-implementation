@@ -108,38 +108,38 @@ STRING \".*\"
 {DIGIT}+ {
    // yylval.integer = atoi(yytext);
    yylval.value = strdup(yytext);
-   printf(yylval.value);
+   //printf(yylval.value);
     return (TYPEINT);
 }
 
 {DIGIT}+("."{DIGIT}*) {
     //yylval.real = strtod(yytext, NULL);
     yylval.value = strdup(yytext);
-    printf(yylval.value);
+    //printf(yylval.value);
     return (TYPEREAL);
     }
 {BOOL} {
      yylval.value = strdup(yytext);
-    printf(yylval.value);
+    //printf(yylval.value);
     return (TYPEBOOL);
 }
 {STRING} {
     yylval.value = yytext;
-    printf(yylval.value);
+    //printf(yylval.value);
     return (TYPESTR);
     }
 
 {MIN}({MIN}*{MAJ}*{DIGIT}*)* {
-    //printf("found an identifier %s \n", yytext);
-    NODESYMTABLE* identifier = rechercher(TS, yytext);
+    NODESYMTABLE* identifier = rechercher(TS, strdup(yytext));
     if (identifier == NULL){
         //printf("it's not in the ts\n");
-        identifier = inserer(TS, yytext);
-        yylval.id =  identifier;
+        identifier = inserer(TS, strdup(yytext));
+        
         /*if(yylval.id != NULL){
             printf("%s\n", yylval.id->info.Token);
         }*/
     }
+    yylval.id =  strdup(yytext);
     return (IDENTIFIER);
 }
 

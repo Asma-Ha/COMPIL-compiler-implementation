@@ -1,0 +1,20 @@
+# program hello
+
+$ to test something remove the comment marks chokran $ 
+
+def models{
+};
+
+
+def main{
+    var b : int = 6;
+
+    var c : int = 20;
+
+    var g : bool;
+
+    c = 5 + 7;
+};
+
+# end
+

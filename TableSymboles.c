@@ -56,16 +56,50 @@ int supprimerTS(SYMTABLE *TS){
 void afficherTS(SYMTABLE *TS) {
     printf("\n \nTable des symboles \n \n");
     NODESYMTABLE *n = TS->head;
-    int i = 0;
     while(n != NULL) {
-        printf("(%d) %s : %d %d %s", i, n->info.Token, n->info.Type, n->info.TokenType, n->info.Value);
-        printf("\n");
-        i++;
+        afficherSymbole(n);
         n = n->next;
     }
     printf("\n\n");
 }
 
+void afficherSymbole(NODESYMTABLE* S){
+    char type[20] = "", tokenType[20] = "";
+    switch(S->info.Type){
+        case  0 :
+            strcpy(type, "str");
+            break;
+        case 1 : 
+            strcpy(type, "bool");
+            break;
+        case 2 : 
+            strcpy(type, "int");
+            break;
+        case 3 : 
+            strcpy(type, "real");
+            break;
+    }
+
+    switch(S->info.TokenType){
+        case  0 :
+            strcpy(tokenType, "const");
+            break;
+        case 1 : 
+            
+            strcpy(tokenType, "var");
+            break;
+        case 2 : 
+            strcpy(tokenType, "fun");
+            break;
+        case 3 : 
+            strcpy(tokenType, "array");
+            break;
+    }
+
+
+    printf("%s : %s   -  %s  -  %s ", S->info.Token, type, tokenType, S->info.Value);
+    printf("\n");
+}
 //get the array of values of an array
 ARRAYCONTENT *accessArray(SYMTABLE *TS, char nomArray[]){
     NODESYMTABLE *node = rechercher(TS, nomArray);
@@ -103,7 +137,8 @@ void setTokenType(SYMTABLE *TS, char name[], int TokenType){
 void setValue(SYMTABLE *TS, char name[], char value[]){
     NODESYMTABLE *TOKEN = rechercher(TS, name);
     if(TOKEN != NULL){
-        strcpy(TOKEN->info.Value,value);
+        strcpy(TOKEN->info.Value, value);
+        return;
     }
     return;
 }
@@ -118,3 +153,5 @@ void addElementToArray(SYMTABLE *TS, char nomArray[], char element[]){
         }
     }
 }
+
+

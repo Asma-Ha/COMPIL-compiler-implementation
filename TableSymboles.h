@@ -60,6 +60,8 @@ NODESYMTABLE *inserer(SYMTABLE *TS, char nom[]);
 
 int supprimerTS(SYMTABLE *TS);
 
+void afficherSymbole(NODESYMTABLE* S);
+
 void afficherTS(SYMTABLE *TS);
 
 void setTokenType(SYMTABLE *TS, char name[], int TokenType);

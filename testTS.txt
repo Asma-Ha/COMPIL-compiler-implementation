@@ -7,11 +7,13 @@ def models{
 
 
 def main{
-    var g : bool;
-    var h : str;
-    var t : int;
-    array hi{int}[6];
-    array wep{int}[2] = [4];
+    $ var g : bool;
+    var h : str; $
+    var t : int = 6 + 7;
+    var l : real = 14.9 + 7.0;
+    $ t = 6; $
+    $ array hi{int}[6];
+    array wep{int}[2] = [4]; $
 };
 
 # end
