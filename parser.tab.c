@@ -66,6 +66,7 @@
 #line 1 "parser.y"
 
 #include "TableSymboles.h"
+#include "quadruplet.h"
 #include <stdio.h>
 #include <stdlib.h>
 int yylex();
@@ -73,9 +74,12 @@ extern FILE *yyin;
 int yyerror(const char *s);
 
 SYMTABLE *TS;
+QUADTABLE *TQ;
+QUADRUPLETNODE* quad;
+int quadCounter = 0;
 
 /* Line 371 of yacc.c  */
-#line 79 "parser.tab.c"
+#line 83 "parser.tab.c"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -167,7 +171,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 387 of yacc.c  */
-#line 12 "parser.y"
+#line 16 "parser.y"
 
     char *value;
     char *id;
@@ -182,7 +186,7 @@ typedef union YYSTYPE
 
 
 /* Line 387 of yacc.c  */
-#line 186 "parser.tab.c"
+#line 190 "parser.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -210,7 +214,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 214 "parser.tab.c"
+#line 218 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -527,12 +531,12 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    79,    79,    79,    87,    90,    91,    95,    96,   100,
-     101,   102,   106,   107,   108,   109,   113,   114,   115,   116,
-     117,   121,   125,   129,   130,   131,   136,   137,   141,   145,
-     158,   159,   164,   168,   186,   187,   191,   196,   215,   234,
-     253,   298,   304,   311,   312,   313,   314,   318,   319,   320,
-     321,   325,   326,   327,   331,   334,   338,   339
+       0,    83,    83,    83,    91,    94,    95,    99,   100,   104,
+     105,   106,   110,   111,   112,   113,   117,   118,   119,   120,
+     121,   125,   129,   133,   134,   135,   140,   141,   145,   151,
+     166,   167,   172,   176,   196,   197,   201,   206,   225,   244,
+     263,   308,   314,   321,   322,   323,   324,   328,   329,   330,
+     331,   335,   336,   337,   341,   344,   348,   349
 };
 #endif
 
@@ -1519,64 +1523,68 @@ yyreduce:
     {
         case 2:
 /* Line 1792 of yacc.c  */
-#line 79 "parser.y"
-    {TS = initialiserTS();}
+#line 83 "parser.y"
+    {TS = initialiserTS(); TQ = initialiserTQ();}
     break;
 
   case 3:
 /* Line 1792 of yacc.c  */
-#line 83 "parser.y"
-    {printf("u got it right\n"); afficherTS(TS); }
+#line 87 "parser.y"
+    {printf("u got it right\n"); afficherTS(TS); afficherTQ(TQ);}
     break;
 
   case 28:
 /* Line 1792 of yacc.c  */
-#line 141 "parser.y"
+#line 145 "parser.y"
     {
         
         setType(TS, (yyvsp[(2) - (5)].id), (yyvsp[(4) - (5)].type)); setTokenType(TS, (yyvsp[(2) - (5)].id), (yyvsp[(1) - (5)].type));
+        quad = creer_Q("DEC", (yyvsp[(2) - (5)].id) , "","" , quadCounter++);
+        inserer_TQ(TQ, quad);
         }
     break;
 
   case 29:
 /* Line 1792 of yacc.c  */
-#line 145 "parser.y"
+#line 151 "parser.y"
     {
-       printf("id = %s, exptype =  %d \n", (yyvsp[(2) - (7)].id), (yyvsp[(6) - (7)].compose).type);
 
+       //printf("id = %s, exptype =  %d \n", $2, $6.type);
         if((yyvsp[(4) - (7)].type) == (yyvsp[(6) - (7)].compose).type) {
-
             setTokenType(TS, (yyvsp[(2) - (7)].id), (yyvsp[(1) - (7)].type));
             setType(TS, (yyvsp[(2) - (7)].id), (yyvsp[(4) - (7)].type));
-
             setValue(TS, (yyvsp[(2) - (7)].id), (yyvsp[(6) - (7)].compose).value);
+            quad = creer_Q("DEC", (yyvsp[(2) - (7)].id) , "", "", quadCounter++);
+            inserer_TQ(TQ, quad);
+            quad = creer_Q("=", (yyvsp[(6) - (7)].compose).value, "", (yyvsp[(2) - (7)].id), quadCounter++);
+            inserer_TQ(TQ, quad);
 
         } else {printf("incompatible type\n"); yyerror('c');}
-        printf("after id = %s, exptype =  %d \n", (yyvsp[(2) - (7)].id), (yyvsp[(6) - (7)].compose).type);
+        //printf("after id = %s, exptype =  %d \n", $2, $6.type);
         }
     break;
 
   case 30:
 /* Line 1792 of yacc.c  */
-#line 158 "parser.y"
+#line 166 "parser.y"
     {setType(TS, (yyvsp[(2) - (9)].id), (yyvsp[(4) - (9)].type)); setTokenType(TS, (yyvsp[(2) - (9)].id), (yyvsp[(1) - (9)].type));}
     break;
 
   case 31:
 /* Line 1792 of yacc.c  */
-#line 159 "parser.y"
+#line 167 "parser.y"
     {setTokenType(TS, (yyvsp[(2) - (13)].id), (yyvsp[(1) - (13)].type));}
     break;
 
   case 32:
 /* Line 1792 of yacc.c  */
-#line 164 "parser.y"
+#line 172 "parser.y"
     {setTokenType(TS, (yyvsp[(2) - (7)].id), (yyvsp[(1) - (7)].type));}
     break;
 
   case 33:
 /* Line 1792 of yacc.c  */
-#line 168 "parser.y"
+#line 176 "parser.y"
     {
         //printf("this id is bitch %s\n", $1);
         NODESYMTABLE *node = rechercher(TS, (yyvsp[(1) - (4)].id));
@@ -1586,6 +1594,8 @@ yyreduce:
 
         if(node->info.Type == (yyvsp[(3) - (4)].compose).type && node->info.TokenType == VAR) {
             setValue(TS, (yyvsp[(1) - (4)].id), (yyvsp[(3) - (4)].compose).value);
+            quad = creer_Q("=", (yyvsp[(3) - (4)].compose).value, "", (yyvsp[(1) - (4)].id), quadCounter++);
+            inserer_TQ(TQ, quad);
         } else {
             printf("incompatible type\n"); yyerror('c');}
 
@@ -1594,7 +1604,7 @@ yyreduce:
 
   case 36:
 /* Line 1792 of yacc.c  */
-#line 191 "parser.y"
+#line 201 "parser.y"
     {
         strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value);
         (yyval.compose).type = (yyvsp[(1) - (1)].compose).type;
@@ -1603,7 +1613,7 @@ yyreduce:
 
   case 37:
 /* Line 1792 of yacc.c  */
-#line 196 "parser.y"
+#line 206 "parser.y"
     {
         //check if both are int
         if((yyvsp[(1) - (3)].compose).type == INT && (yyvsp[(3) - (3)].compose).type == INT) {
@@ -1627,7 +1637,7 @@ yyreduce:
 
   case 38:
 /* Line 1792 of yacc.c  */
-#line 215 "parser.y"
+#line 225 "parser.y"
     {
         //check if both are int
         if((yyvsp[(1) - (3)].compose).type == REAL && (yyvsp[(3) - (3)].compose).type == REAL) {
@@ -1651,7 +1661,7 @@ yyreduce:
 
   case 39:
 /* Line 1792 of yacc.c  */
-#line 234 "parser.y"
+#line 244 "parser.y"
     {
         //check if both are int
         if((yyvsp[(1) - (3)].compose).type == INT && (yyvsp[(3) - (3)].compose).type == INT) {
@@ -1675,7 +1685,7 @@ yyreduce:
 
   case 40:
 /* Line 1792 of yacc.c  */
-#line 253 "parser.y"
+#line 263 "parser.y"
     {
         //check if both are int
         if((yyvsp[(1) - (3)].compose).type == INT && (yyvsp[(3) - (3)].compose).type == INT) {
@@ -1699,7 +1709,7 @@ yyreduce:
 
   case 41:
 /* Line 1792 of yacc.c  */
-#line 298 "parser.y"
+#line 308 "parser.y"
     {
         (yyval.compose).value = (yyvsp[(2) - (3)].compose).value;
         (yyval.compose).type = (yyvsp[(2) - (3)].compose).type;
@@ -1708,7 +1718,7 @@ yyreduce:
 
   case 42:
 /* Line 1792 of yacc.c  */
-#line 304 "parser.y"
+#line 314 "parser.y"
     {
         NODESYMTABLE *node = rechercher(TS, (yyvsp[(1) - (4)].id));
         strcpy((yyval.compose).type, node->info.Type);
@@ -1717,55 +1727,55 @@ yyreduce:
 
   case 43:
 /* Line 1792 of yacc.c  */
-#line 311 "parser.y"
+#line 321 "parser.y"
     {(yyval.type) = yylval.type;}
     break;
 
   case 44:
 /* Line 1792 of yacc.c  */
-#line 312 "parser.y"
+#line 322 "parser.y"
     {(yyval.type) = yylval.type;}
     break;
 
   case 45:
 /* Line 1792 of yacc.c  */
-#line 313 "parser.y"
+#line 323 "parser.y"
     {(yyval.type) = yylval.type;}
     break;
 
   case 46:
 /* Line 1792 of yacc.c  */
-#line 314 "parser.y"
+#line 324 "parser.y"
     {(yyval.type) = yylval.type;}
     break;
 
   case 47:
 /* Line 1792 of yacc.c  */
-#line 318 "parser.y"
+#line 328 "parser.y"
     {(yyval.compose).value = yylval.value; (yyval.compose).type = INT;}
     break;
 
   case 48:
 /* Line 1792 of yacc.c  */
-#line 319 "parser.y"
+#line 329 "parser.y"
     {(yyval.compose).value = yylval.value; (yyval.compose).type = BOOL;}
     break;
 
   case 49:
 /* Line 1792 of yacc.c  */
-#line 320 "parser.y"
+#line 330 "parser.y"
     {(yyval.compose).value = yylval.value; (yyval.compose).type = REAL;}
     break;
 
   case 50:
 /* Line 1792 of yacc.c  */
-#line 321 "parser.y"
+#line 331 "parser.y"
     {(yyval.compose).value = yylval.value; (yyval.compose).type = STR;}
     break;
 
   case 54:
 /* Line 1792 of yacc.c  */
-#line 331 "parser.y"
+#line 341 "parser.y"
     {
         strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value);
         }
@@ -1773,25 +1783,25 @@ yyreduce:
 
   case 55:
 /* Line 1792 of yacc.c  */
-#line 334 "parser.y"
+#line 344 "parser.y"
     { strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value); (yyval.compose).type = (yyvsp[(1) - (1)].compose).type;}
     break;
 
   case 56:
 /* Line 1792 of yacc.c  */
-#line 338 "parser.y"
+#line 348 "parser.y"
     {strcpy((yyval.compose).id, (yyvsp[(1) - (1)].id)); }
     break;
 
   case 57:
 /* Line 1792 of yacc.c  */
-#line 339 "parser.y"
+#line 349 "parser.y"
     {strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value);}
     break;
 
 
 /* Line 1792 of yacc.c  */
-#line 1795 "parser.tab.c"
+#line 1805 "parser.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2023,7 +2033,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 340 "parser.y"
+#line 350 "parser.y"
 
 int yyerror(const char *s) {
   printf("error %s\n",s);

@@ -1,5 +1,6 @@
 %{
 #include "TableSymboles.h"
+#include "quadruplet.h"
 #include <stdio.h>
 #include <stdlib.h>
 int yylex();
@@ -7,6 +8,9 @@ extern FILE *yyin;
 int yyerror(const char *s);
 
 SYMTABLE *TS;
+QUADTABLE *TQ;
+QUADRUPLETNODE* quad;
+int quadCounter = 0;
 %}
 
 %union {
@@ -76,11 +80,11 @@ token <type>KEYARRAY
 %%
 
 program : 
-    {TS = initialiserTS();}
+    {TS = initialiserTS(); TQ = initialiserTQ();}
     header
     SECTDEFKEY MODELS CURLYSTART functions CURLYEND END 
     SECTDEFKEY MAIN CURLYSTART ins_seq CURLYEND END 
-    KEY ENDPROG {printf("u got it right\n"); afficherTS(TS); }
+    KEY ENDPROG {printf("u got it right\n"); afficherTS(TS); afficherTQ(TQ);}
     ;
 
 header :  
@@ -141,19 +145,23 @@ vardeclaration :
     KEYVAR IDENTIFIER TWODOTS dectype END {
         
         setType(TS, $2, $4); setTokenType(TS, $2, $1);
+        quad = creer_Q("DEC", $2 , "","" , quadCounter++);
+        inserer_TQ(TQ, quad);
         }
     | KEYVAR IDENTIFIER TWODOTS dectype ASSIGN EXP END {
-       printf("id = %s, exptype =  %d \n", $2, $6.type);
 
+       //printf("id = %s, exptype =  %d \n", $2, $6.type);
         if($4 == $6.type) {
-
             setTokenType(TS, $2, $1);
             setType(TS, $2, $4);
-
             setValue(TS, $2, $6.value);
+            quad = creer_Q("DEC", $2 , "", "", quadCounter++);
+            inserer_TQ(TQ, quad);
+            quad = creer_Q("=", $6.value, "", $2, quadCounter++);
+            inserer_TQ(TQ, quad);
 
         } else {printf("incompatible type\n"); yyerror('c');}
-        printf("after id = %s, exptype =  %d \n", $2, $6.type);
+        //printf("after id = %s, exptype =  %d \n", $2, $6.type);
         }
     | KEYARRAY IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND END {setType(TS, $2, $4); setTokenType(TS, $2, $1);}//array 
     | KEYARRAY IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND ASSIGN BRACKETSTART types BRACKETEND END  {setTokenType(TS, $2, $1);}//array
@@ -174,6 +182,8 @@ assignment :
 
         if(node->info.Type == $3.type && node->info.TokenType == VAR) {
             setValue(TS, $1, $3.value);
+            quad = creer_Q("=", $3.value, "", $1, quadCounter++);
+            inserer_TQ(TQ, quad);
         } else {
             printf("incompatible type\n"); yyerror('c');}
 
