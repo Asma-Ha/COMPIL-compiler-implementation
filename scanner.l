@@ -25,6 +25,7 @@ STRING \".*\"
 
 
 %%
+
 "#" return (KEY);
 "program" return (PROGKEY);
 "def" return (SECTDEFKEY);
@@ -49,6 +50,7 @@ STRING \".*\"
 "∨" return (OR);
 "!" return(NOT);
 
+";" return (END);
 "$" {BEGIN(comment); /*start comment state*/}
 <comment>"$" {BEGIN(INITIAL); /*when finding a $ => go back to regular state*/}
 <comment>\n {/* do nothing */}
@@ -56,7 +58,6 @@ STRING \".*\"
 {MODELS} return (MODELS);
 {MAIN} return (MAIN);
 {blank}  { /* ignore whitespace */ }
-";" return (END);
 {EOL} { cptLigne++; /* ignore lines */ };
 "var" {
     yylval.type = VAR;
@@ -105,30 +106,39 @@ STRING \".*\"
 
 
 {DIGIT}+ {
-    yylval.integer = atoi(yytext);
+   // yylval.integer = atoi(yytext);
+   yylval.value = strdup(yytext);
+   printf(yylval.value);
     return (TYPEINT);
 }
 
 {DIGIT}+("."{DIGIT}*) {
-    yylval.real = strtod(yytext, NULL);
+    //yylval.real = strtod(yytext, NULL);
+    yylval.value = strdup(yytext);
+    printf(yylval.value);
     return (TYPEREAL);
     }
-{BOOL} return (TYPEBOOL);
+{BOOL} {
+     yylval.value = strdup(yytext);
+    printf(yylval.value);
+    return (TYPEBOOL);
+}
 {STRING} {
-    yylval.string = yytext;
+    yylval.value = yytext;
+    printf(yylval.value);
     return (TYPESTR);
     }
 
 {MIN}({MIN}*{MAJ}*{DIGIT}*)* {
-    printf("found an identifier %s \n", yytext);
+    //printf("found an identifier %s \n", yytext);
     NODESYMTABLE* identifier = rechercher(TS, yytext);
     if (identifier == NULL){
-        printf("it's not in the ts\n");
+        //printf("it's not in the ts\n");
         identifier = inserer(TS, yytext);
-        yylval.id = identifier;
-        if(yylval.id != NULL){
+        yylval.id =  identifier;
+        /*if(yylval.id != NULL){
             printf("%s\n", yylval.id->info.Token);
-        }
+        }*/
     }
     return (IDENTIFIER);
 }

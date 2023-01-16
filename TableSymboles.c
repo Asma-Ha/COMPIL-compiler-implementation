@@ -58,7 +58,7 @@ void afficherTS(SYMTABLE *TS) {
     NODESYMTABLE *n = TS->head;
     int i = 0;
     while(n != NULL) {
-        printf("(%d) %s : %d %d ", i, n->info.Token, n->info.Type, n->info.TokenType);
+        printf("(%d) %s : %d %d %s", i, n->info.Token, n->info.Type, n->info.TokenType, n->info.Value);
         printf("\n");
         i++;
         n = n->next;
@@ -98,4 +98,23 @@ void setTokenType(SYMTABLE *TS, char name[], int TokenType){
         TOKEN->info.TokenType = TokenType;
     }
     return;
+}
+
+void setValue(SYMTABLE *TS, char name[], char value[]){
+    NODESYMTABLE *TOKEN = rechercher(TS, name);
+    if(TOKEN != NULL){
+        strcpy(TOKEN->info.Value,value);
+    }
+    return;
+}
+
+void addElementToArray(SYMTABLE *TS, char nomArray[], char element[]){
+    NODESYMTABLE *TOKEN = rechercher(TS, nomArray);
+    if(TOKEN != NULL){
+        if(TOKEN->info.arraycontent == NULL){
+            ARRAYCONTENT *node = malloc(sizeof(NODESYMTABLE));
+            node->elements;
+            TOKEN->info.arraycontent = node;
+        }
+    }
 }

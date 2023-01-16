@@ -1,0 +1,22 @@
+# program hello
+
+$ to test something remove the comment marks chokran $ 
+
+def models{
+};
+
+
+def main{
+    var g : bool = "helogrongr ùrgj thù";
+    $ expected output : 0 : (=, 5, ,g) $ 
+
+   $  array a{int}[5]; $
+
+   $ array tab{int}[3] = [1, 6]; $
+
+   $  y = 6; $ 
+    $ t[5] = 7; $
+};
+
+# end
+

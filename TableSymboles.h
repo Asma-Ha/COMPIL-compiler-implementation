@@ -41,13 +41,25 @@ typedef struct SymTable
 
 
 NODESYMTABLE *rechercher(SYMTABLE *TS, char nom[]);
+
 ARRAYCONTENT *accessArray(SYMTABLE *TS, char nomArray[]);
-NODESYMTABLE *setValue(NODESYMTABLE *TOKEN, char value[]);
+
+void addElementToArray(SYMTABLE *TS, char nomArray[], char element[]);
+
+void setValue(SYMTABLE *TS, char name[], char value[]);
+
 //void setType(NODESYMTABLE **TOKEN, int type);
+
 void setType(SYMTABLE *TS, char name[], int type);
+
 int supprimer(SYMTABLE *TS, char nom[]);
+
 SYMTABLE *initialiserTS();
+
 NODESYMTABLE *inserer(SYMTABLE *TS, char nom[]);
+
 int supprimerTS(SYMTABLE *TS);
+
 void afficherTS(SYMTABLE *TS);
+
 void setTokenType(SYMTABLE *TS, char name[], int TokenType);

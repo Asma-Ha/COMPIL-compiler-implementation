@@ -1,21 +1,24 @@
 %{
 #include "TableSymboles.h"
+#include "quadruplet.h"
 #include <stdio.h>
 #include <stdlib.h>
 int yylex();
 extern FILE *yyin;
+
 int yyerror(const char *s);
 
 SYMTABLE *TS;
+QUADTABLE *TQ;
+QUADRUPLETNODE* quad;
+int quadCounter = 0;
 %}
 
 %union {
-    double real;
-    int integer;
-    int boolean;
-    NODESYMTABLE *id;
-    char *string;
-    int type;
+
+    char *value;  //used to get values of terminals and expressions 
+    NODESYMTABLE *id; //used to get value of identifiers
+    char *type; //To determine the types of expressions
 }
 
 
@@ -28,21 +31,21 @@ SYMTABLE *TS;
 %token MAIN
 %token END
 %token <id>IDENTIFIER
-%token <type>ENDPROG
-%token <type>KEYFUN
+%token ENDPROG
+%token KEYFUN
 token KEYARRAY
 %token ASSIGN
-%token <type>KEYVAR
-%token <type>KEYCONST
+%token KEYVAR
+%token KEYCONST
 %token KEYIF
 %token KEYELSE
 %token KEYTHEN
-%token TYPEINT TYPEREAL TYPEBOOL TYPESTR
+%token <value>TYPEINT <value>TYPEREAL <value>TYPEBOOL <value>TYPESTR
 %token TWODOTS
-%token DECINT 
-%token DECREAL 
-%token DECBOOL 
-%token DECSTR
+%token <type>DECINT 
+%token <type>DECREAL 
+%token <type>DECBOOL 
+%token <type>DECSTR
 %token COMMA
 %token RETURNKEY
 %token BRACKETSTART
@@ -52,6 +55,9 @@ token KEYARRAY
 %token PLUS MINUS MULT DIV
 %token SUP SUPEQ INF INFEQ EQ NEQ
 %type <type>dectype
+%type <value>EXP
+%type <value>EXPS
+%type <id>variable
 %left OR
 %left AND
 %left NOT
@@ -66,11 +72,11 @@ token KEYARRAY
 %%
 
 program : 
-    {TS = initialiserTS();}
+    {TS = initialiserTS(); TQ = initialiserTQ();}
     header
     SECTDEFKEY MODELS CURLYSTART functions CURLYEND END
     SECTDEFKEY MAIN CURLYSTART ins_seq CURLYEND END
-    KEY ENDPROG {printf("u got it right\n"); afficherTS(TS); }
+    KEY ENDPROG {printf("u got it right\n"); afficherTS(TS); afficherTQ(TQ);}
     ;
 
 header :  
@@ -128,20 +134,99 @@ declaration :
     ;
 
 vardeclaration :
-    KEYVAR IDENTIFIER TWODOTS dectype END {setType(TS, $2->info.Token, $4); setTokenType(TS, $2->info.Token, $1);}
-    | KEYVAR IDENTIFIER TWODOTS dectype ASSIGN EXP END {setTokenType(TS, $2->info.Token, $1);}
-    | KEYARRAY IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND END {setType(TS, $2->info.Token, $4); setTokenType(TS, $2->info.Token, $1);}//array 
-    | KEYARRAY IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND ASSIGN BRACKETSTART types BRACKETEND END  {setTokenType(TS, $2->info.Token, $1);}//array
+    KEYVAR IDENTIFIER TWODOTS dectype END {
+        setType(TS, $2, $4); 
+        setTokenType(TS, $2, 1); 
 
+
+        quad = creer_Q("DEC", $2 , "","" , quadCounter++);
+        inserer_TQ(TQ, quad);
+
+        }
+
+    | KEYVAR IDENTIFIER TWODOTS dectype ASSIGN EXP END {
+        setTokenType(TS, $2, 1);
+
+        //quad creation
+        //all values are represented by a char => convert to string 
+        quad = creer_Q("DEC", $2 , "","" , quadCounter++);
+        inserer_TQ(TQ, quad);
+
+        /*char buffer[20];
+        itoa($6, buffer, 10);*/
+        printf("VALLLLL %s", $6);
+        quad = creer_Q("=", $6, "", $2, quadCounter++);
+        inserer_TQ(TQ, quad);
+
+        setValue(TS, $2, $6);
+       
+        }
+
+    | KEYARRAY IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND END {
+        setType(TS, $2, $4); 
+        setTokenType(TS, $2, 3); 
+        char length[10];
+        sprintf(length, "%d", $7);
+        setValue(TS, $2, length); //store the array length in value
+
+        //quad
+         quad = creer_Q("BOUNDS", "1", length, "", quadCounter++);
+         inserer_TQ(TQ, quad);
+         quad = creer_Q("ADEC", $2, "", "", quadCounter++);
+         inserer_TQ(TQ, quad);
+
+
+
+        }
+
+    | KEYARRAY IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND ASSIGN BRACKETSTART EXPS BRACKETEND END //array 
+     {
+        setTokenType(TS, $2, 3);
+        char length[10];
+        sprintf(length, "%d", $7);
+        setValue(TS, $2, length);
+
+
+        //store values in arrayContent
+
+         quad = creer_Q("BOUNDS", "1", length, "", quadCounter++);
+         inserer_TQ(TQ, quad);
+         quad = creer_Q("ADEC", $2, "", "", quadCounter++);
+         inserer_TQ(TQ, quad);
+         //quadruplet de l'initialisation d'un tableau
+
+         quad = creer_Q("=", "list of elements", "", $2, quadCounter++);
+         inserer_TQ(TQ, quad);
+        }
     ;
 
+EXPS : 
+    EXP | EXPS COMMA EXP
+    ;
+
+
 constdeclaration : 
-    KEYCONST IDENTIFIER TWODOTS dectype ASSIGN EXP END {setTokenType(TS, $2->info.Token, $1);}
+    KEYCONST IDENTIFIER TWODOTS dectype ASSIGN EXP END {
+        setTokenType(TS, $2, 0);
+
+        quad = creer_Q("DEC", $2 , "","" , quadCounter++);
+        inserer_TQ(TQ, quad);
+
+        char buffer[20];
+        itoa($6, buffer, 10);
+        quad = creer_Q("=", buffer, "", $2, quadCounter++);
+        inserer_TQ(TQ, quad);
+
+        }
     ;
 
 assignment : 
-    IDENTIFIER ASSIGN EXP END 
-    | listelement ASSIGN EXP END /* assign to list element */
+    variable ASSIGN EXP END 
+    {
+        char buffer[20];
+        itoa($3, buffer, 10);
+        quad = creer_Q("=", buffer, "", $1, quadCounter++);
+        inserer_TQ(TQ, quad);}
     ;
 
 condition : 
@@ -149,9 +234,11 @@ condition :
     | KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART ins_seq CURLYEND KEYELSE CURLYSTART ins_seq CURLYEND
     ;
 
+
 EXP : 
-     TERM
-     | IDENTIFIER PARENTESESTART arguments PARENTESEEND /* function call */
+    TYPEINT {printf(" VALUE : %s\n", $1); $$ = $1;}
+    | EXP EQ EXP
+     /*| IDENTIFIER PARENTESESTART arguments PARENTESEEND //function call
      | EXP PLUS EXP | EXP MINUS EXP
      | EXP DIV EXP | EXP MULT EXP
      | MINUS EXP %prec NEG
@@ -164,11 +251,17 @@ EXP :
      | EXP AND EXP
      | EXP OR EXP 
      | NOT EXP
-     | PARENTESESTART EXP PARENTESEEND
+     | PARENTESESTART EXP PARENTESEEND*/
+
     ;
-listelement :
-    IDENTIFIER BRACKETSTART EXP BRACKETEND
-    ;
+    variable :
+    IDENTIFIER | IDENTIFIER BRACKETSTART EXP BRACKETEND {
+        char buffer[20];
+        itoa($3, buffer, 10);
+        quad = creer_Q("ARRAY_ELMT", $1, buffer, "", quadCounter++);
+        inserer_TQ(TQ, quad);
+    };
+    
 
 dectype : 
     DECBOOL {$$ = yylval.type;}
@@ -177,31 +270,13 @@ dectype :
     | DECSTR {$$ = yylval.type;}
     ;
 
-type : 
-    TYPEBOOL 
-    | TYPEINT
-    | TYPEREAL
-    | TYPESTR
-    ;
-
-types : 
-    type
-    | types COMMA type
-    |
-    ;
-
-TERM : 
-    IDENTIFIER
-    | type 
-    | listelement
-    ;
 %%
 int yyerror(const char *s) {
   printf("%s\n",s);
 }
 
 int main(int argc, char *argv[]) {
-    yyin = fopen("testTS.txt", "r");
+    yyin = fopen("testQD.txt", "r");
     yyparse();
     fclose(yyin);
     return 0;

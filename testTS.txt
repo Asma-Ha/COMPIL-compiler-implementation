@@ -11,6 +11,7 @@ def main{
     var h : str;
     var t : int;
     array hi{int}[6];
+    array wep{int}[2] = [4];
 };
 
 # end
