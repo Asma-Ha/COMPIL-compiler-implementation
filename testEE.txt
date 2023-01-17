@@ -9,11 +9,19 @@ def models{
 def main{
     var b : int = 6;
 
-    var c : int = 20;
+    var c : real = 20;
 
-    var g : bool;
+    var o : bool = false;
 
-    c = 5 + 7;
+    c = (5.5 - 0.5) * 6;
+
+    o = 1.2 + 4.8 == 6;
+
+
+
+
+    
+
 };
 
 # end

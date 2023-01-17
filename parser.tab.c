@@ -67,6 +67,7 @@
 
 #include "TableSymboles.h"
 #include "quadruplet.h"
+#include "helperSemantic.h"
 #include <stdio.h>
 #include <stdlib.h>
 int yylex();
@@ -79,7 +80,7 @@ QUADRUPLETNODE* quad;
 int quadCounter = 0;
 
 /* Line 371 of yacc.c  */
-#line 83 "parser.tab.c"
+#line 84 "parser.tab.c"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -171,7 +172,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 387 of yacc.c  */
-#line 16 "parser.y"
+#line 17 "parser.y"
 
     char *value;
     char *id;
@@ -186,7 +187,7 @@ typedef union YYSTYPE
 
 
 /* Line 387 of yacc.c  */
-#line 190 "parser.tab.c"
+#line 191 "parser.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -214,7 +215,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 218 "parser.tab.c"
+#line 219 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -434,16 +435,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  3
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   150
+#define YYLAST   219
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  51
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  24
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  57
+#define YYNRULES  63
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  135
+#define YYNSTATES  147
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
@@ -497,8 +498,9 @@ static const yytype_uint8 yyprhs[] =
       43,    47,    48,    50,    52,    54,    56,    58,    60,    62,
       64,    66,    72,    78,    80,    84,    85,    87,    89,    95,
      103,   113,   127,   135,   140,   149,   162,   164,   168,   172,
-     176,   180,   184,   189,   191,   193,   195,   197,   199,   201,
-     203,   205,   207,   211,   212,   214,   216,   218
+     176,   180,   184,   188,   192,   196,   200,   204,   208,   213,
+     215,   217,   219,   221,   223,   225,   227,   229,   231,   235,
+     236,   238,   240,   242
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
@@ -522,21 +524,25 @@ static const yytype_int8 yyrhs[] =
       35,    68,    36,    21,     6,    55,     7,    20,     6,    55,
        7,    -1,    73,    -1,    68,    40,    68,    -1,    68,    41,
       68,    -1,    68,    43,    68,    -1,    68,    42,    68,    -1,
-      35,    68,    36,    -1,    11,    33,    68,    34,    -1,    29,
-      -1,    27,    -1,    28,    -1,    30,    -1,    22,    -1,    24,
-      -1,    23,    -1,    25,    -1,    71,    -1,    72,    31,    71,
-      -1,    -1,    74,    -1,    71,    -1,    11,    -1,    69,    -1
+      68,    44,    68,    -1,    68,    45,    68,    -1,    68,    46,
+      68,    -1,    68,    47,    68,    -1,    68,    48,    68,    -1,
+      68,    49,    68,    -1,    35,    68,    36,    -1,    11,    33,
+      68,    34,    -1,    29,    -1,    27,    -1,    28,    -1,    30,
+      -1,    22,    -1,    24,    -1,    23,    -1,    25,    -1,    71,
+      -1,    72,    31,    71,    -1,    -1,    74,    -1,    71,    -1,
+      11,    -1,    69,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    83,    83,    83,    91,    94,    95,    99,   100,   104,
-     105,   106,   110,   111,   112,   113,   117,   118,   119,   120,
-     121,   125,   129,   133,   134,   135,   140,   141,   145,   151,
-     166,   167,   172,   176,   196,   197,   201,   206,   225,   244,
-     263,   308,   314,   321,   322,   323,   324,   328,   329,   330,
-     331,   335,   336,   337,   341,   344,   348,   349
+       0,    84,    84,    84,    92,    95,    96,   100,   101,   105,
+     106,   107,   111,   112,   113,   114,   118,   119,   120,   121,
+     122,   126,   130,   134,   135,   136,   141,   142,   146,   152,
+     168,   169,   174,   178,   198,   199,   203,   209,   232,   256,
+     280,   320,   336,   353,   369,   385,   401,   420,   426,   433,
+     434,   435,   436,   440,   441,   442,   443,   446,   447,   448,
+     452,   455,   459,   460
 };
 #endif
 
@@ -581,8 +587,9 @@ static const yytype_uint8 yyr1[] =
       57,    57,    58,    58,    58,    58,    59,    59,    59,    59,
       59,    60,    61,    62,    62,    62,    63,    63,    64,    64,
       64,    64,    65,    66,    67,    67,    68,    68,    68,    68,
-      68,    68,    69,    70,    70,    70,    70,    71,    71,    71,
-      71,    72,    72,    72,    73,    73,    74,    74
+      68,    68,    68,    68,    68,    68,    68,    68,    69,    70,
+      70,    70,    70,    71,    71,    71,    71,    72,    72,    72,
+      73,    73,    74,    74
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -592,8 +599,9 @@ static const yytype_uint8 yyr2[] =
        3,     0,     1,     1,     1,     1,     1,     1,     1,     1,
        1,     5,     5,     1,     3,     0,     1,     1,     5,     7,
        9,    13,     7,     4,     8,    12,     1,     3,     3,     3,
-       3,     3,     4,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     3,     0,     1,     1,     1,     1
+       3,     3,     3,     3,     3,     3,     3,     3,     4,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     3,     0,
+       1,     1,     1,     1
 };
 
 /* YYDEFACT[STATE-NAME] -- Default reduction number in state STATE-NUM.
@@ -606,52 +614,54 @@ static const yytype_uint8 yydefact[] =
        0,     0,     0,    10,     0,     5,    13,    14,    12,    15,
        0,     0,     0,     0,     0,     0,     0,     0,     5,    19,
       20,    16,    26,    27,    17,    18,     5,     0,    25,     0,
-       0,     0,     0,     0,     0,     6,     0,    56,    47,    49,
-      48,    50,     0,     0,    57,    55,    36,    54,     0,    23,
+       0,     0,     0,     0,     0,     6,     0,    62,    53,    55,
+      54,    56,     0,     0,    63,    61,    36,    60,     0,    23,
        0,     0,     0,     0,     0,     0,     7,     0,     0,    33,
-       0,     0,     0,     0,     0,     0,    44,    45,    43,    46,
-       0,     0,     0,     0,     0,     0,     0,    41,    37,    38,
-      40,    39,    24,    22,     0,    28,     0,     0,     0,    21,
-       3,    42,     0,     0,     0,     5,     0,    29,    32,     0,
-       0,    34,    30,     0,     0,    53,     5,    51,     0,     0,
-       0,     0,    35,    52,    31
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,    50,    51,    49,    52,     0,     0,     0,     0,
+       0,     0,     0,    47,    37,    38,    40,    39,    41,    42,
+      43,    44,    45,    46,    24,    22,     0,    28,     0,     0,
+       0,    21,     3,    48,     0,     0,     0,     5,     0,    29,
+      32,     0,     0,    34,    30,     0,     0,    59,     5,    57,
+       0,     0,     0,     0,    35,    58,    31
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int16 yydefgoto[] =
 {
       -1,     1,     2,     5,    37,    12,    18,    30,    38,    39,
-      40,    68,    41,    42,    43,    44,    45,    63,    64,    90,
-      65,   128,    66,    67
+      40,    68,    41,    42,    43,    44,    45,    63,    64,    96,
+      65,   140,    66,    67
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -99
+#define YYPACT_NINF -111
 static const yytype_int16 yypact[] =
 {
-     -99,     2,     9,   -99,    10,    21,    17,    46,   -99,    32,
-      50,    60,    77,    47,    76,    84,    82,   -99,   -20,    85,
-     107,    93,   114,   -99,    75,    51,   -99,   -99,   -99,   -99,
-     115,   -13,   111,   112,   113,    90,    91,   120,    51,   -99,
-     -99,   -99,   -99,   -99,   -99,   -99,    51,    -4,    -4,   122,
-     103,   104,    -4,    -4,   121,   -99,   125,   100,   -99,   -99,
-     -99,   -99,    -4,    -1,   -99,   -99,   -99,   -99,    65,    66,
-      83,    83,    83,    15,    49,   131,   -99,    -4,    57,   -99,
-      -4,    -4,    -4,    -4,    -4,   126,   -99,   -99,   -99,   -99,
-     128,    -6,   123,   116,   130,   129,    33,   -99,   -18,   -18,
-     -99,   -99,    66,   -99,   105,   -99,    -4,    -4,   136,   -99,
-     -99,   -99,    -4,     3,     7,    51,    38,   -99,   -99,   137,
-      13,   127,   -99,   110,   139,    92,    51,   -99,    30,   141,
-      92,   140,   -99,   -99,   -99
+    -111,     2,    10,  -111,    12,    24,    59,    66,  -111,    70,
+      65,    69,    81,    60,    84,    86,    93,  -111,    -8,    92,
+      88,    76,   112,  -111,    38,    64,  -111,  -111,  -111,  -111,
+     128,   -13,   135,   136,   149,   113,   126,   155,    64,  -111,
+    -111,  -111,  -111,  -111,  -111,  -111,    64,    -4,    -4,   168,
+     150,   176,    -4,    -4,   165,  -111,   194,   170,  -111,  -111,
+    -111,  -111,    -4,     4,  -111,  -111,  -111,  -111,    33,   147,
+      87,    87,    87,   109,   123,   201,  -111,    -4,   137,  -111,
+      -4,    -4,    -4,    -4,    -4,    -4,    -4,    -4,    -4,    -4,
+      -4,   195,  -111,  -111,  -111,  -111,   199,    -6,   191,   187,
+     200,   197,    79,  -111,   -17,   -17,  -111,  -111,    44,    44,
+      44,    44,    90,    90,   147,  -111,   178,  -111,    -4,    -4,
+     206,  -111,  -111,  -111,    -4,    14,    63,    64,    95,  -111,
+    -111,   207,     1,   193,  -111,   182,   210,   175,    64,  -111,
+     -22,   211,   175,   209,  -111,  -111,  -111
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -99,   -99,   -99,   -99,   -38,   -99,   -99,   -99,   -99,   -99,
-     -99,   -99,   -99,   -99,   -99,   -99,   -99,   -47,   -99,   -19,
-     -98,   -99,   -99,   -99
+    -111,  -111,  -111,  -111,   -38,  -111,  -111,  -111,  -111,  -111,
+    -111,  -111,  -111,  -111,  -111,  -111,  -111,   -47,  -111,    19,
+    -110,  -111,  -111,  -111
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -660,48 +670,60 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-      55,    69,     3,    47,   105,    73,    74,    57,    56,    79,
-     106,    20,     4,   117,     6,    78,    21,   118,    58,    59,
-      60,    61,    48,   122,    82,    83,     7,   127,     8,   123,
-      96,    62,   133,    98,    99,   100,   101,   102,    10,    80,
-      81,    82,    83,    80,    81,    82,    83,    80,    81,    82,
-      83,    93,    91,    92,     9,    80,    81,    82,    83,   113,
-     114,   130,    31,    11,   131,   116,    32,   111,    33,    34,
-      35,    13,   120,    80,    81,    82,    83,   119,    80,    81,
-      82,    83,    15,    36,    14,    94,    16,    19,   129,    80,
-      81,    82,    83,    97,    22,    17,    84,    80,    81,    82,
-      83,    85,    26,    27,    28,    29,    80,    81,    82,    83,
-      86,    87,    88,    89,    58,    59,    60,    61,    23,    24,
-      25,    46,    49,    50,    51,    52,    53,    54,    70,    71,
-      72,    75,    76,    77,    95,   104,   103,   108,   112,   107,
-     109,   110,   115,   125,   121,   126,     0,   124,   132,     0,
-     134
+      55,    69,     3,    47,   117,    73,    74,    57,    56,   142,
+     118,   134,   143,     4,    79,    78,     6,   135,    58,    59,
+      60,    61,    48,    20,   129,    82,    83,   139,    21,     7,
+     102,    62,   145,   104,   105,   106,   107,   108,   109,   110,
+     111,   112,   113,   114,    80,    81,    82,    83,    84,    85,
+      86,    87,    88,    89,    80,    81,    82,    83,    84,    85,
+      86,    87,    88,    89,    90,    26,    27,    28,    29,    91,
+       8,   125,   126,   130,     9,    31,    10,   128,    11,    32,
+      13,    33,    34,    35,    80,    81,    82,    83,    14,   131,
+      97,    98,    88,    89,    16,    15,    36,    17,    19,    23,
+     141,    22,    24,    80,    81,    82,    83,    84,    85,    86,
+      87,    88,    89,   123,    92,    93,    94,    95,    25,    80,
+      81,    82,    83,    84,    85,    86,    87,    88,    89,   132,
+      80,    81,    82,    83,    46,    80,    81,    82,    83,    84,
+      85,    86,    87,    88,    89,    99,    49,    50,    52,    80,
+      81,    82,    83,    84,    85,    86,    87,    88,    89,   100,
+      51,    53,    54,    80,    81,    82,    83,    84,    85,    86,
+      87,    88,    89,   103,    70,    75,    71,    80,    81,    82,
+      83,    84,    85,    86,    87,    88,    89,    80,    81,    82,
+      83,    84,    85,    86,    87,    88,    89,    58,    59,    60,
+      61,    76,    72,    77,   101,   115,   116,   119,   120,   122,
+     121,   124,   127,   136,   133,   137,   138,     0,   144,   146
 };
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-99)))
+  (!!((Yystate) == (-111)))
 
 #define yytable_value_is_error(Yytable_value) \
   YYID (0)
 
 static const yytype_int16 yycheck[] =
 {
-      38,    48,     0,    16,    10,    52,    53,    11,    46,    10,
-      16,    31,     3,    10,     4,    62,    36,    10,    22,    23,
-      24,    25,    35,    10,    42,    43,     5,   125,    11,    16,
-      77,    35,   130,    80,    81,    82,    83,    84,     6,    40,
-      41,    42,    43,    40,    41,    42,    43,    40,    41,    42,
-      43,    36,    71,    72,     8,    40,    41,    42,    43,   106,
-     107,    31,    11,    13,    34,   112,    15,    34,    17,    18,
-      19,    11,    34,    40,    41,    42,    43,   115,    40,    41,
-      42,    43,    35,    32,     7,    36,    10,     5,   126,    40,
-      41,    42,    43,    36,     9,    11,    31,    40,    41,    42,
-      43,    36,    27,    28,    29,    30,    40,    41,    42,    43,
-      27,    28,    29,    30,    22,    23,    24,    25,    11,    26,
-       6,     6,    11,    11,    11,    35,    35,     7,     6,    26,
-      26,    10,     7,    33,     3,     7,    10,    21,    33,    16,
-      10,    12,     6,    33,     7,     6,    -1,    20,     7,    -1,
-      10
+      38,    48,     0,    16,    10,    52,    53,    11,    46,    31,
+      16,    10,    34,     3,    10,    62,     4,    16,    22,    23,
+      24,    25,    35,    31,    10,    42,    43,   137,    36,     5,
+      77,    35,   142,    80,    81,    82,    83,    84,    85,    86,
+      87,    88,    89,    90,    40,    41,    42,    43,    44,    45,
+      46,    47,    48,    49,    40,    41,    42,    43,    44,    45,
+      46,    47,    48,    49,    31,    27,    28,    29,    30,    36,
+      11,   118,   119,    10,     8,    11,     6,   124,    13,    15,
+      11,    17,    18,    19,    40,    41,    42,    43,     7,   127,
+      71,    72,    48,    49,    10,    35,    32,    11,     5,    11,
+     138,     9,    26,    40,    41,    42,    43,    44,    45,    46,
+      47,    48,    49,    34,    27,    28,    29,    30,     6,    40,
+      41,    42,    43,    44,    45,    46,    47,    48,    49,    34,
+      40,    41,    42,    43,     6,    40,    41,    42,    43,    44,
+      45,    46,    47,    48,    49,    36,    11,    11,    35,    40,
+      41,    42,    43,    44,    45,    46,    47,    48,    49,    36,
+      11,    35,     7,    40,    41,    42,    43,    44,    45,    46,
+      47,    48,    49,    36,     6,    10,    26,    40,    41,    42,
+      43,    44,    45,    46,    47,    48,    49,    40,    41,    42,
+      43,    44,    45,    46,    47,    48,    49,    22,    23,    24,
+      25,     7,    26,    33,     3,    10,     7,    16,    21,    12,
+      10,    33,     6,    20,     7,    33,     6,    -1,     7,    10
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -716,12 +738,13 @@ static const yytype_uint8 yystos[] =
       11,    11,    35,    35,     7,    55,    55,    11,    22,    23,
       24,    25,    35,    68,    69,    71,    73,    74,    62,    68,
        6,    26,    26,    68,    68,    10,     7,    33,    68,    10,
-      40,    41,    42,    43,    31,    36,    27,    28,    29,    30,
-      70,    70,    70,    36,    36,     3,    68,    36,    68,    68,
-      68,    68,    68,    10,     7,    10,    16,    16,    21,    10,
-      12,    34,    33,    68,    68,     6,    68,    10,    10,    55,
-      34,     7,    10,    16,    20,    33,     6,    71,    72,    55,
-      31,    34,     7,    71,    10
+      40,    41,    42,    43,    44,    45,    46,    47,    48,    49,
+      31,    36,    27,    28,    29,    30,    70,    70,    70,    36,
+      36,     3,    68,    36,    68,    68,    68,    68,    68,    68,
+      68,    68,    68,    68,    68,    10,     7,    10,    16,    16,
+      21,    10,    12,    34,    33,    68,    68,     6,    68,    10,
+      10,    55,    34,     7,    10,    16,    20,    33,     6,    71,
+      72,    55,    31,    34,     7,    71,    10
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1523,19 +1546,19 @@ yyreduce:
     {
         case 2:
 /* Line 1792 of yacc.c  */
-#line 83 "parser.y"
+#line 84 "parser.y"
     {TS = initialiserTS(); TQ = initialiserTQ();}
     break;
 
   case 3:
 /* Line 1792 of yacc.c  */
-#line 87 "parser.y"
+#line 88 "parser.y"
     {printf("u got it right\n"); afficherTS(TS); afficherTQ(TQ);}
     break;
 
   case 28:
 /* Line 1792 of yacc.c  */
-#line 145 "parser.y"
+#line 146 "parser.y"
     {
         
         setType(TS, (yyvsp[(2) - (5)].id), (yyvsp[(4) - (5)].type)); setTokenType(TS, (yyvsp[(2) - (5)].id), (yyvsp[(1) - (5)].type));
@@ -1546,11 +1569,12 @@ yyreduce:
 
   case 29:
 /* Line 1792 of yacc.c  */
-#line 151 "parser.y"
+#line 152 "parser.y"
     {
 
        //printf("id = %s, exptype =  %d \n", $2, $6.type);
-        if((yyvsp[(4) - (7)].type) == (yyvsp[(6) - (7)].compose).type) {
+        if((yyvsp[(4) - (7)].type) == (yyvsp[(6) - (7)].compose).type || (yyvsp[(4) - (7)].type) == REAL && isNumeric((yyvsp[(6) - (7)].compose).type)) { 
+            //if type is the same of if we're assigning a numeric expression (int or real) to real
             setTokenType(TS, (yyvsp[(2) - (7)].id), (yyvsp[(1) - (7)].type));
             setType(TS, (yyvsp[(2) - (7)].id), (yyvsp[(4) - (7)].type));
             setValue(TS, (yyvsp[(2) - (7)].id), (yyvsp[(6) - (7)].compose).value);
@@ -1566,33 +1590,33 @@ yyreduce:
 
   case 30:
 /* Line 1792 of yacc.c  */
-#line 166 "parser.y"
+#line 168 "parser.y"
     {setType(TS, (yyvsp[(2) - (9)].id), (yyvsp[(4) - (9)].type)); setTokenType(TS, (yyvsp[(2) - (9)].id), (yyvsp[(1) - (9)].type));}
     break;
 
   case 31:
 /* Line 1792 of yacc.c  */
-#line 167 "parser.y"
+#line 169 "parser.y"
     {setTokenType(TS, (yyvsp[(2) - (13)].id), (yyvsp[(1) - (13)].type));}
     break;
 
   case 32:
 /* Line 1792 of yacc.c  */
-#line 172 "parser.y"
+#line 174 "parser.y"
     {setTokenType(TS, (yyvsp[(2) - (7)].id), (yyvsp[(1) - (7)].type));}
     break;
 
   case 33:
 /* Line 1792 of yacc.c  */
-#line 176 "parser.y"
+#line 178 "parser.y"
     {
-        //printf("this id is bitch %s\n", $1);
         NODESYMTABLE *node = rechercher(TS, (yyvsp[(1) - (4)].id));
         if(node == NULL) {
            printf("girl u cant assign to a non declared variable\n"); yyerror('c');
         }
 
-        if(node->info.Type == (yyvsp[(3) - (4)].compose).type && node->info.TokenType == VAR) {
+        if((node->info.Type == (yyvsp[(3) - (4)].compose).type || node->info.Type == REAL && isNumeric((yyvsp[(3) - (4)].compose).type)) && node->info.TokenType == VAR) {
+            //if type is the same of if we're assigning a numeric expression (int or real) to real
             setValue(TS, (yyvsp[(1) - (4)].id), (yyvsp[(3) - (4)].compose).value);
             quad = creer_Q("=", (yyvsp[(3) - (4)].compose).value, "", (yyvsp[(1) - (4)].id), quadCounter++);
             inserer_TQ(TQ, quad);
@@ -1604,7 +1628,7 @@ yyreduce:
 
   case 36:
 /* Line 1792 of yacc.c  */
-#line 201 "parser.y"
+#line 203 "parser.y"
     {
         strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value);
         (yyval.compose).type = (yyvsp[(1) - (1)].compose).type;
@@ -1613,195 +1637,338 @@ yyreduce:
 
   case 37:
 /* Line 1792 of yacc.c  */
-#line 206 "parser.y"
+#line 209 "parser.y"
     {
-        //check if both are int
-        if((yyvsp[(1) - (3)].compose).type == INT && (yyvsp[(3) - (3)].compose).type == INT) {
-            //Convert to int, sum, covert back to string 
-            int val1 = atoi((yyvsp[(1) - (3)].compose).value);
-            int val2 = atoi((yyvsp[(3) - (3)].compose).value);
-            char result[255];
-            itoa(val1 + val2, result, 10);
-            strcpy((yyval.compose).value, result);
-        } else if ((yyvsp[(1) - (3)].compose).type == REAL && (yyvsp[(3) - (3)].compose).type == REAL) {
-
+        printf("types %d %d \n \n ", (yyvsp[(1) - (3)].compose).type, (yyvsp[(3) - (3)].compose).type);
+        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+            
             float val1 = atof((yyvsp[(1) - (3)].compose).value);
             float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            float val = val1 + val2;
             char result[255];
-            sprintf(result, "%.2f", val1 + val2);
-             strcpy((yyval.compose).value, result);
+
+            if(ceilf(val) == val){
+                itoa((int)(val), result, 10);
+                (yyval.compose).type = INT;
+            } else {
+                sprintf(result, "%.2f", val);
+                (yyval.compose).type = REAL;
+            }
+
+            strcpy((yyval.compose).value, result);
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
         }
-        else {printf("Erreur Semantique : Type incompatible\n");}
      }
     break;
 
   case 38:
 /* Line 1792 of yacc.c  */
-#line 225 "parser.y"
+#line 232 "parser.y"
     {
-        //check if both are int
-        if((yyvsp[(1) - (3)].compose).type == REAL && (yyvsp[(3) - (3)].compose).type == REAL) {
-            //Convert to int, sum, covert back to string 
-            int val1 = atoi((yyvsp[(1) - (3)].compose).value);
-            int val2 = atoi((yyvsp[(3) - (3)].compose).value);
-            char result[255];
-            itoa(val1 - val2, result, 10);
-            strcpy((yyval.compose).value, result);
-        } else if ((yyvsp[(1) - (3)].compose).type == REAL && (yyvsp[(3) - (3)].compose).type == REAL) {
-
+        printf("types %d %d \n \n ", (yyvsp[(1) - (3)].compose).type, (yyvsp[(3) - (3)].compose).type);
+        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+            
             float val1 = atof((yyvsp[(1) - (3)].compose).value);
             float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            float val = val1 - val2;
             char result[255];
-            sprintf(result, "%.2f", val1 - val2);
-             strcpy((yyval.compose).value, result);
+
+            if(ceilf(val) == val){
+                itoa((int)val, result, 10);
+                (yyval.compose).type = INT;
+            } else {
+                sprintf(result, "%.2f", val);
+                (yyval.compose).type = REAL;
+            }
+
+            strcpy((yyval.compose).value, result);
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
         }
-        else {printf("Erreur Semantique : Type incompatible\n");}
+
      }
     break;
 
   case 39:
 /* Line 1792 of yacc.c  */
-#line 244 "parser.y"
+#line 256 "parser.y"
     {
-        //check if both are int
-        if((yyvsp[(1) - (3)].compose).type == INT && (yyvsp[(3) - (3)].compose).type == INT) {
-            //Convert to int, sum, covert back to string 
-            int val1 = atoi((yyvsp[(1) - (3)].compose).value);
-            int val2 = atoi((yyvsp[(3) - (3)].compose).value);
-            char result[255];
-            itoa(val1 / val2, result, 10);
-            strcpy((yyval.compose).value, result);
-        } else if ((yyvsp[(1) - (3)].compose).type == REAL && (yyvsp[(3) - (3)].compose).type == REAL) {
-
+        printf("types %d %d \n \n ", (yyvsp[(1) - (3)].compose).type, (yyvsp[(3) - (3)].compose).type);
+        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+            
             float val1 = atof((yyvsp[(1) - (3)].compose).value);
             float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            float val = val1 / val2;
             char result[255];
-            sprintf(result, "%.2f", val1 / val2);
-             strcpy((yyval.compose).value, result);
+
+            if(ceilf(val) == val){
+                itoa((int)(val), result, 10);
+                (yyval.compose).type = INT;
+            } else {
+                sprintf(result, "%.2f", val);
+                (yyval.compose).type = REAL;
+            }
+
+            strcpy((yyval.compose).value, result);
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
         }
-        else {printf("Erreur Semantique : Type incompatible\n");}
      }
     break;
 
   case 40:
 /* Line 1792 of yacc.c  */
-#line 263 "parser.y"
+#line 280 "parser.y"
     {
-        //check if both are int
-        if((yyvsp[(1) - (3)].compose).type == INT && (yyvsp[(3) - (3)].compose).type == INT) {
-            //Convert to int, sum, covert back to string 
-            int val1 = atoi((yyvsp[(1) - (3)].compose).value);
-            int val2 = atoi((yyvsp[(3) - (3)].compose).value);
-            char result[255];
-            itoa(val1 * val2, result, 10);
-            strcpy((yyval.compose).value, result);
-        } else if ((yyvsp[(1) - (3)].compose).type == REAL && (yyvsp[(3) - (3)].compose).type == REAL) {
-
+        //printf("types %d %d \n \n ", $1.type, $3.type);
+        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+            
             float val1 = atof((yyvsp[(1) - (3)].compose).value);
             float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            float val = val1 * val2;
             char result[255];
-            sprintf(result, "%.2f", val1*val2);
-             strcpy((yyval.compose).value, result);
+
+            if(ceilf(val) == val){
+                itoa((int)(val), result, 10);
+                (yyval.compose).type = INT;
+            } else {
+                sprintf(result, "%.2f", val);
+                (yyval.compose).type = REAL;
+            }
+
+            strcpy((yyval.compose).value, result);
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
         }
-        else {printf("erreur semantique\n"); yyerror('c');}
      }
     break;
 
   case 41:
 /* Line 1792 of yacc.c  */
-#line 308 "parser.y"
+#line 320 "parser.y"
+    {
+        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+            (yyval.compose).type = BOOL;
+            float val1 = atof((yyvsp[(1) - (3)].compose).value);
+            float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            if(val1 > val2) {
+                //expression is true
+                strcpy((yyval.compose).value, "true");
+            } else {
+                strcpy((yyval.compose).value, "false");
+            }
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
+        }
+     }
+    break;
+
+  case 42:
+/* Line 1792 of yacc.c  */
+#line 336 "parser.y"
+    {
+        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+            (yyval.compose).type = BOOL;
+            float val1 = atof((yyvsp[(1) - (3)].compose).value);
+            float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            if(val1 >= val2) {
+                //expression is true
+                strcpy((yyval.compose).value, "true");
+            } else {
+                strcpy((yyval.compose).value, "false");
+            }
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
+        }
+     }
+    break;
+
+  case 43:
+/* Line 1792 of yacc.c  */
+#line 353 "parser.y"
+    {
+        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+            (yyval.compose).type = BOOL;
+            float val1 = atof((yyvsp[(1) - (3)].compose).value);
+            float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            if(val1 < val2) {
+                //expression is true
+                strcpy((yyval.compose).value, "true");
+            } else {
+                strcpy((yyval.compose).value, "false");
+            }
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
+        }
+     }
+    break;
+
+  case 44:
+/* Line 1792 of yacc.c  */
+#line 369 "parser.y"
+    {
+        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+            (yyval.compose).type = BOOL;
+            float val1 = atof((yyvsp[(1) - (3)].compose).value);
+            float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            if(val1 <= val2) {
+                //expression is true
+                strcpy((yyval.compose).value, "true");
+            } else {
+                strcpy((yyval.compose).value, "false");
+            }
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
+        }
+     }
+    break;
+
+  case 45:
+/* Line 1792 of yacc.c  */
+#line 385 "parser.y"
+    {
+        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+            (yyval.compose).type = BOOL;
+            float val1 = atof((yyvsp[(1) - (3)].compose).value);
+            float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            if(val1 == val2) {
+                //expression is true
+                strcpy((yyval.compose).value, "true");
+            } else {
+                strcpy((yyval.compose).value, "false");
+            }
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
+        }
+     }
+    break;
+
+  case 46:
+/* Line 1792 of yacc.c  */
+#line 401 "parser.y"
+    {
+        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+            (yyval.compose).type = BOOL;
+            float val1 = atof((yyvsp[(1) - (3)].compose).value);
+            float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            if(val1 != val2) {
+                //expression is true
+                strcpy((yyval.compose).value, "true");
+            } else {
+                strcpy((yyval.compose).value, "false");
+            }
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
+        }
+     }
+    break;
+
+  case 47:
+/* Line 1792 of yacc.c  */
+#line 420 "parser.y"
     {
         (yyval.compose).value = (yyvsp[(2) - (3)].compose).value;
         (yyval.compose).type = (yyvsp[(2) - (3)].compose).type;
      }
     break;
 
-  case 42:
+  case 48:
 /* Line 1792 of yacc.c  */
-#line 314 "parser.y"
+#line 426 "parser.y"
     {
         NODESYMTABLE *node = rechercher(TS, (yyvsp[(1) - (4)].id));
         strcpy((yyval.compose).type, node->info.Type);
         }
     break;
 
-  case 43:
-/* Line 1792 of yacc.c  */
-#line 321 "parser.y"
-    {(yyval.type) = yylval.type;}
-    break;
-
-  case 44:
-/* Line 1792 of yacc.c  */
-#line 322 "parser.y"
-    {(yyval.type) = yylval.type;}
-    break;
-
-  case 45:
-/* Line 1792 of yacc.c  */
-#line 323 "parser.y"
-    {(yyval.type) = yylval.type;}
-    break;
-
-  case 46:
-/* Line 1792 of yacc.c  */
-#line 324 "parser.y"
-    {(yyval.type) = yylval.type;}
-    break;
-
-  case 47:
-/* Line 1792 of yacc.c  */
-#line 328 "parser.y"
-    {(yyval.compose).value = yylval.value; (yyval.compose).type = INT;}
-    break;
-
-  case 48:
-/* Line 1792 of yacc.c  */
-#line 329 "parser.y"
-    {(yyval.compose).value = yylval.value; (yyval.compose).type = BOOL;}
-    break;
-
   case 49:
 /* Line 1792 of yacc.c  */
-#line 330 "parser.y"
-    {(yyval.compose).value = yylval.value; (yyval.compose).type = REAL;}
+#line 433 "parser.y"
+    {(yyval.type) = yylval.type;}
     break;
 
   case 50:
 /* Line 1792 of yacc.c  */
-#line 331 "parser.y"
-    {(yyval.compose).value = yylval.value; (yyval.compose).type = STR;}
+#line 434 "parser.y"
+    {(yyval.type) = yylval.type;}
+    break;
+
+  case 51:
+/* Line 1792 of yacc.c  */
+#line 435 "parser.y"
+    {(yyval.type) = yylval.type;}
+    break;
+
+  case 52:
+/* Line 1792 of yacc.c  */
+#line 436 "parser.y"
+    {(yyval.type) = yylval.type;}
+    break;
+
+  case 53:
+/* Line 1792 of yacc.c  */
+#line 440 "parser.y"
+    {(yyval.compose).value = yylval.value; (yyval.compose).type = INT;}
     break;
 
   case 54:
 /* Line 1792 of yacc.c  */
-#line 341 "parser.y"
+#line 441 "parser.y"
+    {(yyval.compose).value = yylval.value; (yyval.compose).type = BOOL;}
+    break;
+
+  case 55:
+/* Line 1792 of yacc.c  */
+#line 442 "parser.y"
+    {(yyval.compose).value = yylval.value; (yyval.compose).type = REAL;}
+    break;
+
+  case 56:
+/* Line 1792 of yacc.c  */
+#line 443 "parser.y"
+    {(yyval.compose).value = yylval.value; (yyval.compose).type = STR;}
+    break;
+
+  case 60:
+/* Line 1792 of yacc.c  */
+#line 452 "parser.y"
     {
         strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value);
         }
     break;
 
-  case 55:
+  case 61:
 /* Line 1792 of yacc.c  */
-#line 344 "parser.y"
+#line 455 "parser.y"
     { strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value); (yyval.compose).type = (yyvsp[(1) - (1)].compose).type;}
     break;
 
-  case 56:
+  case 62:
 /* Line 1792 of yacc.c  */
-#line 348 "parser.y"
+#line 459 "parser.y"
     {strcpy((yyval.compose).id, (yyvsp[(1) - (1)].id)); }
     break;
 
-  case 57:
+  case 63:
 /* Line 1792 of yacc.c  */
-#line 349 "parser.y"
+#line 460 "parser.y"
     {strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value);}
     break;
 
 
 /* Line 1792 of yacc.c  */
-#line 1805 "parser.tab.c"
+#line 1972 "parser.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2033,7 +2200,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 350 "parser.y"
+#line 461 "parser.y"
 
 int yyerror(const char *s) {
   printf("error %s\n",s);

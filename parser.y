@@ -1,6 +1,7 @@
 %{
 #include "TableSymboles.h"
 #include "quadruplet.h"
+#include "helperSemantic.h"
 #include <stdio.h>
 #include <stdlib.h>
 int yylex();
@@ -151,7 +152,8 @@ vardeclaration :
     | KEYVAR IDENTIFIER TWODOTS dectype ASSIGN EXP END {
 
        //printf("id = %s, exptype =  %d \n", $2, $6.type);
-        if($4 == $6.type) {
+        if($4 == $6.type || $4 == REAL && isNumeric($6.type)) { 
+            //if type is the same of if we're assigning a numeric expression (int or real) to real
             setTokenType(TS, $2, $1);
             setType(TS, $2, $4);
             setValue(TS, $2, $6.value);
@@ -174,13 +176,13 @@ constdeclaration :
 
 assignment : 
     IDENTIFIER ASSIGN EXP END {
-        //printf("this id is bitch %s\n", $1);
         NODESYMTABLE *node = rechercher(TS, $1);
         if(node == NULL) {
            printf("girl u cant assign to a non declared variable\n"); yyerror('c');
         }
 
-        if(node->info.Type == $3.type && node->info.TokenType == VAR) {
+        if((node->info.Type == $3.type || node->info.Type == REAL && isNumeric($3.type)) && node->info.TokenType == VAR) {
+            //if type is the same of if we're assigning a numeric expression (int or real) to real
             setValue(TS, $1, $3.value);
             quad = creer_Q("=", $3.value, "", $1, quadCounter++);
             inserer_TQ(TQ, quad);
@@ -203,81 +205,100 @@ EXP :
         $$.type = $1.type;
         }
      //| IDENTIFIER PARENTESESTART arguments PARENTESEEND 
+     
      | EXP PLUS EXP {
-        //check if both are int
-        if($1.type == INT && $3.type == INT) {
-            //Convert to int, sum, covert back to string 
-            int val1 = atoi($1.value);
-            int val2 = atoi($3.value);
-            char result[255];
-            itoa(val1 + val2, result, 10);
-            strcpy($$.value, result);
-        } else if ($1.type == REAL && $3.type == REAL) {
-
+        printf("types %d %d \n \n ", $1.type, $3.type);
+        if(isNumeric($1.type) && isNumeric($3.type)) {
+            
             float val1 = atof($1.value);
             float val2 = atof($3.value);
+            float val = val1 + val2;
             char result[255];
-            sprintf(result, "%.2f", val1 + val2);
-             strcpy($$.value, result);
+
+            if(ceilf(val) == val){
+                itoa((int)(val), result, 10);
+                $$.type = INT;
+            } else {
+                sprintf(result, "%.2f", val);
+                $$.type = REAL;
+            }
+
+            strcpy($$.value, result);
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
         }
-        else {printf("Erreur Semantique : Type incompatible\n");}
      }
      | EXP MINUS EXP {
-        //check if both are int
-        if($1.type == REAL && $3.type == REAL) {
-            //Convert to int, sum, covert back to string 
-            int val1 = atoi($1.value);
-            int val2 = atoi($3.value);
-            char result[255];
-            itoa(val1 - val2, result, 10);
-            strcpy($$.value, result);
-        } else if ($1.type == REAL && $3.type == REAL) {
-
+        printf("types %d %d \n \n ", $1.type, $3.type);
+        if(isNumeric($1.type) && isNumeric($3.type)) {
+            
             float val1 = atof($1.value);
             float val2 = atof($3.value);
+            float val = val1 - val2;
             char result[255];
-            sprintf(result, "%.2f", val1 - val2);
-             strcpy($$.value, result);
+
+            if(ceilf(val) == val){
+                itoa((int)val, result, 10);
+                $$.type = INT;
+            } else {
+                sprintf(result, "%.2f", val);
+                $$.type = REAL;
+            }
+
+            strcpy($$.value, result);
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
         }
-        else {printf("Erreur Semantique : Type incompatible\n");}
+
      }
      | EXP DIV EXP {
-        //check if both are int
-        if($1.type == INT && $3.type == INT) {
-            //Convert to int, sum, covert back to string 
-            int val1 = atoi($1.value);
-            int val2 = atoi($3.value);
-            char result[255];
-            itoa(val1 / val2, result, 10);
-            strcpy($$.value, result);
-        } else if ($1.type == REAL && $3.type == REAL) {
-
+        printf("types %d %d \n \n ", $1.type, $3.type);
+        if(isNumeric($1.type) && isNumeric($3.type)) {
+            
             float val1 = atof($1.value);
             float val2 = atof($3.value);
+            float val = val1 / val2;
             char result[255];
-            sprintf(result, "%.2f", val1 / val2);
-             strcpy($$.value, result);
+
+            if(ceilf(val) == val){
+                itoa((int)(val), result, 10);
+                $$.type = INT;
+            } else {
+                sprintf(result, "%.2f", val);
+                $$.type = REAL;
+            }
+
+            strcpy($$.value, result);
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
         }
-        else {printf("Erreur Semantique : Type incompatible\n");}
      }
+     
      | EXP MULT EXP {
-        //check if both are int
-        if($1.type == INT && $3.type == INT) {
-            //Convert to int, sum, covert back to string 
-            int val1 = atoi($1.value);
-            int val2 = atoi($3.value);
-            char result[255];
-            itoa(val1 * val2, result, 10);
-            strcpy($$.value, result);
-        } else if ($1.type == REAL && $3.type == REAL) {
-
+        //printf("types %d %d \n \n ", $1.type, $3.type);
+        if(isNumeric($1.type) && isNumeric($3.type)) {
+            
             float val1 = atof($1.value);
             float val2 = atof($3.value);
+            float val = val1 * val2;
             char result[255];
-            sprintf(result, "%.2f", val1*val2);
-             strcpy($$.value, result);
+
+            if(ceilf(val) == val){
+                itoa((int)(val), result, 10);
+                $$.type = INT;
+            } else {
+                sprintf(result, "%.2f", val);
+                $$.type = REAL;
+            }
+
+            strcpy($$.value, result);
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
         }
-        else {printf("erreur semantique\n"); yyerror('c');}
      }
      /*| MINUS EXP %prec NEG {
         printf("we here\n");
@@ -296,13 +317,104 @@ EXP :
         }
         else {printf("erreur semantique : cant negate a non numeric value\n"); yyerror('c');}
      }*/
-     /*| EXP SUP EXP
-     | EXP SUPEQ EXP
-     | EXP INF EXP
-     | EXP INFEQ EXP
-     | EXP EQ EXP
-     | EXP NEQ EXP
-     | EXP AND EXP
+     | EXP SUP EXP {
+        if(isNumeric($1.type) && isNumeric($3.type)) {
+            $$.type = BOOL;
+            float val1 = atof($1.value);
+            float val2 = atof($3.value);
+            if(val1 > val2) {
+                //expression is true
+                strcpy($$.value, "true");
+            } else {
+                strcpy($$.value, "false");
+            }
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
+        }
+     }
+     | EXP SUPEQ EXP {
+        if(isNumeric($1.type) && isNumeric($3.type)) {
+            $$.type = BOOL;
+            float val1 = atof($1.value);
+            float val2 = atof($3.value);
+            if(val1 >= val2) {
+                //expression is true
+                strcpy($$.value, "true");
+            } else {
+                strcpy($$.value, "false");
+            }
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
+        }
+     }
+     
+     | EXP INF EXP {
+        if(isNumeric($1.type) && isNumeric($3.type)) {
+            $$.type = BOOL;
+            float val1 = atof($1.value);
+            float val2 = atof($3.value);
+            if(val1 < val2) {
+                //expression is true
+                strcpy($$.value, "true");
+            } else {
+                strcpy($$.value, "false");
+            }
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
+        }
+     }
+     | EXP INFEQ EXP {
+        if(isNumeric($1.type) && isNumeric($3.type)) {
+            $$.type = BOOL;
+            float val1 = atof($1.value);
+            float val2 = atof($3.value);
+            if(val1 <= val2) {
+                //expression is true
+                strcpy($$.value, "true");
+            } else {
+                strcpy($$.value, "false");
+            }
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
+        }
+     }
+     | EXP EQ EXP{
+        if(isNumeric($1.type) && isNumeric($3.type)) {
+            $$.type = BOOL;
+            float val1 = atof($1.value);
+            float val2 = atof($3.value);
+            if(val1 == val2) {
+                //expression is true
+                strcpy($$.value, "true");
+            } else {
+                strcpy($$.value, "false");
+            }
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
+        }
+     }
+     | EXP NEQ EXP {
+        if(isNumeric($1.type) && isNumeric($3.type)) {
+            $$.type = BOOL;
+            float val1 = atof($1.value);
+            float val2 = atof($3.value);
+            if(val1 != val2) {
+                //expression is true
+                strcpy($$.value, "true");
+            } else {
+                strcpy($$.value, "false");
+            }
+        } else {
+            printf("Erreur Semantique : Type incompatible\n");
+            yyerror('c');
+        }
+     }
+     /*| EXP AND EXP
      | EXP OR EXP 
      | NOT EXP*/
      | PARENTESESTART EXP PARENTESEEND {
@@ -330,7 +442,6 @@ type :
     | TYPEREAL {$$.value = yylval.value; $$.type = REAL;}
     | TYPESTR {$$.value = yylval.value; $$.type = STR;}
     ;
-
 types : 
     type
     | types COMMA type

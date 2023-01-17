@@ -2,6 +2,7 @@
 #define BOOL 1
 #define INT 2
 #define REAL 3
+#define NUM 4 //includes real and int and only used to evaluate arithmetic expressions
 
 #define CONST 0
 #define VAR 1
