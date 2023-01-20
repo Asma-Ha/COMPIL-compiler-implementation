@@ -2,6 +2,10 @@
 
 $ to test something remove the comment marks chokran $ 
 
+def models{
+};
+
+
 def main{
     var b : int = 6;
 

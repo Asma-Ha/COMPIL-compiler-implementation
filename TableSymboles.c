@@ -24,8 +24,6 @@ NODESYMTABLE *rechercher(SYMTABLE *TS, char nom[]){
             n = n->next;
         }
     }
-    //printf("we didnt find it \n");
-    return NULL;
 }
 
 

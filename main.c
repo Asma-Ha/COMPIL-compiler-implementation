@@ -5,18 +5,16 @@
 #include "quadruplet.h"
 
 int main() {
-    // TQ works 
+    /* TQ works 
     QUADTABLE *T = initialiserTQ();
     QUADRUPLETNODE *Q1 = creer_Q("+", "t1", "t2", "R1", 1);
-    QUADRUPLETNODE *Q3 = creer_Q("/", "t4", "t2", "R1", 2);
     inserer_TQ(T, Q1);
-    inserer_TQ(T, Q3);
     afficherTQ(T);
-
+    */
 
 
    /* PQ*/
-   /*QUADPILE *P = initialiserP();
+   QUADPILE *P = initialiserP();
    QUADRUPLETNODE *Q1 = creer_Q("+", "t1", "t2", "R1", 1);
    QUADRUPLETNODE *Q2 = creer_Q("-", "R1", "t2", "R2", 2);
 
@@ -31,6 +29,6 @@ int main() {
    printf("\nAffichage P after popping \n");
    afficherP(P);
 
-    Q = pop(P);*/
+    Q = pop(P);
     return 0;
 }

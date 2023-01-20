@@ -29,17 +29,8 @@ void afficherQ(QUADRUPLETNODE* Q){
 }
 
 void inserer_TQ(QUADTABLE *TQ, QUADRUPLETNODE *Q){
-    if(TQ->head == NULL){
-        TQ->head = Q;
-        return;
-    }
-    QUADRUPLETNODE *n = TQ->head, *tmp;
-    while(n != NULL) {
-        tmp = n;
-        n = n->next;
-    }
-    tmp->next = Q;
-    Q->next = NULL;
+    Q->next = TQ->head;
+    TQ->head = Q;
     return;
 }
 

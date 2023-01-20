@@ -2,6 +2,23 @@
 
 $ to test something remove the comment marks chokran $ 
 
+def models{
+    $ fun fonction1 (g, h) : real {
+
+    } $ 
+
+    $ fun fonction2(g, pYg, o, h1) : str {
+        return(a);
+    } $
+
+    $ fun fonction3 () : bool {
+        var g : bool = 5;
+        var y : bool = g;
+        return(y);
+    } $
+};
+
+
 def main{
 
     $ test : variable declaration $ 

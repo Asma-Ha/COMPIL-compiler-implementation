@@ -15,8 +15,6 @@ QUADPILE *P;
 int execute = 1; 
 QUADRUPLETNODE* quad;
 int quadCounter = 0;
-
-int saveEtiq;
 %}
 
 %union {
@@ -25,10 +23,11 @@ int saveEtiq;
     int type;
     struct {
         char* value;
+        char* id;
         int type;
     } compose;
 
-
+    
 }
 
 
@@ -40,10 +39,11 @@ int saveEtiq;
 %token MODELS
 %token MAIN
 %token END
-%token KEYFOR
+
 %token <id>IDENTIFIER
 %token ENDPROG
-token <type>KEYARRAY
+%token <type>KEYFUN
+%token <type>KEYARRAY
 %token ASSIGN
 %token <type>KEYVAR
 %token <type>KEYCONST
@@ -68,9 +68,7 @@ token <type>KEYARRAY
 %type <compose>type
 %type <compose>TERM
 %type <compose>Variable
-%type <compose>assignment //this is because we need to check the type when doing for loops 
-%type <id>for_first_part //i need index name
-//%type <compose>listelement
+%type <compose>listelement
 %type <compose>EXP
 %left OR
 %left AND
@@ -88,6 +86,7 @@ token <type>KEYARRAY
 program : 
     {TS = initialiserTS(); TQ = initialiserTQ(); P = initialiserP();}
     header
+    SECTDEFKEY MODELS CURLYSTART functions CURLYEND END 
     SECTDEFKEY MAIN CURLYSTART ins_seq CURLYEND END 
     KEY ENDPROG {printf("u got it right\n"); afficherTS(TS); afficherTQ(TQ);}
     ;
@@ -100,13 +99,44 @@ ins_seq :
     | instruction ins_seq
     ;
 
+functions : 
+    KEYFUN IDENTIFIER PARENTESESTART parameters PARENTESEEND TWODOTS returntype CURLYSTART ins_seq CURLYEND
+    |
+    ;
 
+parameters : 
+    IDENTIFIER 
+    | parameters COMMA IDENTIFIER
+    |
+    ;
+
+returntype : 
+    DECBOOL 
+    | DECINT
+    | DECREAL
+    | DECSTR
+    ;
 
 instruction : 
-    declaration END
-    | assignment END
+    declaration 
+    | assignment 
     | ifstatemnt
-    | loop
+    | returnn 
+    | funcall
+    ;
+
+returnn : 
+    RETURNKEY PARENTESESTART EXP PARENTESEEND END
+    ;
+
+funcall : 
+    IDENTIFIER PARENTESESTART arguments PARENTESEEND END
+    ;
+
+arguments : 
+    EXP
+    | arguments COMMA EXP
+    |
     ;
 
 
@@ -116,29 +146,21 @@ declaration :
     ;
 
 vardeclaration :
-    KEYVAR IDENTIFIER TWODOTS dectype {
+    KEYVAR IDENTIFIER TWODOTS dectype END {
         quad = creer_Q("DEC", $2 , "","" , quadCounter++);
         inserer_TQ(TQ, quad);
         if(execute) {
-            NODESYMTABLE* identifier = rechercher(TS, $2);
-            if (identifier == NULL){
-                identifier = inserer(TS, $2);
-            }
             setType(TS, $2, $4); setTokenType(TS, $2, $1);
             }
         }
         
-    | KEYVAR IDENTIFIER TWODOTS dectype ASSIGN EXP {
+    | KEYVAR IDENTIFIER TWODOTS dectype ASSIGN EXP END {
         quad = creer_Q("DEC", $2 , "", "", quadCounter++);
         inserer_TQ(TQ, quad);
         quad = creer_Q("=", $6.value, "", $2, quadCounter++);
         inserer_TQ(TQ, quad);
        //printf("id = %s, exptype =  %d \n", $2, $6.type);
        if(execute) {
-        NODESYMTABLE* identifier = rechercher(TS, $2);
-            if (identifier == NULL){
-                identifier = inserer(TS, $2);
-            }
         if($4 == $6.type || $4 == REAL && isNumeric($6.type)) { 
             //if type is the same of if we're assigning a numeric expression (int or real) to real
             setTokenType(TS, $2, $1);
@@ -155,48 +177,24 @@ vardeclaration :
     ;
 
 constdeclaration : 
-    KEYCONST IDENTIFIER TWODOTS dectype ASSIGN EXP {
-        quad = creer_Q("DEC", $2 , "", "", quadCounter++);
-        inserer_TQ(TQ, quad);
-        quad = creer_Q("=", $6.value, "", $2, quadCounter++);
-        inserer_TQ(TQ, quad);
-       //printf("id = %s, exptype =  %d \n", $2, $6.type);
-       if(execute) {
-        NODESYMTABLE* identifier = rechercher(TS, $2);
-        if (identifier == NULL){
-            identifier = inserer(TS, $2);
-        }
-        if($4 == $6.type || $4 == REAL && isNumeric($6.type)) { 
-            //if type is the same of if we're assigning a numeric expression (int or real) to real
-            printf("TOKEN TYPE IS %d ", $1);
-            setTokenType(TS, $2, $1);
-            setType(TS, $2, $4);
-            setValue(TS, $2, $6.value);
-
-        } else {printf("incompatible type\n"); yyerror('c');}
-       }
-        }
+    KEYCONST IDENTIFIER TWODOTS dectype ASSIGN EXP END {setTokenType(TS, $2, $1);}
     ;
 
 assignment : 
-    IDENTIFIER ASSIGN EXP {
+    IDENTIFIER ASSIGN EXP END {
         //printf("\n execute %d \n", execute);
         quad = creer_Q("=", $3.value, "", $1, quadCounter++);
         inserer_TQ(TQ, quad);
         if(execute) {
-            //printf("Im dumb and i look twice \n");
             NODESYMTABLE *node = rechercher(TS, $1);
             if(node == NULL) {
-            printf(" \ngirl u cant assign to a non declared variable\n"); yyerror('c');
-            } else if (node->info.TokenType == CONST){
-                printf("\ngirl u cant assign to a constant\n"); yyerror('c');
-            } else if((node->info.Type == $3.type || node->info.Type == REAL && isNumeric($3.type)) && node->info.TokenType == VAR) {
+            printf("girl u cant assign to a non declared variable\n"); yyerror('c');
+            }
+            if((node->info.Type == $3.type || node->info.Type == REAL && isNumeric($3.type)) && node->info.TokenType == VAR) {
                 //if type is the same of if we're assigning a numeric expression (int or real) to real
                 setValue(TS, $1, $3.value);
-                $$.type = $3.type;
-                strcpy($$.value, $1);
             } else {
-                printf("HRincompatible type\n"); yyerror('c');}
+                printf("incompatible type\n"); yyerror('c');}
             }
     }
 
@@ -204,90 +202,19 @@ assignment :
     /*| listelement ASSIGN EXP END /* assign to list element */
     ;
 
-loop : 
-
-    forloop 
-    /*
-    | whileloop
-    | dowileloop
-    ;*/
-
-forloop : 
-    for_first_part for_second_part TYPEINT PARENTESEEND CURLYSTART ins_seq CURLYEND {
-       //we insert a non real assignment expression : index = index + pas 
-        //result of increment
-        NODESYMTABLE *node = rechercher(TS, $1);
-        int index = atoi(node->info.Value);
-        printf("index = %d\n", index);
-        int pas = atoi($3);
-
-        //quad for increment
-        char result[255];
-        itoa(index + pas, result, 10);
-
-        quad = creer_Q("+", node->info.Value , $3, result, quadCounter++);
-        inserer_TQ(TQ, quad);
-
-        quad = creer_Q("=", result, "" , $1, quadCounter++);
-        inserer_TQ(TQ, quad);
-
-
-        //updating the fin etiq
-        quad = pop(P);
-        updateEtiq(quad, quadCounter+1);
-
-        //back to first ins with save etiq 
-        char se[255];
-        itoa(saveEtiq, se, 10);
-        quad = creer_Q("BR", se, "" , "", quadCounter++);
-        inserer_TQ(TQ, quad);
-    }
-    ;
-for_first_part :
-    KEYFOR PARENTESESTART assignment {
-        saveEtiq = quadCounter;
-        //check if assignment is integer 
-        if($3.type != INT) {
-            printf("\nfor loop index has to be an int\n"); yyerror('c');
-        } 
-        strcpy($$, $3.value); //save value of index
-    }
-    ;
-for_second_part :
-    END EXP END {
-        //check if EXP type is boolean 
-        if($2.type != BOOL) {
-            printf("\nfor loop condition isnt right, there has to be a boolean expression\n"); yyerror('c');
-        }
-        
-        //Quad for jump to end if it's false
-            quad = creer_Q("BZ", "etiq", "", $2.value, quadCounter++);
-            inserer_TQ(TQ, quad);
-            push(P, quad);
-        
-
-
-            /*if(strcmp($3.value, "false") == 0){
-
-            printf("false baby\n");
-                //if the condition is false => skip instruction set
-                execute = 0;
-            } */ //later for when teacher responds to mail
-    }
-    ;
 
 ifstatemnt : 
 
-    if_first_part KEYTHEN CURLYSTART ins_seq CURLYEND {
+    first_part KEYTHEN CURLYSTART ins_seq CURLYEND {
         //mise a jour d'adresses
-        //printf("\nIM HERE\n");
+        printf("\nIM HERE\n");
         quad = pop(P);
-        //afficherQ(quad);
+        afficherQ(quad);
         updateEtiq(quad, quadCounter);
          execute = 1; //get out
     }
 
-    | if_first_part if_second_part KEYELSE CURLYSTART ins_seq CURLYEND {
+    | first_part second_part KEYELSE CURLYSTART ins_seq CURLYEND {
         quad = pop(P);
         afficherQ(quad);
         updateEtiq(quad, quadCounter);
@@ -295,7 +222,7 @@ ifstatemnt :
     }
     ;
 
-if_first_part : 
+first_part : 
     KEYIF PARENTESESTART EXP PARENTESEEND {
         if($3.type == BOOL) {
             //make quadruplet for thing 
@@ -314,7 +241,7 @@ if_first_part :
         }
     }
     ;
-if_second_part :
+ second_part :
     KEYTHEN CURLYSTART ins_seq CURLYEND {
         quad = pop(P);
         afficherQ(quad);
@@ -343,6 +270,7 @@ EXP :
         $$.type = $1.type;
 
         }
+     //| IDENTIFIER PARENTESESTART arguments PARENTESEEND 
      
      | EXP PLUS EXP {
         printf("\ntypes %s %s \n \n ", $1.value, $3.value);
@@ -582,20 +510,150 @@ EXP :
             yyerror('c');
         }
      }
-     /*| EXP AND EXP
-     | EXP OR EXP 
-     | NOT EXP*/
+     
+     | EXP OR EXP {
+        printf("\nI am an OR condition\n");
+        char result[255];
+        //Check first expression before or
+        if(strcmp($1.value, "true") == 0){
+            
+            printf("\nThe first condition has a value of\n");
+            printf($1.value);
+            printf("\nWhole condition\n");
+            strcpy(result, "true");
+
+            quad = creer_Q("||", $1.value, $3.value, result, quadCounter++);
+            inserer_TQ(TQ, quad);
+
+            strcpy($$.value, result);
+            printf("\n %s",$$.value);
+            printf("\n------------------------\n");
+        }
+        else if (strcmp($1.value, "false") == 0)
+        {
+            printf("\nThe first condition has a value of\n");
+            printf($1.value);
+
+            //Check second expression after or when the first value is false
+            if(strcmp($3.value, "true") == 0){
+            
+                printf("\nThe second condition has a value of\n");
+                printf($3.value);
+                printf("\nWhole condition\n");
+                strcpy(result, "true");
+
+                quad = creer_Q("||", $1.value, $3.value, result, quadCounter++);
+                inserer_TQ(TQ, quad);
+
+                strcpy($$.value, result);
+                printf("\n %s",$$.value);
+                printf("\n------------------------\n");
+            }
+            else if (strcmp($3.value, "false") == 0)
+            {
+                printf("\nThe second condition has a value of\n");
+                printf($3.value);
+                printf("\nWhole condition\n");
+                strcpy(result, "false");
+
+                quad = creer_Q("||", $1.value, $3.value, result, quadCounter++);
+                inserer_TQ(TQ, quad);
+
+                strcpy($$.value, result);
+                printf("\n %s",$$.value);
+            }
+            else
+            {
+                printf("\nError, the condition should be a boolean expression\n");
+                yyerror('c');
+            }
+        }
+        else 
+        {
+            printf("\nError, the condition should be a boolean expression\n");
+            yyerror('c');
+        }
+
+     }
+
+     | EXP AND EXP {
+        printf("\nI am an AND condition\n");
+        char result[255];
+
+        //Check first expression before and
+        if(strcmp($1.value, "false") == 0){
+            
+            printf("\nThe first condition has a value of\n");
+            printf($1.value);
+            printf("\nWhole condition\n");
+            strcpy(result, "false");
+
+            quad = creer_Q("&&", $1.value, $3.value, result, quadCounter++);
+            inserer_TQ(TQ, quad);
+
+            strcpy($$.value, result);
+            printf("\n %s",$$.value);
+            printf("\n------------------------\n");
+        }
+        else if (strcmp($1.value, "true") == 0)
+        {
+            printf("\nThe first condition has a value of\n");
+            printf($1.value);
+
+            //Check second expression after and when the first value is true
+            if(strcmp($3.value, "true") == 0){
+            
+                printf("\nThe second condition has a value of\n");
+                printf($3.value);
+                printf("\nWhole condition\n");
+                strcpy(result, "true");
+
+                quad = creer_Q("&&", $1.value, $3.value, result, quadCounter++);
+                inserer_TQ(TQ, quad);
+
+                strcpy($$.value, result);
+                printf("\n %s",$$.value);
+                printf("\n------------------------\n");
+            }
+            else if (strcmp($3.value, "false") == 0)
+            {
+                printf("\nThe second condition has a value of\n");
+                printf($3.value);
+                printf("\nWhole condition\n");
+                strcpy(result, "false");
+
+                quad = creer_Q("&&", $1.value, $3.value, result, quadCounter++);
+                inserer_TQ(TQ, quad);
+
+                strcpy($$.value, result);
+                printf("\n %s",$$.value);
+                printf("\n------------------------\n");
+            }
+            else
+            {
+                printf("\nError, the condition should be a boolean expression\n");
+                yyerror('c');
+            }
+        }
+        else 
+        {
+            printf("\nError, the condition should be a boolean expression\n");
+            yyerror('c');
+        }
+
+     }
+
      | PARENTESESTART EXP PARENTESEEND {
         $$.value = $2.value;
         $$.type = $2.type;
      }
     ;
-/*listelement :
+listelement :
     IDENTIFIER BRACKETSTART EXP BRACKETEND {
         NODESYMTABLE *node = rechercher(TS, $1);
         strcpy($$.type, node->info.Type);
         }
-    ;*/
+    ;
 
 dectype : 
     DECBOOL {$$ = yylval.type;}
@@ -618,6 +676,7 @@ types :
 
 TERM : 
     Variable {
+        printf("hello");
         strcpy($$.value, $1.value);
         $$.type =  $1.type;
         }
@@ -630,7 +689,7 @@ Variable :
     strcpy($$.value, node->info.Value);
     $$.type =  node->info.Type;
     }
-    //| listelement {strcpy($$.value, $1.value);}
+    | listelement {strcpy($$.value, $1.value);}
 %%
 int yyerror(const char *s) {
   printf("error %s\n",s);

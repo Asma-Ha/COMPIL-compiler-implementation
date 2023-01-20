@@ -46,8 +46,8 @@ STRING \".*\"
 "<=" return (INFEQ);
 "==" return (EQ);
 "!=" return (NEQ);
-"∧" return (AND);
-"∨" return (OR);
+"&&" return (AND);
+"||" return (OR);
 "!" return(NOT);
 
 ";" return (END);
@@ -65,12 +65,14 @@ STRING \".*\"
 "const" {
     yylval.type = CONST;
     return (KEYCONST);}
-"for" return (KEYFOR);
 "if" return (KEYIF);
 "then" return (KEYTHEN);
 "else" return (KEYELSE);
 ":" return (TWODOTS);
 "=" return (ASSIGN);
+"fun" {
+    yylval.type = FUN;
+    return (KEYFUN);}
 "," return (COMMA);
 
 "array" {
@@ -128,6 +130,11 @@ STRING \".*\"
     }
 
 {MIN}({MIN}*{MAJ}*{DIGIT}*)* {
+    NODESYMTABLE* identifier = rechercher(TS, strdup(yytext));
+    if (identifier == NULL){
+        //printf("it's not in the ts\n");
+        identifier = inserer(TS, strdup(yytext));
+    }
     yylval.id =  strdup(yytext);
     return (IDENTIFIER);
 }
