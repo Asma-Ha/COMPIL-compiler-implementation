@@ -54,9 +54,9 @@ extern int yydebug;
      MODELS = 263,
      MAIN = 264,
      END = 265,
-     IDENTIFIER = 266,
-     ENDPROG = 267,
-     KEYFUN = 268,
+     KEYFOR = 266,
+     IDENTIFIER = 267,
+     ENDPROG = 268,
      token = 269,
      KEYARRAY = 270,
      ASSIGN = 271,
@@ -102,22 +102,21 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 20 "parser.y"
+#line 22 "parser.y"
 
     char *value;
     char *id;
     int type;
     struct {
         char* value;
-        char* id;
         int type;
     } compose;
 
-    
+
 
 
 /* Line 2058 of yacc.c  */
-#line 121 "parser.tab.h"
+#line 120 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

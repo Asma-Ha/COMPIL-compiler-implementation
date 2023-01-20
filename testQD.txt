@@ -2,12 +2,14 @@
 
 $ to test something remove the comment marks chokran $ 
 
-def models{
-};
-
 
 def main{
-    var g : int = 7;
+     var g : int = 7;
+
+    var q : real = 8;
+
+    $ q = g; $
+
     $ expected output : 0 : (=, 5, ,g) $ 
 
    $  array a{int}[5]; $
@@ -25,18 +27,24 @@ def main{
 
 
     $ if else work but not always when nested $
-    $ if (false) then {
+    $ if (true) then {
         g = 6;
+        g = g + 4;
     } else {
         g = 9;
-    } $
+    } 
+    g = g - 1; $
 
-   $ g = "heelo";
+    $ g = "heelo"; $
 
-    var q : str = "hi";
+    $ var q : str = "hi"; $
 
-    q = g; $
 
+     for( g = 1 ; g > 4; 1){
+        q = 23;
+    } 
+
+    q = 2.6;
 
 };
 
