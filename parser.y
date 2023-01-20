@@ -10,6 +10,9 @@ int yyerror(const char *s);
 
 SYMTABLE *TS;
 QUADTABLE *TQ;
+QUADPILE *P;
+
+int execute = 1; 
 QUADRUPLETNODE* quad;
 int quadCounter = 0;
 %}
@@ -81,7 +84,7 @@ token <type>KEYARRAY
 %%
 
 program : 
-    {TS = initialiserTS(); TQ = initialiserTQ();}
+    {TS = initialiserTS(); TQ = initialiserTQ(); P = initialiserP();}
     header
     SECTDEFKEY MODELS CURLYSTART functions CURLYEND END 
     SECTDEFKEY MAIN CURLYSTART ins_seq CURLYEND END 
@@ -116,8 +119,8 @@ returntype :
 
 instruction : 
     declaration 
-    | assignment
-    | condition 
+    | assignment 
+    | ifstatemnt
     | returnn 
     | funcall
     ;
@@ -144,25 +147,28 @@ declaration :
 
 vardeclaration :
     KEYVAR IDENTIFIER TWODOTS dectype END {
-        
-        setType(TS, $2, $4); setTokenType(TS, $2, $1);
         quad = creer_Q("DEC", $2 , "","" , quadCounter++);
         inserer_TQ(TQ, quad);
+        if(execute) {
+            setType(TS, $2, $4); setTokenType(TS, $2, $1);
+            }
         }
+        
     | KEYVAR IDENTIFIER TWODOTS dectype ASSIGN EXP END {
-
+        quad = creer_Q("DEC", $2 , "", "", quadCounter++);
+        inserer_TQ(TQ, quad);
+        quad = creer_Q("=", $6.value, "", $2, quadCounter++);
+        inserer_TQ(TQ, quad);
        //printf("id = %s, exptype =  %d \n", $2, $6.type);
+       if(execute) {
         if($4 == $6.type || $4 == REAL && isNumeric($6.type)) { 
             //if type is the same of if we're assigning a numeric expression (int or real) to real
             setTokenType(TS, $2, $1);
             setType(TS, $2, $4);
             setValue(TS, $2, $6.value);
-            quad = creer_Q("DEC", $2 , "", "", quadCounter++);
-            inserer_TQ(TQ, quad);
-            quad = creer_Q("=", $6.value, "", $2, quadCounter++);
-            inserer_TQ(TQ, quad);
 
         } else {printf("incompatible type\n"); yyerror('c');}
+       }
         //printf("after id = %s, exptype =  %d \n", $2, $6.type);
         }
     | KEYARRAY IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND END {setType(TS, $2, $4); setTokenType(TS, $2, $1);}//array 
@@ -176,28 +182,86 @@ constdeclaration :
 
 assignment : 
     IDENTIFIER ASSIGN EXP END {
-        NODESYMTABLE *node = rechercher(TS, $1);
-        if(node == NULL) {
-           printf("girl u cant assign to a non declared variable\n"); yyerror('c');
-        }
-
-        if((node->info.Type == $3.type || node->info.Type == REAL && isNumeric($3.type)) && node->info.TokenType == VAR) {
-            //if type is the same of if we're assigning a numeric expression (int or real) to real
-            setValue(TS, $1, $3.value);
-            quad = creer_Q("=", $3.value, "", $1, quadCounter++);
-            inserer_TQ(TQ, quad);
-        } else {
-            printf("incompatible type\n"); yyerror('c');}
-
+        printf("\n execute %d \n", execute);
+        quad = creer_Q("=", $3.value, "", $1, quadCounter++);
+        inserer_TQ(TQ, quad);
+        if(execute) {
+            NODESYMTABLE *node = rechercher(TS, $1);
+            if(node == NULL) {
+            printf("girl u cant assign to a non declared variable\n"); yyerror('c');
+            }
+            if((node->info.Type == $3.type || node->info.Type == REAL && isNumeric($3.type)) && node->info.TokenType == VAR) {
+                //if type is the same of if we're assigning a numeric expression (int or real) to real
+                setValue(TS, $1, $3.value);
+            } else {
+                printf("incompatible type\n"); yyerror('c');}
+            }
     }
+
 
     /*| listelement ASSIGN EXP END /* assign to list element */
     ;
 
-condition : 
-    KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART ins_seq CURLYEND
-    | KEYIF PARENTESESTART EXP PARENTESEEND KEYTHEN CURLYSTART ins_seq CURLYEND KEYELSE CURLYSTART ins_seq CURLYEND
+ifstatemnt : 
+
+    first_part KEYTHEN CURLYSTART ins_seq CURLYEND {
+        //mise a jour d'adresses
+        printf("\nIM HERE\n");
+        quad = pop(P);
+        afficherQ(quad);
+        updateEtiq(quad, quadCounter);
+         execute = 1; //get out
+    }
+
+    | first_part second_part KEYELSE CURLYSTART ins_seq CURLYEND {
+        quad = pop(P);
+        afficherQ(quad);
+        updateEtiq(quad, quadCounter);
+        execute = 1; //get out
+    }
     ;
+
+first_part : 
+    KEYIF PARENTESESTART EXP PARENTESEEND {
+        if($3.type == BOOL) {
+            //make quadruplet for thing 
+            quad = creer_Q("BZ", "etiq", "", $3.value, quadCounter++);
+            inserer_TQ(TQ, quad);
+            push(P, quad);
+            if(strcmp($3.value, "false") == 0){
+
+            printf("false baby\n");
+                //if the condition is false => skip instruction set
+                execute = 0;
+            }
+        }
+        else {
+            printf("incompatible type\n"); yyerror('c');
+        }
+    }
+    ;
+ second_part :
+    KEYTHEN CURLYSTART ins_seq CURLYEND {
+        quad = pop(P);
+        afficherQ(quad);
+        updateEtiq(quad, quadCounter+1);
+        //branchement vers fin
+        quad = creer_Q("BR", "etiq", "", "", quadCounter++);
+        inserer_TQ(TQ, quad);
+        push(P, quad);
+        printf("1. EXCEE  %d \n", execute);
+        if(execute == 0) {
+            //ins1 was skipped 
+            execute = 1;
+            
+        } else {
+            //ins1 was executed => dont execute else 
+            execute = 0;
+        }
+        
+    }
+    ;
+
 
 EXP : 
      TERM {
@@ -207,7 +271,7 @@ EXP :
      //| IDENTIFIER PARENTESESTART arguments PARENTESEEND 
      
      | EXP PLUS EXP {
-        printf("types %d %d \n \n ", $1.type, $3.type);
+        printf("\ntypes %s %s \n \n ", $1.value, $3.value);
         if(isNumeric($1.type) && isNumeric($3.type)) {
             
             float val1 = atof($1.value);
@@ -222,7 +286,8 @@ EXP :
                 sprintf(result, "%.2f", val);
                 $$.type = REAL;
             }
-
+            quad = creer_Q("+", $1.value, $3.value, result, quadCounter++);
+            inserer_TQ(TQ, quad);
             strcpy($$.value, result);
         } else {
             printf("Erreur Semantique : Type incompatible\n");
@@ -245,7 +310,8 @@ EXP :
                 sprintf(result, "%.2f", val);
                 $$.type = REAL;
             }
-
+            quad = creer_Q("-", $1.value, $3.value, result, quadCounter++);
+            inserer_TQ(TQ, quad);
             strcpy($$.value, result);
         } else {
             printf("Erreur Semantique : Type incompatible\n");
@@ -269,7 +335,8 @@ EXP :
                 sprintf(result, "%.2f", val);
                 $$.type = REAL;
             }
-
+            quad = creer_Q("%", $1.value, $3.value, result, quadCounter++);
+            inserer_TQ(TQ, quad);
             strcpy($$.value, result);
         } else {
             printf("Erreur Semantique : Type incompatible\n");
@@ -293,7 +360,8 @@ EXP :
                 sprintf(result, "%.2f", val);
                 $$.type = REAL;
             }
-
+            quad = creer_Q("*", $1.value, $3.value, result, quadCounter++);
+            inserer_TQ(TQ, quad);
             strcpy($$.value, result);
         } else {
             printf("Erreur Semantique : Type incompatible\n");
@@ -319,15 +387,21 @@ EXP :
      }*/
      | EXP SUP EXP {
         if(isNumeric($1.type) && isNumeric($3.type)) {
+            //printf("\nHOUNA \n");
             $$.type = BOOL;
             float val1 = atof($1.value);
             float val2 = atof($3.value);
+            char result[255];
+
             if(val1 > val2) {
-                //expression is true
-                strcpy($$.value, "true");
+                strcpy(result, "true");
             } else {
-                strcpy($$.value, "false");
+                strcpy(result, "false");
             }
+
+            quad = creer_Q(">", $1.value, $3.value, result, quadCounter++);
+            inserer_TQ(TQ, quad);
+            strcpy($$.value, result);
         } else {
             printf("Erreur Semantique : Type incompatible\n");
             yyerror('c');
@@ -338,12 +412,16 @@ EXP :
             $$.type = BOOL;
             float val1 = atof($1.value);
             float val2 = atof($3.value);
+            char result[255];
             if(val1 >= val2) {
                 //expression is true
-                strcpy($$.value, "true");
+                strcpy(result, "true");
             } else {
-                strcpy($$.value, "false");
+                strcpy(result, "false");
             }
+            quad = creer_Q(">=", $1.value, $3.value, result, quadCounter++);
+            inserer_TQ(TQ, quad);
+            strcpy($$.value, result);
         } else {
             printf("Erreur Semantique : Type incompatible\n");
             yyerror('c');
@@ -355,12 +433,16 @@ EXP :
             $$.type = BOOL;
             float val1 = atof($1.value);
             float val2 = atof($3.value);
+            char result[255];
             if(val1 < val2) {
                 //expression is true
-                strcpy($$.value, "true");
+                strcpy(result, "true");
             } else {
-                strcpy($$.value, "false");
+                strcpy(result, "false");
             }
+            quad = creer_Q("<", $1.value, $3.value, result, quadCounter++);
+            inserer_TQ(TQ, quad);
+            strcpy($$.value, result);
         } else {
             printf("Erreur Semantique : Type incompatible\n");
             yyerror('c');
@@ -371,12 +453,16 @@ EXP :
             $$.type = BOOL;
             float val1 = atof($1.value);
             float val2 = atof($3.value);
+            char result[255];
             if(val1 <= val2) {
                 //expression is true
-                strcpy($$.value, "true");
+                strcpy(result, "true");
             } else {
-                strcpy($$.value, "false");
+                strcpy(result, "false");
             }
+            quad = creer_Q("<=", $1.value, $3.value, result, quadCounter++);
+            inserer_TQ(TQ, quad);
+            strcpy($$.value, result);
         } else {
             printf("Erreur Semantique : Type incompatible\n");
             yyerror('c');
@@ -387,12 +473,16 @@ EXP :
             $$.type = BOOL;
             float val1 = atof($1.value);
             float val2 = atof($3.value);
+            char result[255];
             if(val1 == val2) {
                 //expression is true
-                strcpy($$.value, "true");
+                strcpy(result, "true");
             } else {
-                strcpy($$.value, "false");
+                strcpy(result, "false");
             }
+            quad = creer_Q("==", $1.value, $3.value, result, quadCounter++);
+            inserer_TQ(TQ, quad);
+            strcpy($$.value, result);
         } else {
             printf("Erreur Semantique : Type incompatible\n");
             yyerror('c');
@@ -403,12 +493,16 @@ EXP :
             $$.type = BOOL;
             float val1 = atof($1.value);
             float val2 = atof($3.value);
+            char result[255];
             if(val1 != val2) {
                 //expression is true
-                strcpy($$.value, "true");
+                strcpy(result, "true");
             } else {
-                strcpy($$.value, "false");
+                strcpy(result, "false");
             }
+            quad = creer_Q("!=", $1.value, $3.value, result, quadCounter++);
+            inserer_TQ(TQ, quad);
+            strcpy($$.value, result);
         } else {
             printf("Erreur Semantique : Type incompatible\n");
             yyerror('c');
@@ -464,7 +558,7 @@ int yyerror(const char *s) {
 }
 
 int main(int argc, char *argv[]) {
-    yyin = fopen("testEE.txt", "r");
+    yyin = fopen("testQD.txt", "r");
     yyparse();
     fclose(yyin);
     return 0;

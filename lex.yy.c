@@ -1139,7 +1139,7 @@ case 51:
 YY_RULE_SETUP
 #line 126 "scanner.l"
 {
-    yylval.value = yytext;
+    yylval.value = strdup(yytext);
     //printf(yylval.value);
     return (TYPESTR);
     }

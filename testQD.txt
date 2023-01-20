@@ -7,7 +7,7 @@ def models{
 
 
 def main{
-    var g : bool = "helogrongr ùrgj thù";
+    var g : int;
     $ expected output : 0 : (=, 5, ,g) $ 
 
    $  array a{int}[5]; $
@@ -16,6 +16,25 @@ def main{
 
    $  y = 6; $ 
     $ t[5] = 7; $
+
+    $ if works fine $
+    $ if (4 < 6) then {
+        g = 5 + 7;
+        g = 8;
+    } 
+
+    g = 9; $
+
+    $ if else $
+    if (true) then {
+        g = 6;
+    } else {
+         g = 7; 
+    }
+
+    g = 20;
+
+
 };
 
 # end

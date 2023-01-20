@@ -124,7 +124,7 @@ STRING \".*\"
     return (TYPEBOOL);
 }
 {STRING} {
-    yylval.value = yytext;
+    yylval.value = strdup(yytext);
     //printf(yylval.value);
     return (TYPESTR);
     }
@@ -134,10 +134,6 @@ STRING \".*\"
     if (identifier == NULL){
         //printf("it's not in the ts\n");
         identifier = inserer(TS, strdup(yytext));
-        
-        /*if(yylval.id != NULL){
-            printf("%s\n", yylval.id->info.Token);
-        }*/
     }
     yylval.id =  strdup(yytext);
     return (IDENTIFIER);

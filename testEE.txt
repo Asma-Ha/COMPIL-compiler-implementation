@@ -11,16 +11,14 @@ def main{
 
     var c : real = 20;
 
-    var o : bool = false;
+    var o : bool;
 
-    c = (5.5 - 0.5) * 6;
+    c = 5 + (6 + 7) * 8.6;
 
-    o = 1.2 + 4.8 == 6;
+    o = 7 <= 6;
 
+    var l : str = "false bitch";
 
-
-
-    
 
 };
 
