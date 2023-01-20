@@ -7,7 +7,7 @@ def models{
 
 
 def main{
-    var g : int;
+    var g : int = 7;
     $ expected output : 0 : (=, 5, ,g) $ 
 
    $  array a{int}[5]; $
@@ -18,21 +18,24 @@ def main{
     $ t[5] = 7; $
 
     $ if works fine $
-    $ if (4 < 6) then {
-        g = 5 + 7;
+    $ if (g - 1 == 6) then {
+        g = g + 7;
         g = 8;
-    } 
+    } $
 
-    g = 9; $
 
-    $ if else $
-    if (true) then {
+    $ if else work but not always when nested $
+    $ if (false) then {
         g = 6;
     } else {
-         g = 7; 
-    }
+        g = 9;
+    } $
 
-    g = 20;
+   $ g = "heelo";
+
+    var q : str = "hi";
+
+    q = g; $
 
 
 };

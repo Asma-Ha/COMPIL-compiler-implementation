@@ -182,7 +182,7 @@ constdeclaration :
 
 assignment : 
     IDENTIFIER ASSIGN EXP END {
-        printf("\n execute %d \n", execute);
+        //printf("\n execute %d \n", execute);
         quad = creer_Q("=", $3.value, "", $1, quadCounter++);
         inserer_TQ(TQ, quad);
         if(execute) {
@@ -267,6 +267,7 @@ EXP :
      TERM {
         strcpy($$.value, $1.value);
         $$.type = $1.type;
+
         }
      //| IDENTIFIER PARENTESESTART arguments PARENTESEEND 
      
@@ -544,13 +545,19 @@ types :
 
 TERM : 
     Variable {
+        printf("hello");
         strcpy($$.value, $1.value);
+        $$.type =  $1.type;
         }
     | type { strcpy($$.value, $1.value); $$.type = $1.type;}
 
     ;
 Variable : 
-    IDENTIFIER {strcpy($$.id, $1); }
+    IDENTIFIER {
+    NODESYMTABLE *node = rechercher(TS, $1);
+    strcpy($$.value, node->info.Value);
+    $$.type =  node->info.Type;
+    }
     | listelement {strcpy($$.value, $1.value);}
 %%
 int yyerror(const char *s) {

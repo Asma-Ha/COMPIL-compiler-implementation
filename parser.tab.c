@@ -542,10 +542,10 @@ static const yytype_uint16 yyrline[] =
        0,    87,    87,    87,    95,    98,    99,   103,   104,   108,
      109,   110,   114,   115,   116,   117,   121,   122,   123,   124,
      125,   129,   133,   137,   138,   139,   144,   145,   149,   157,
-     174,   175,   180,   184,   218,   227,   236,   255,   278,   284,
-     308,   333,   358,   399,   421,   442,   462,   482,   502,   525,
-     531,   538,   539,   540,   541,   545,   546,   547,   548,   551,
-     552,   553,   557,   560,   564,   565
+     174,   175,   180,   184,   207,   216,   225,   244,   267,   274,
+     298,   323,   348,   389,   411,   432,   452,   472,   492,   515,
+     521,   528,   529,   530,   531,   535,   536,   537,   538,   541,
+     542,   543,   547,   552,   556,   563
 };
 #endif
 
@@ -1618,7 +1618,7 @@ yyreduce:
 /* Line 1792 of yacc.c  */
 #line 184 "parser.y"
     {
-        printf("\n execute %d \n", execute);
+        //printf("\n execute %d \n", execute);
         quad = creer_Q("=", (yyvsp[(3) - (4)].compose).value, "", (yyvsp[(1) - (4)].id), quadCounter++);
         inserer_TQ(TQ, quad);
         if(execute) {
@@ -1637,7 +1637,7 @@ yyreduce:
 
   case 34:
 /* Line 1792 of yacc.c  */
-#line 218 "parser.y"
+#line 207 "parser.y"
     {
         //mise a jour d'adresses
         printf("\nIM HERE\n");
@@ -1650,7 +1650,7 @@ yyreduce:
 
   case 35:
 /* Line 1792 of yacc.c  */
-#line 227 "parser.y"
+#line 216 "parser.y"
     {
         quad = pop(P);
         afficherQ(quad);
@@ -1661,7 +1661,7 @@ yyreduce:
 
   case 36:
 /* Line 1792 of yacc.c  */
-#line 236 "parser.y"
+#line 225 "parser.y"
     {
         if((yyvsp[(3) - (4)].compose).type == BOOL) {
             //make quadruplet for thing 
@@ -1683,7 +1683,7 @@ yyreduce:
 
   case 37:
 /* Line 1792 of yacc.c  */
-#line 255 "parser.y"
+#line 244 "parser.y"
     {
         quad = pop(P);
         afficherQ(quad);
@@ -1707,16 +1707,17 @@ yyreduce:
 
   case 38:
 /* Line 1792 of yacc.c  */
-#line 278 "parser.y"
+#line 267 "parser.y"
     {
         strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value);
         (yyval.compose).type = (yyvsp[(1) - (1)].compose).type;
+
         }
     break;
 
   case 39:
 /* Line 1792 of yacc.c  */
-#line 284 "parser.y"
+#line 274 "parser.y"
     {
         printf("\ntypes %s %s \n \n ", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value);
         if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
@@ -1745,7 +1746,7 @@ yyreduce:
 
   case 40:
 /* Line 1792 of yacc.c  */
-#line 308 "parser.y"
+#line 298 "parser.y"
     {
         printf("types %d %d \n \n ", (yyvsp[(1) - (3)].compose).type, (yyvsp[(3) - (3)].compose).type);
         if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
@@ -1775,7 +1776,7 @@ yyreduce:
 
   case 41:
 /* Line 1792 of yacc.c  */
-#line 333 "parser.y"
+#line 323 "parser.y"
     {
         printf("types %d %d \n \n ", (yyvsp[(1) - (3)].compose).type, (yyvsp[(3) - (3)].compose).type);
         if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
@@ -1804,7 +1805,7 @@ yyreduce:
 
   case 42:
 /* Line 1792 of yacc.c  */
-#line 358 "parser.y"
+#line 348 "parser.y"
     {
         //printf("types %d %d \n \n ", $1.type, $3.type);
         if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
@@ -1833,7 +1834,7 @@ yyreduce:
 
   case 43:
 /* Line 1792 of yacc.c  */
-#line 399 "parser.y"
+#line 389 "parser.y"
     {
         if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
             //printf("\nHOUNA \n");
@@ -1860,7 +1861,7 @@ yyreduce:
 
   case 44:
 /* Line 1792 of yacc.c  */
-#line 421 "parser.y"
+#line 411 "parser.y"
     {
         if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
             (yyval.compose).type = BOOL;
@@ -1885,7 +1886,7 @@ yyreduce:
 
   case 45:
 /* Line 1792 of yacc.c  */
-#line 442 "parser.y"
+#line 432 "parser.y"
     {
         if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
             (yyval.compose).type = BOOL;
@@ -1910,7 +1911,7 @@ yyreduce:
 
   case 46:
 /* Line 1792 of yacc.c  */
-#line 462 "parser.y"
+#line 452 "parser.y"
     {
         if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
             (yyval.compose).type = BOOL;
@@ -1935,7 +1936,7 @@ yyreduce:
 
   case 47:
 /* Line 1792 of yacc.c  */
-#line 482 "parser.y"
+#line 472 "parser.y"
     {
         if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
             (yyval.compose).type = BOOL;
@@ -1960,7 +1961,7 @@ yyreduce:
 
   case 48:
 /* Line 1792 of yacc.c  */
-#line 502 "parser.y"
+#line 492 "parser.y"
     {
         if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
             (yyval.compose).type = BOOL;
@@ -1985,7 +1986,7 @@ yyreduce:
 
   case 49:
 /* Line 1792 of yacc.c  */
-#line 525 "parser.y"
+#line 515 "parser.y"
     {
         (yyval.compose).value = (yyvsp[(2) - (3)].compose).value;
         (yyval.compose).type = (yyvsp[(2) - (3)].compose).type;
@@ -1994,7 +1995,7 @@ yyreduce:
 
   case 50:
 /* Line 1792 of yacc.c  */
-#line 531 "parser.y"
+#line 521 "parser.y"
     {
         NODESYMTABLE *node = rechercher(TS, (yyvsp[(1) - (4)].id));
         strcpy((yyval.compose).type, node->info.Type);
@@ -2003,81 +2004,89 @@ yyreduce:
 
   case 51:
 /* Line 1792 of yacc.c  */
-#line 538 "parser.y"
+#line 528 "parser.y"
     {(yyval.type) = yylval.type;}
     break;
 
   case 52:
 /* Line 1792 of yacc.c  */
-#line 539 "parser.y"
+#line 529 "parser.y"
     {(yyval.type) = yylval.type;}
     break;
 
   case 53:
 /* Line 1792 of yacc.c  */
-#line 540 "parser.y"
+#line 530 "parser.y"
     {(yyval.type) = yylval.type;}
     break;
 
   case 54:
 /* Line 1792 of yacc.c  */
-#line 541 "parser.y"
+#line 531 "parser.y"
     {(yyval.type) = yylval.type;}
     break;
 
   case 55:
 /* Line 1792 of yacc.c  */
-#line 545 "parser.y"
+#line 535 "parser.y"
     {(yyval.compose).value = yylval.value; (yyval.compose).type = INT;}
     break;
 
   case 56:
 /* Line 1792 of yacc.c  */
-#line 546 "parser.y"
+#line 536 "parser.y"
     {(yyval.compose).value = yylval.value; (yyval.compose).type = BOOL;}
     break;
 
   case 57:
 /* Line 1792 of yacc.c  */
-#line 547 "parser.y"
+#line 537 "parser.y"
     {(yyval.compose).value = yylval.value; (yyval.compose).type = REAL;}
     break;
 
   case 58:
 /* Line 1792 of yacc.c  */
-#line 548 "parser.y"
+#line 538 "parser.y"
     {(yyval.compose).value = yylval.value; (yyval.compose).type = STR;}
     break;
 
   case 62:
 /* Line 1792 of yacc.c  */
-#line 557 "parser.y"
+#line 547 "parser.y"
     {
+        printf("hello");
         strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value);
+        (yyval.compose).type =  (yyvsp[(1) - (1)].compose).type;
         }
     break;
 
   case 63:
 /* Line 1792 of yacc.c  */
-#line 560 "parser.y"
+#line 552 "parser.y"
     { strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value); (yyval.compose).type = (yyvsp[(1) - (1)].compose).type;}
     break;
 
   case 64:
 /* Line 1792 of yacc.c  */
-#line 564 "parser.y"
-    {strcpy((yyval.compose).id, (yyvsp[(1) - (1)].id)); }
+#line 556 "parser.y"
+    {
+    NODESYMTABLE *node = rechercher(TS, (yyvsp[(1) - (1)].id));
+    printf("THIS IS AN IDENTIFIER %d\n", node->info.Type);
+    printf("THIS IS AN IDENTIFIER %s \n", node->info.Value);
+    strcpy((yyval.compose).value, node->info.Value);
+    (yyval.compose).type =  node->info.Type;
+    }
     break;
 
   case 65:
 /* Line 1792 of yacc.c  */
-#line 565 "parser.y"
+#line 563 "parser.y"
     {strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value);}
     break;
 
 
 /* Line 1792 of yacc.c  */
-#line 2081 "parser.tab.c"
+#line 2090 "parser.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2309,7 +2318,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 566 "parser.y"
+#line 564 "parser.y"
 
 int yyerror(const char *s) {
   printf("error %s\n",s);
