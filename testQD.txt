@@ -1,52 +1,15 @@
 # program hello
 
-$ to test something remove the comment marks chokran $ 
-
-
 def main{
-     var g : int = 7;
+    var g : bool = false;
+    var i : int = 5;
+    
+    var q : bool = g || !g;
+    $ while( i < 7) do {
+        i = i + 1;
+    }
 
-    var q : real = 8;
-
-    $ q = g; $
-
-    $ expected output : 0 : (=, 5, ,g) $ 
-
-   $  array a{int}[5]; $
-
-   $ array tab{int}[3] = [1, 6]; $
-
-   $  y = 6; $ 
-    $ t[5] = 7; $
-
-    $ if works fine $
-    $ if (g - 1 == 6) then {
-        g = g + 7;
-        g = 8;
-    } $
-
-
-    $ if else work but not always when nested $
-    $ if (true) then {
-        g = 6;
-        g = g + 4;
-    } else {
-        g = 9;
-    } 
-    g = g - 1; $
-
-    $ g = "heelo"; $
-
-    $ var q : str = "hi"; $
-
-
-     for( g = 1 ; g > 4; 1){
-        q = 23;
-    } 
-
-    q = 2.6;
-
+    var q : str = "false"; $ 
 };
-
 # end
 

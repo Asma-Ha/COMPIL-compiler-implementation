@@ -25,6 +25,7 @@ int saveEtiq;
     int type;
     struct {
         char* value;
+        char* id;
         int type;
     } compose;
 
@@ -43,13 +44,15 @@ int saveEtiq;
 %token KEYFOR
 %token <id>IDENTIFIER
 %token ENDPROG
-token <type>KEYARRAY
+%token <type>KEYARRAY
 %token ASSIGN
 %token <type>KEYVAR
 %token <type>KEYCONST
 %token KEYIF
 %token KEYELSE
 %token KEYTHEN
+%token KEYWHILE
+%token KEYDO
 %token <value>TYPEINT <value>TYPEREAL <value>TYPEBOOL <value>TYPESTR
 %token TWODOTS
 %token DECINT 
@@ -77,9 +80,9 @@ token <type>KEYARRAY
 %left NOT
 %left SUP SUPEQ INF INFEQ
 %left EQ NEQ
+%left ASSIGN
 %left PLUS MINUS
 %left MULT DIV
-%left NEG
 %start program
 
 
@@ -87,7 +90,7 @@ token <type>KEYARRAY
 
 program : 
     {TS = initialiserTS(); TQ = initialiserTQ(); P = initialiserP();}
-    header
+    header 
     SECTDEFKEY MAIN CURLYSTART ins_seq CURLYEND END 
     KEY ENDPROG {printf("u got it right\n"); afficherTS(TS); afficherTQ(TQ);}
     ;
@@ -111,7 +114,7 @@ instruction :
 
 
 declaration : 
-    vardeclaration 
+    vardeclaration {}
     | constdeclaration
     ;
 
@@ -129,11 +132,13 @@ vardeclaration :
         }
         
     | KEYVAR IDENTIFIER TWODOTS dectype ASSIGN EXP {
+        
+        //printf("id = %s, exptype =  %s \n", $2, $6.value);
         quad = creer_Q("DEC", $2 , "", "", quadCounter++);
         inserer_TQ(TQ, quad);
         quad = creer_Q("=", $6.value, "", $2, quadCounter++);
         inserer_TQ(TQ, quad);
-       //printf("id = %s, exptype =  %d \n", $2, $6.type);
+        
        if(execute) {
         NODESYMTABLE* identifier = rechercher(TS, $2);
             if (identifier == NULL){
@@ -146,8 +151,10 @@ vardeclaration :
             setValue(TS, $2, $6.value);
 
         } else {printf("incompatible type\n"); yyerror('c');}
+        
        }
         //printf("after id = %s, exptype =  %d \n", $2, $6.type);
+        
         }
     | KEYARRAY IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND END {setType(TS, $2, $4); setTokenType(TS, $2, $1);}//array 
     | KEYARRAY IDENTIFIER CURLYSTART dectype CURLYEND BRACKETSTART EXP BRACKETEND ASSIGN BRACKETSTART types BRACKETEND END  {setTokenType(TS, $2, $1);}//array
@@ -168,7 +175,7 @@ constdeclaration :
         }
         if($4 == $6.type || $4 == REAL && isNumeric($6.type)) { 
             //if type is the same of if we're assigning a numeric expression (int or real) to real
-            printf("TOKEN TYPE IS %d ", $1);
+            //printf("TOKEN TYPE IS %d ", $1);
             setTokenType(TS, $2, $1);
             setType(TS, $2, $4);
             setValue(TS, $2, $6.value);
@@ -180,24 +187,30 @@ constdeclaration :
 
 assignment : 
     IDENTIFIER ASSIGN EXP {
-        //printf("\n execute %d \n", execute);
-        quad = creer_Q("=", $3.value, "", $1, quadCounter++);
+        //printf("\n \nidentifier %s %s\n \n", $3.value, $3.id);
+        printf("id being assigned to is %s, it is assigned the value %s %s \n", $1, $3.value, $3.id);
+        if($3.id != NULL) {
+            quad = creer_Q("=", $3.id, "", $1, quadCounter++);
+        } else {
+            quad = creer_Q("=", $3.value, "", $1, quadCounter++);
+        }
         inserer_TQ(TQ, quad);
         if(execute) {
             //printf("Im dumb and i look twice \n");
             NODESYMTABLE *node = rechercher(TS, $1);
             if(node == NULL) {
-            printf(" \ngirl u cant assign to a non declared variable\n"); yyerror('c');
+            printf(" \ncant assign to a non declared variable\n"); yyerror('c');
             } else if (node->info.TokenType == CONST){
-                printf("\ngirl u cant assign to a constant\n"); yyerror('c');
+                printf("\ncant assign to a constant\n"); yyerror('c');
             } else if((node->info.Type == $3.type || node->info.Type == REAL && isNumeric($3.type)) && node->info.TokenType == VAR) {
                 //if type is the same of if we're assigning a numeric expression (int or real) to real
                 setValue(TS, $1, $3.value);
                 $$.type = $3.type;
                 strcpy($$.value, $1);
             } else {
-                printf("HRincompatible type\n"); yyerror('c');}
+                printf("incompatible type\n"); yyerror('c');}
             }
+        printf("after : id being assigned to is %s, it is assigned the value %s %s \n", $1, $3.value, $3.id);
     }
 
 
@@ -207,18 +220,44 @@ assignment :
 loop : 
 
     forloop 
-    /*
     | whileloop
-    | dowileloop
-    ;*/
+    ;
+whileloop : 
+    while_first_part while_second_part KEYDO  CURLYSTART ins_seq CURLYEND {
+        quad = pop(P);
+        updateEtiq(quad, quadCounter+1);
 
+        //back to first ins with save etiq 
+        char se[255];
+        itoa(saveEtiq, se, 10);
+        quad = creer_Q("BR", se, "" , "", quadCounter++);
+        inserer_TQ(TQ, quad);
+    }
+while_first_part :
+    KEYWHILE {
+        //Save debut address
+        saveEtiq = quadCounter;
+    }
+    ;
+while_second_part : 
+    PARENTESESTART EXP PARENTESEEND {
+        if($2.type != BOOL) {
+            printf("\nwhile loop condition isnt right, there has to be a boolean expression\n"); yyerror('c');
+        }
+        
+        //Quad for jump to end if it's false
+            quad = creer_Q("BZ", "etiq", "", $2.value, quadCounter++);
+            inserer_TQ(TQ, quad);
+            push(P, quad);
+    }
+    ;
 forloop : 
     for_first_part for_second_part TYPEINT PARENTESEEND CURLYSTART ins_seq CURLYEND {
        //we insert a non real assignment expression : index = index + pas 
         //result of increment
         NODESYMTABLE *node = rechercher(TS, $1);
         int index = atoi(node->info.Value);
-        printf("index = %d\n", index);
+        //printf("index = %d\n", index);
         int pas = atoi($3);
 
         //quad for increment
@@ -265,14 +304,6 @@ for_second_part :
             inserer_TQ(TQ, quad);
             push(P, quad);
         
-
-
-            /*if(strcmp($3.value, "false") == 0){
-
-            printf("false baby\n");
-                //if the condition is false => skip instruction set
-                execute = 0;
-            } */ //later for when teacher responds to mail
     }
     ;
 
@@ -341,18 +372,27 @@ EXP :
      TERM {
         strcpy($$.value, $1.value);
         $$.type = $1.type;
-
+        if($1.id != NULL){
+            //printf("has an id %s\n", $1.id);
+            strcpy($$.id, $1.id); }
         }
      
      | EXP PLUS EXP {
-        printf("\ntypes %s %s \n \n ", $1.value, $3.value);
+        printf("SUM : %s %s \n \n", $1.value, $3.value);
+        char op1[255];
+        char op2[255];
+        if($1.id != NULL){strcpy(op1, $1.id); } else {strcpy(op1, $1.value);}
+        if($3.id != NULL){strcpy(op2, $3.id);} else {strcpy(op2, $3.value);}
+
         if(isNumeric($1.type) && isNumeric($3.type)) {
-            
             float val1 = atof($1.value);
             float val2 = atof($3.value);
             float val = val1 + val2;
             char result[255];
 
+            
+            //for quads 
+            //type
             if(ceilf(val) == val){
                 itoa((int)(val), result, 10);
                 $$.type = INT;
@@ -360,33 +400,48 @@ EXP :
                 sprintf(result, "%.2f", val);
                 $$.type = REAL;
             }
-            quad = creer_Q("+", $1.value, $3.value, result, quadCounter++);
+            //valeur 
+            $$.value = result;
+
+            //insertion du quadruplet
+            quad = creer_Q("+", op1, op2, $$.value, quadCounter++);
             inserer_TQ(TQ, quad);
-            strcpy($$.value, result);
+
+            $$.id = NULL;
+            printf("SUMAFT : %s %s %s\n \n", $1.value, $3.value, $$.value);
         } else {
             printf("Erreur Semantique : Type incompatible\n");
             yyerror('c');
         }
      }
      | EXP MINUS EXP {
-        printf("types %d %d \n \n ", $1.type, $3.type);
         if(isNumeric($1.type) && isNumeric($3.type)) {
-            
+                        //for quads 
+            char op1[255];
+            char op2[255];
+            if($1.id != NULL){strcpy(op1, $1.id); } else {strcpy(op1, $1.value);}
+            if($3.id != NULL){strcpy(op2, $3.id);} else {strcpy(op2, $3.value);}
             float val1 = atof($1.value);
             float val2 = atof($3.value);
             float val = val1 - val2;
             char result[255];
-
+            
+            //type
             if(ceilf(val) == val){
-                itoa((int)val, result, 10);
+                itoa((int)(val), result, 10);
                 $$.type = INT;
             } else {
                 sprintf(result, "%.2f", val);
                 $$.type = REAL;
             }
-            quad = creer_Q("-", $1.value, $3.value, result, quadCounter++);
+            //valeur 
+            $$.value = result;
+
+            //insertion du quadruplet
+            quad = creer_Q("-", op1, op2, $$.value, quadCounter++);
             inserer_TQ(TQ, quad);
-            strcpy($$.value, result);
+            
+            $$.id = NULL;
         } else {
             printf("Erreur Semantique : Type incompatible\n");
             yyerror('c');
@@ -394,14 +449,20 @@ EXP :
 
      }
      | EXP DIV EXP {
-        printf("types %d %d \n \n ", $1.type, $3.type);
         if(isNumeric($1.type) && isNumeric($3.type)) {
-            
+                        //for quads 
+            char op1[255];
+            char op2[255];
+            if($1.id != NULL){strcpy(op1, $1.id); } else {strcpy(op1, $1.value);}
+            if($3.id != NULL){strcpy(op2, $3.id);} else {strcpy(op2, $3.value);}
+
             float val1 = atof($1.value);
             float val2 = atof($3.value);
             float val = val1 / val2;
             char result[255];
 
+            
+            //type
             if(ceilf(val) == val){
                 itoa((int)(val), result, 10);
                 $$.type = INT;
@@ -409,9 +470,14 @@ EXP :
                 sprintf(result, "%.2f", val);
                 $$.type = REAL;
             }
-            quad = creer_Q("%", $1.value, $3.value, result, quadCounter++);
+            //valeur 
+            $$.value = result;
+
+            //insertion du quadruplet
+            quad = creer_Q("%", op1, op2, $$.value, quadCounter++);
             inserer_TQ(TQ, quad);
-            strcpy($$.value, result);
+            
+            $$.id = NULL;
         } else {
             printf("Erreur Semantique : Type incompatible\n");
             yyerror('c');
@@ -419,14 +485,23 @@ EXP :
      }
      
      | EXP MULT EXP {
-        //printf("types %d %d \n \n ", $1.type, $3.type);
+        printf("MULT: %s %s \n \n", $1.value, $3.value);
         if(isNumeric($1.type) && isNumeric($3.type)) {
-            
+            char op1[255];
+            char op2[255];
+            if($1.id != NULL){strcpy(op1, $1.id); } else {strcpy(op1, $1.value);}
+            if($3.id != NULL){strcpy(op2, $3.id);} else {strcpy(op2, $3.value);}
+
             float val1 = atof($1.value);
             float val2 = atof($3.value);
             float val = val1 * val2;
             char result[255];
+            
 
+            //for quads 
+
+            
+            //type
             if(ceilf(val) == val){
                 itoa((int)(val), result, 10);
                 $$.type = INT;
@@ -434,157 +509,324 @@ EXP :
                 sprintf(result, "%.2f", val);
                 $$.type = REAL;
             }
-            quad = creer_Q("*", $1.value, $3.value, result, quadCounter++);
+            //valeur 
+            $$.value = result;
+
+            //insertion du quadruplet
+            quad = creer_Q("*", op1, op2, $$.value, quadCounter++);
             inserer_TQ(TQ, quad);
-            strcpy($$.value, result);
+            
+            $$.id = NULL;
         } else {
             printf("Erreur Semantique : Type incompatible\n");
             yyerror('c');
         }
+        printf("SUMBT2 : %s %s %s\n \n", $1.value, $3.value, $$.value);
      }
-     /*| MINUS EXP %prec NEG {
-        printf("we here\n");
-        if($2.type == 2) {
-            //Convert to int, sum, covert back to string 
-            int val1 = atoi($2.value);
-            char result[255];
-            itoa(val1 + 6, result, 10);
-            printf("welp %s", result);
-            strcpy($$.value, -6); 
-        } else if ($2.type == 4) {
-            float val1 = atof($2.value);
-            char result[255];
-            sprintf(result, "%.2f", val1);
-             strcpy($$.value, result);
-        }
-        else {printf("erreur semantique : cant negate a non numeric value\n"); yyerror('c');}
-     }*/
      | EXP SUP EXP {
-        if(isNumeric($1.type) && isNumeric($3.type)) {
-            //printf("\nHOUNA \n");
-            $$.type = BOOL;
-            float val1 = atof($1.value);
-            float val2 = atof($3.value);
-            char result[255];
+        
+            if(isNumeric($1.type) && isNumeric($3.type)) {
+                char op1[255];
+                char op2[255];
+                if($1.id != NULL){strcpy(op1, $1.id); } else {strcpy(op1, $1.value);}
+                if($3.id != NULL){strcpy(op2, $3.id);} else {strcpy(op2, $3.value);}
+                float val1 = atof($1.value);
+                float val2 = atof($3.value);
+            
+                char result[255];
+                //comapraison 
+                if(val1 > val2) {
+                    //expression is true
+                    strcpy(result, "true");
+                } else {
+                    strcpy(result, "false");
+                }
+                //for quads 
+                
+                //type
+                $$.type = BOOL;
+                //valeur 
+                $$.value = result;
 
-            if(val1 > val2) {
-                strcpy(result, "true");
+                //insertion du quadruplet
+                quad = creer_Q(">", op1, op2, $$.value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                $$.id = NULL;
             } else {
-                strcpy(result, "false");
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
             }
-
-            quad = creer_Q(">", $1.value, $3.value, result, quadCounter++);
-            inserer_TQ(TQ, quad);
-            strcpy($$.value, result);
-        } else {
-            printf("Erreur Semantique : Type incompatible\n");
-            yyerror('c');
-        }
+            
      }
      | EXP SUPEQ EXP {
-        if(isNumeric($1.type) && isNumeric($3.type)) {
-            $$.type = BOOL;
-            float val1 = atof($1.value);
-            float val2 = atof($3.value);
-            char result[255];
-            if(val1 >= val2) {
-                //expression is true
-                strcpy(result, "true");
+                    if(isNumeric($1.type) && isNumeric($3.type)) {
+                char op1[255];
+                char op2[255];
+                if($1.id != NULL){strcpy(op1, $1.id); } else {strcpy(op1, $1.value);}
+                if($3.id != NULL){strcpy(op2, $3.id);} else {strcpy(op2, $3.value);}
+                float val1 = atof($1.value);
+                float val2 = atof($3.value);
+            
+                char result[255];
+                //comapraison 
+                if(val1 >= val2) {
+                    //expression is true
+                    strcpy(result, "true");
+                } else {
+                    strcpy(result, "false");
+                }
+                //for quads 
+                
+                //type
+                $$.type = BOOL;
+                //valeur 
+                $$.value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q(">=", op1, op2, $$.value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                $$.id = NULL;
             } else {
-                strcpy(result, "false");
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
             }
-            quad = creer_Q(">=", $1.value, $3.value, result, quadCounter++);
-            inserer_TQ(TQ, quad);
-            strcpy($$.value, result);
-        } else {
-            printf("Erreur Semantique : Type incompatible\n");
-            yyerror('c');
-        }
+            
      }
      
      | EXP INF EXP {
-        if(isNumeric($1.type) && isNumeric($3.type)) {
-            $$.type = BOOL;
-            float val1 = atof($1.value);
-            float val2 = atof($3.value);
-            char result[255];
-            if(val1 < val2) {
-                //expression is true
-                strcpy(result, "true");
+                    if(isNumeric($1.type) && isNumeric($3.type)) {
+                char op1[255];
+                char op2[255];
+                if($1.id != NULL){strcpy(op1, $1.id); } else {strcpy(op1, $1.value);}
+                if($3.id != NULL){strcpy(op2, $3.id);} else {strcpy(op2, $3.value);}
+                float val1 = atof($1.value);
+                float val2 = atof($3.value);
+            
+                char result[255];
+                //comapraison 
+                if(val1 < val2) {
+                    //expression is true
+                    strcpy(result, "true");
+                } else {
+                    strcpy(result, "false");
+                }
+                //for quads 
+                
+                //type
+                $$.type = BOOL;
+                //valeur 
+                $$.value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q("<", op1, op2, $$.value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                $$.id = NULL;
             } else {
-                strcpy(result, "false");
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
             }
-            quad = creer_Q("<", $1.value, $3.value, result, quadCounter++);
-            inserer_TQ(TQ, quad);
-            strcpy($$.value, result);
-        } else {
-            printf("Erreur Semantique : Type incompatible\n");
-            yyerror('c');
-        }
+            
      }
      | EXP INFEQ EXP {
-        if(isNumeric($1.type) && isNumeric($3.type)) {
-            $$.type = BOOL;
-            float val1 = atof($1.value);
-            float val2 = atof($3.value);
-            char result[255];
-            if(val1 <= val2) {
-                //expression is true
-                strcpy(result, "true");
+                if(isNumeric($1.type) && isNumeric($3.type)) {
+                char op1[255];
+                char op2[255];
+                if($1.id != NULL){strcpy(op1, $1.id); } else {strcpy(op1, $1.value);}
+                if($3.id != NULL){strcpy(op2, $3.id);} else {strcpy(op2, $3.value);}
+                float val1 = atof($1.value);
+                float val2 = atof($3.value);
+            
+                char result[255];
+                //comapraison 
+                if(val1 <= val2) {
+                    //expression is true
+                    strcpy(result, "true");
+                } else {
+                    strcpy(result, "false");
+                }
+                //for quads 
+                
+                //type
+                $$.type = BOOL;
+                //valeur 
+                $$.value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q("<=", op1, op2, $$.value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                $$.id = NULL;
             } else {
-                strcpy(result, "false");
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
             }
-            quad = creer_Q("<=", $1.value, $3.value, result, quadCounter++);
-            inserer_TQ(TQ, quad);
-            strcpy($$.value, result);
-        } else {
-            printf("Erreur Semantique : Type incompatible\n");
-            yyerror('c');
-        }
+            
      }
      | EXP EQ EXP{
-        if(isNumeric($1.type) && isNumeric($3.type)) {
-            $$.type = BOOL;
-            float val1 = atof($1.value);
-            float val2 = atof($3.value);
-            char result[255];
-            if(val1 == val2) {
-                //expression is true
-                strcpy(result, "true");
+            if(isNumeric($1.type) && isNumeric($3.type)) {
+                char op1[255];
+                char op2[255];
+                if($1.id != NULL){strcpy(op1, $1.id); } else {strcpy(op1, $1.value);}
+                if($3.id != NULL){strcpy(op2, $3.id);} else {strcpy(op2, $3.value);}
+                float val1 = atof($1.value);
+                float val2 = atof($3.value);
+            
+                char result[255];
+                //comapraison 
+                if(val1 == val2) {
+                    //expression is true
+                    strcpy(result, "true");
+                } else {
+                    strcpy(result, "false");
+                }
+                //for quads 
+                
+                //type
+                $$.type = BOOL;
+                //valeur 
+                $$.value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q("==", op1, op2, $$.value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                $$.id = NULL;
             } else {
-                strcpy(result, "false");
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
             }
-            quad = creer_Q("==", $1.value, $3.value, result, quadCounter++);
-            inserer_TQ(TQ, quad);
-            strcpy($$.value, result);
-        } else {
-            printf("Erreur Semantique : Type incompatible\n");
-            yyerror('c');
-        }
      }
      | EXP NEQ EXP {
-        if(isNumeric($1.type) && isNumeric($3.type)) {
-            $$.type = BOOL;
-            float val1 = atof($1.value);
-            float val2 = atof($3.value);
-            char result[255];
-            if(val1 != val2) {
-                //expression is true
-                strcpy(result, "true");
+            if(isNumeric($1.type) && isNumeric($3.type)) {
+                char op1[255];
+                char op2[255];
+                if($1.id != NULL){strcpy(op1, $1.id); } else {strcpy(op1, $1.value);}
+                if($3.id != NULL){strcpy(op2, $3.id);} else {strcpy(op2, $3.value);}
+                float val1 = atof($1.value);
+                float val2 = atof($3.value);
+            
+                char result[255];
+                //comapraison 
+                if(val1 != val2) {
+                    //expression is true
+                    strcpy(result, "true");
+                } else {
+                    strcpy(result, "false");
+                }
+                //for quads 
+                
+                //type
+                $$.type = BOOL;
+                //valeur 
+                $$.value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q("!=", op1, op2, $$.value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                $$.id = NULL;
             } else {
-                strcpy(result, "false");
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
             }
-            quad = creer_Q("!=", $1.value, $3.value, result, quadCounter++);
-            inserer_TQ(TQ, quad);
-            strcpy($$.value, result);
-        } else {
-            printf("Erreur Semantique : Type incompatible\n");
-            yyerror('c');
-        }
      }
-     /*| EXP AND EXP
-     | EXP OR EXP 
-     | NOT EXP*/
+    | EXP AND EXP {
+        if($1.type == BOOL && $3.type == BOOL) {
+                char op1[255];
+                char op2[255];
+                if($1.id != NULL){strcpy(op1, $1.id); } else {strcpy(op1, $1.value);}
+                if($3.id != NULL){strcpy(op2, $3.id);} else {strcpy(op2, $3.value);}
+            
+                char result[255];
+                //comapraison 
+                if(strcmp($1.value, "false") == 0 || strcmp($3.value, "false") == 0 ) {
+                    //if any of them is false 
+                    //expression is true
+                    strcpy(result, "false");
+                } else {
+                    strcpy(result, "true");
+                }
+                //for quads 
+                
+                //type
+                $$.type = BOOL;
+                //valeur 
+                $$.value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q("&&", op1, op2, $$.value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                $$.id = NULL;
+            } else {
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
+            }
+    }
+     | EXP OR EXP {
+        if($1.type == BOOL && $3.type == BOOL) {
+                char op1[255];
+                char op2[255];
+                if($1.id != NULL){strcpy(op1, $1.id); } else {strcpy(op1, $1.value);}
+                if($3.id != NULL){strcpy(op2, $3.id);} else {strcpy(op2, $3.value);}
+            
+                char result[255];
+                //comapraison 
+                if(strcmp($1.value, "true") == 0 || strcmp($3.value, "true") == 0 ) {
+                    strcpy(result, "true");
+                } else {
+                    strcpy(result, "false");
+                }
+                //for quads 
+                
+                //type
+                $$.type = BOOL;
+                //valeur 
+                $$.value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q("||", op1, op2, $$.value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                $$.id = NULL;
+            } else {
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
+            }
+    }
+     | NOT EXP {
+        if($2.type == BOOL) {
+                char op1[255];
+                if($2.id != NULL){strcpy(op1, $2.id); } else {strcpy(op1, $2.value);}
+            
+                char result[255];
+                //comapraison 
+                if(strcmp($2.value, "true") == 0) {
+                    strcpy(result, "false");
+                } else {
+                    strcpy(result, "true");
+                }
+                //for quads 
+                
+                //type
+                $$.type = BOOL;
+                //valeur 
+                $$.value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q("!", op1, "", $$.value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                $$.id = NULL;
+            } else {
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
+            }
+
+     }
      | PARENTESESTART EXP PARENTESEEND {
         $$.value = $2.value;
         $$.type = $2.type;
@@ -618,17 +860,22 @@ types :
 
 TERM : 
     Variable {
-        strcpy($$.value, $1.value);
+        $$.id = $1.id;
+        $$.value =  $1.value;
         $$.type =  $1.type;
+
+
         }
     | type { strcpy($$.value, $1.value); $$.type = $1.type;}
 
     ;
 Variable : 
     IDENTIFIER {
+    $$.id = $1;
     NODESYMTABLE *node = rechercher(TS, $1);
-    strcpy($$.value, node->info.Value);
+    $$.value =  node->info.Value;
     $$.type =  node->info.Type;
+
     }
     //| listelement {strcpy($$.value, $1.value);}
 %%

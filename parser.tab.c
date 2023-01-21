@@ -132,43 +132,43 @@ extern int yydebug;
      KEYFOR = 266,
      IDENTIFIER = 267,
      ENDPROG = 268,
-     token = 269,
-     KEYARRAY = 270,
-     ASSIGN = 271,
-     KEYVAR = 272,
-     KEYCONST = 273,
-     KEYIF = 274,
-     KEYELSE = 275,
-     KEYTHEN = 276,
-     TYPEINT = 277,
-     TYPEREAL = 278,
-     TYPEBOOL = 279,
-     TYPESTR = 280,
-     TWODOTS = 281,
-     DECINT = 282,
-     DECREAL = 283,
-     DECBOOL = 284,
-     DECSTR = 285,
-     COMMA = 286,
-     RETURNKEY = 287,
-     BRACKETSTART = 288,
-     BRACKETEND = 289,
-     PARENTESESTART = 290,
-     PARENTESEEND = 291,
-     AND = 292,
-     OR = 293,
-     NOT = 294,
-     PLUS = 295,
-     MINUS = 296,
-     MULT = 297,
-     DIV = 298,
-     SUP = 299,
-     SUPEQ = 300,
-     INF = 301,
-     INFEQ = 302,
-     EQ = 303,
-     NEQ = 304,
-     NEG = 305
+     KEYARRAY = 269,
+     ASSIGN = 270,
+     KEYVAR = 271,
+     KEYCONST = 272,
+     KEYIF = 273,
+     KEYELSE = 274,
+     KEYTHEN = 275,
+     KEYWHILE = 276,
+     KEYDO = 277,
+     TYPEINT = 278,
+     TYPEREAL = 279,
+     TYPEBOOL = 280,
+     TYPESTR = 281,
+     TWODOTS = 282,
+     DECINT = 283,
+     DECREAL = 284,
+     DECBOOL = 285,
+     DECSTR = 286,
+     COMMA = 287,
+     RETURNKEY = 288,
+     BRACKETSTART = 289,
+     BRACKETEND = 290,
+     PARENTESESTART = 291,
+     PARENTESEEND = 292,
+     AND = 293,
+     OR = 294,
+     NOT = 295,
+     PLUS = 296,
+     MINUS = 297,
+     MULT = 298,
+     DIV = 299,
+     SUP = 300,
+     SUPEQ = 301,
+     INF = 302,
+     INFEQ = 303,
+     EQ = 304,
+     NEQ = 305
    };
 #endif
 
@@ -184,6 +184,7 @@ typedef union YYSTYPE
     int type;
     struct {
         char* value;
+        char* id;
         int type;
     } compose;
 
@@ -191,7 +192,7 @@ typedef union YYSTYPE
 
 
 /* Line 387 of yacc.c  */
-#line 195 "parser.tab.c"
+#line 196 "parser.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -219,7 +220,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 223 "parser.tab.c"
+#line 224 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -439,16 +440,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  3
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   157
+#define YYLAST   210
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  51
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  23
+#define YYNNTS  26
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  52
+#define YYNRULES  59
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  121
+#define YYNSTATES  138
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
@@ -500,10 +501,10 @@ static const yytype_uint8 yyprhs[] =
 {
        0,     0,     3,     4,    15,    19,    20,    23,    26,    29,
       31,    33,    35,    37,    42,    49,    59,    73,    80,    84,
-      86,    94,    98,   102,   108,   115,   120,   125,   127,   131,
-     135,   139,   143,   147,   151,   155,   159,   163,   167,   171,
-     173,   175,   177,   179,   181,   183,   185,   187,   189,   193,
-     194,   196,   198
+      86,    88,    95,    97,   101,   109,   113,   117,   123,   130,
+     135,   140,   142,   146,   150,   154,   158,   162,   166,   170,
+     174,   178,   182,   186,   190,   193,   197,   199,   201,   203,
+     205,   207,   209,   211,   213,   215,   219,   220,   222,   224
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
@@ -511,35 +512,38 @@ static const yytype_int8 yyrhs[] =
 {
       52,     0,    -1,    -1,    53,    54,     5,     9,     6,    55,
        7,    10,     3,    13,    -1,     3,     4,    12,    -1,    -1,
-      56,    55,    -1,    57,    10,    -1,    60,    10,    -1,    65,
-      -1,    61,    -1,    58,    -1,    59,    -1,    17,    12,    26,
-      69,    -1,    17,    12,    26,    69,    16,    68,    -1,    15,
-      12,     6,    69,     7,    33,    68,    34,    10,    -1,    15,
-      12,     6,    69,     7,    33,    68,    34,    16,    33,    71,
-      34,    10,    -1,    18,    12,    26,    69,    16,    68,    -1,
-      12,    16,    68,    -1,    62,    -1,    63,    64,    22,    36,
-       6,    55,     7,    -1,    11,    35,    60,    -1,    10,    68,
-      10,    -1,    66,    21,     6,    55,     7,    -1,    66,    67,
-      20,     6,    55,     7,    -1,    19,    35,    68,    36,    -1,
-      21,     6,    55,     7,    -1,    72,    -1,    68,    40,    68,
-      -1,    68,    41,    68,    -1,    68,    43,    68,    -1,    68,
-      42,    68,    -1,    68,    44,    68,    -1,    68,    45,    68,
-      -1,    68,    46,    68,    -1,    68,    47,    68,    -1,    68,
-      48,    68,    -1,    68,    49,    68,    -1,    35,    68,    36,
-      -1,    29,    -1,    27,    -1,    28,    -1,    30,    -1,    22,
-      -1,    24,    -1,    23,    -1,    25,    -1,    70,    -1,    71,
-      31,    70,    -1,    -1,    73,    -1,    70,    -1,    12,    -1
+      56,    55,    -1,    57,    10,    -1,    60,    10,    -1,    68,
+      -1,    61,    -1,    58,    -1,    59,    -1,    16,    12,    27,
+      72,    -1,    16,    12,    27,    72,    15,    71,    -1,    14,
+      12,     6,    72,     7,    34,    71,    35,    10,    -1,    14,
+      12,     6,    72,     7,    34,    71,    35,    15,    34,    74,
+      35,    10,    -1,    17,    12,    27,    72,    15,    71,    -1,
+      12,    15,    71,    -1,    65,    -1,    62,    -1,    63,    64,
+      22,     6,    55,     7,    -1,    21,    -1,    36,    71,    37,
+      -1,    66,    67,    23,    37,     6,    55,     7,    -1,    11,
+      36,    60,    -1,    10,    71,    10,    -1,    69,    20,     6,
+      55,     7,    -1,    69,    70,    19,     6,    55,     7,    -1,
+      18,    36,    71,    37,    -1,    20,     6,    55,     7,    -1,
+      75,    -1,    71,    41,    71,    -1,    71,    42,    71,    -1,
+      71,    44,    71,    -1,    71,    43,    71,    -1,    71,    45,
+      71,    -1,    71,    46,    71,    -1,    71,    47,    71,    -1,
+      71,    48,    71,    -1,    71,    49,    71,    -1,    71,    50,
+      71,    -1,    71,    38,    71,    -1,    71,    39,    71,    -1,
+      40,    71,    -1,    36,    71,    37,    -1,    30,    -1,    28,
+      -1,    29,    -1,    31,    -1,    23,    -1,    25,    -1,    24,
+      -1,    26,    -1,    73,    -1,    74,    32,    73,    -1,    -1,
+      76,    -1,    73,    -1,    12,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    89,    89,    89,    96,    99,   100,   106,   107,   108,
-     109,   114,   115,   119,   131,   152,   153,   158,   182,   209,
-     216,   247,   257,   281,   290,   299,   318,   341,   347,   371,
-     396,   421,   462,   484,   505,   525,   545,   565,   588,   601,
-     602,   603,   604,   608,   609,   610,   611,   614,   615,   616,
-     620,   624,   628
+       0,    92,    92,    92,    99,   102,   103,   109,   110,   111,
+     112,   117,   118,   122,   134,   159,   160,   165,   189,   222,
+     223,   226,   237,   243,   255,   286,   296,   312,   321,   330,
+     349,   372,   380,   417,   451,   487,   526,   562,   598,   633,
+     668,   702,   736,   769,   800,   830,   843,   844,   845,   846,
+     850,   851,   852,   853,   856,   857,   858,   862,   869,   873
 };
 #endif
 
@@ -550,17 +554,17 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "KEY", "PROGKEY", "SECTDEFKEY",
   "CURLYSTART", "CURLYEND", "MODELS", "MAIN", "END", "KEYFOR",
-  "IDENTIFIER", "ENDPROG", "token", "KEYARRAY", "ASSIGN", "KEYVAR",
-  "KEYCONST", "KEYIF", "KEYELSE", "KEYTHEN", "TYPEINT", "TYPEREAL",
-  "TYPEBOOL", "TYPESTR", "TWODOTS", "DECINT", "DECREAL", "DECBOOL",
-  "DECSTR", "COMMA", "RETURNKEY", "BRACKETSTART", "BRACKETEND",
+  "IDENTIFIER", "ENDPROG", "KEYARRAY", "ASSIGN", "KEYVAR", "KEYCONST",
+  "KEYIF", "KEYELSE", "KEYTHEN", "KEYWHILE", "KEYDO", "TYPEINT",
+  "TYPEREAL", "TYPEBOOL", "TYPESTR", "TWODOTS", "DECINT", "DECREAL",
+  "DECBOOL", "DECSTR", "COMMA", "RETURNKEY", "BRACKETSTART", "BRACKETEND",
   "PARENTESESTART", "PARENTESEEND", "AND", "OR", "NOT", "PLUS", "MINUS",
-  "MULT", "DIV", "SUP", "SUPEQ", "INF", "INFEQ", "EQ", "NEQ", "NEG",
-  "$accept", "program", "$@1", "header", "ins_seq", "instruction",
-  "declaration", "vardeclaration", "constdeclaration", "assignment",
-  "loop", "forloop", "for_first_part", "for_second_part", "ifstatemnt",
-  "if_first_part", "if_second_part", "EXP", "dectype", "type", "types",
-  "TERM", "Variable", YY_NULL
+  "MULT", "DIV", "SUP", "SUPEQ", "INF", "INFEQ", "EQ", "NEQ", "$accept",
+  "program", "$@1", "header", "ins_seq", "instruction", "declaration",
+  "vardeclaration", "constdeclaration", "assignment", "loop", "whileloop",
+  "while_first_part", "while_second_part", "forloop", "for_first_part",
+  "for_second_part", "ifstatemnt", "if_first_part", "if_second_part",
+  "EXP", "dectype", "type", "types", "TERM", "Variable", YY_NULL
 };
 #endif
 
@@ -583,10 +587,10 @@ static const yytype_uint8 yyr1[] =
 {
        0,    51,    53,    52,    54,    55,    55,    56,    56,    56,
       56,    57,    57,    58,    58,    58,    58,    59,    60,    61,
-      62,    63,    64,    65,    65,    66,    67,    68,    68,    68,
-      68,    68,    68,    68,    68,    68,    68,    68,    68,    69,
-      69,    69,    69,    70,    70,    70,    70,    71,    71,    71,
-      72,    72,    73
+      61,    62,    63,    64,    65,    66,    67,    68,    68,    69,
+      70,    71,    71,    71,    71,    71,    71,    71,    71,    71,
+      71,    71,    71,    71,    71,    71,    72,    72,    72,    72,
+      73,    73,    73,    73,    74,    74,    74,    75,    75,    76
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -594,10 +598,10 @@ static const yytype_uint8 yyr2[] =
 {
        0,     2,     0,    10,     3,     0,     2,     2,     2,     1,
        1,     1,     1,     4,     6,     9,    13,     6,     3,     1,
-       7,     3,     3,     5,     6,     4,     4,     1,     3,     3,
-       3,     3,     3,     3,     3,     3,     3,     3,     3,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     3,     0,
-       1,     1,     1
+       1,     6,     1,     3,     7,     3,     3,     5,     6,     4,
+       4,     1,     3,     3,     3,     3,     3,     3,     3,     3,
+       3,     3,     3,     3,     2,     3,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     3,     0,     1,     1,     1
 };
 
 /* YYDEFACT[STATE-NAME] -- Default reduction number in state STATE-NUM.
@@ -606,104 +610,118 @@ static const yytype_uint8 yyr2[] =
 static const yytype_uint8 yydefact[] =
 {
        2,     0,     0,     1,     0,     0,     0,     0,     4,     0,
-       5,     0,     0,     0,     0,     0,     0,     0,     5,     0,
-      11,    12,     0,    10,    19,     0,     9,     0,     0,     0,
-       0,     0,     0,     0,     0,     6,     7,     8,     0,     0,
-       0,     0,    21,    52,    43,    45,    44,    46,     0,    18,
-      51,    27,    50,     0,     0,     0,     0,     0,     0,     0,
-       5,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,    40,    41,    39,    42,     0,    13,     0,
-      25,     0,    22,     0,     0,     5,    38,    28,    29,    31,
-      30,    32,    33,    34,    35,    36,    37,     0,     0,     0,
-       3,     5,    23,     0,     0,    14,    17,     0,    24,     0,
-      20,     0,    15,     0,    49,    47,     0,     0,     0,    48,
-      16
+       5,     0,     0,     0,     0,     0,     0,    22,     0,     5,
+       0,    11,    12,     0,    10,    20,     0,    19,     0,     9,
+       0,     0,     0,     0,     0,     0,     0,     0,     6,     7,
+       8,     0,     0,     0,     0,     0,     0,    25,    59,    50,
+      52,    51,    53,     0,     0,    18,    58,    31,    57,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     5,     0,
+       0,    44,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,    47,    48,    46,    49,     0,    13,
+       0,    29,     0,    23,     5,    26,     0,     0,     5,    45,
+      42,    43,    32,    33,    35,    34,    36,    37,    38,    39,
+      40,    41,     0,     0,     0,     3,     0,     5,    27,     0,
+       0,    14,    17,    21,     0,    28,     0,    24,     0,    15,
+       0,    56,    54,     0,     0,     0,    55,    16
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
-static const yytype_int8 yydefgoto[] =
+static const yytype_int16 yydefgoto[] =
 {
-      -1,     1,     2,     5,    17,    18,    19,    20,    21,    22,
-      23,    24,    25,    39,    26,    27,    41,    49,    77,    50,
-     116,    51,    52
+      -1,     1,     2,     5,    18,    19,    20,    21,    22,    23,
+      24,    25,    26,    42,    27,    28,    44,    29,    30,    46,
+      55,    88,    56,   133,    57,    58
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -36
+#define YYPACT_NINF -122
 static const yytype_int16 yypact[] =
 {
-     -36,     2,    22,   -36,     8,    21,    29,    47,   -36,    74,
-      42,    61,    66,    85,    86,   112,    90,   120,    42,   118,
-     -36,   -36,   119,   -36,   -36,   121,   -36,   109,   122,    -8,
-     126,   107,   110,    -8,   125,   -36,   -36,   -36,    -8,   115,
-     132,   123,   -36,   -36,   -36,   -36,   -36,   -36,    -8,    69,
-     -36,   -36,   -36,   -22,   -22,   -22,    45,   136,    -9,   104,
-      42,   135,    59,    -8,    -8,    -8,    -8,    -8,    -8,    -8,
-      -8,    -8,    -8,   -36,   -36,   -36,   -36,   137,   129,   130,
-     -36,   134,   -36,   142,   143,    42,   -36,   -32,   -32,   -36,
-     -36,   -19,   -19,   -19,   -19,    23,    23,   116,    -8,    -8,
-     -36,    42,   131,   145,    -8,    69,    69,   146,   -36,    28,
-     -36,    -7,   -36,   124,    97,   -36,    24,    97,   144,   -36,
-     -36
+    -122,    14,     8,  -122,    19,    26,    24,    41,  -122,    65,
+      -9,    40,    62,    68,    69,    70,    42,  -122,    81,    -9,
+      77,  -122,  -122,    79,  -122,  -122,    54,  -122,    84,  -122,
+      71,    83,    60,    91,    75,    76,    60,    96,  -122,  -122,
+    -122,    60,    98,    60,   111,   142,   154,  -122,  -122,  -122,
+    -122,  -122,  -122,    60,    60,   121,  -122,  -122,  -122,    -1,
+      -1,    -1,    80,   158,    94,   168,    -4,   159,    -9,   189,
+     108,   144,    60,    60,    60,    60,    60,    60,    60,    60,
+      60,    60,    60,    60,  -122,  -122,  -122,  -122,   190,   183,
+     184,  -122,   187,  -122,    -9,  -122,   195,   196,    -9,  -122,
+     144,   134,     4,     4,  -122,  -122,   -25,   -25,   -25,   -25,
+      22,    22,   170,    60,    60,  -122,   198,    -9,   188,   199,
+      60,   121,   121,  -122,   201,  -122,    66,  -122,    11,  -122,
+     175,    44,  -122,   -31,    44,   192,  -122,  -122
 };
 
 /* YYPGOTO[NTERM-NUM].  */
-static const yytype_int8 yypgoto[] =
+static const yytype_int16 yypgoto[] =
 {
-     -36,   -36,   -36,   -36,   -18,   -36,   -36,   -36,   -36,   114,
-     -36,   -36,   -36,   -36,   -36,   -36,   -36,   -20,   -35,     9,
-     -36,   -36,   -36
+    -122,  -122,  -122,  -122,   -19,  -122,  -122,  -122,  -122,   179,
+    -122,  -122,  -122,  -122,  -122,  -122,  -122,  -122,  -122,  -122,
+     -21,    13,  -121,  -122,  -122,  -122
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
    positive, shift that token.  If negative, reduce the rule which
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
-#define YYTABLE_NINF -27
-static const yytype_int8 yytable[] =
+#define YYTABLE_NINF -31
+static const yytype_int16 yytable[] =
 {
-      35,    82,     3,   112,    43,    73,    74,    75,    76,   113,
-      65,    66,     6,    56,    44,    45,    46,    47,    58,    78,
-      79,    63,    64,    65,    66,     4,     7,    48,    62,    71,
-      72,    63,    64,    65,    66,    67,    68,    69,    70,    71,
-      72,     8,    84,    87,    88,    89,    90,    91,    92,    93,
-      94,    95,    96,    11,    12,   117,     9,    13,   118,    14,
-      15,    16,   111,    63,    64,    65,    66,   103,    63,    64,
-      65,    66,    67,    68,    69,    70,    71,    72,   105,   106,
-      10,    80,    29,   107,   109,    63,    64,    65,    66,    67,
-      68,    69,    70,    71,    72,    86,    28,    30,    31,    63,
-      64,    65,    66,    67,    68,    69,    70,    71,    72,    63,
-      64,    65,    66,    67,    68,    69,    70,    71,    72,    44,
-      45,    46,    47,   115,    32,    33,   119,    34,    36,    37,
-      40,    38,    53,    54,    12,    57,    55,    59,    60,    81,
-      83,    85,    42,    61,    97,    98,    99,   100,   101,   104,
-     102,   -26,   108,   110,   120,     0,     0,   114
+      38,   134,    11,    12,   135,    13,    95,    14,    15,    16,
+     132,     4,    17,   136,     3,    62,    74,    75,    76,    77,
+      64,   129,    66,     6,    82,    83,   130,    84,    85,    86,
+      87,     7,    70,    71,    72,    73,     8,    74,    75,    76,
+      77,    78,    79,    80,    81,    82,    83,    76,    77,    97,
+       9,   100,   101,   102,   103,   104,   105,   106,   107,   108,
+     109,   110,   111,    74,    75,    76,    77,    49,    50,    51,
+      52,    10,    48,    89,    90,   116,    31,    32,    36,   119,
+      33,    34,    35,    49,    50,    51,    52,    39,    37,    40,
+      41,    45,   121,   122,    43,    12,    53,    59,   124,   126,
+      54,   128,    60,    61,    72,    73,    63,    74,    75,    76,
+      77,    78,    79,    80,    81,    82,    83,    91,    72,    73,
+      65,    74,    75,    76,    77,    78,    79,    80,    81,    82,
+      83,    93,    72,    73,    67,    74,    75,    76,    77,    78,
+      79,    80,    81,    82,    83,    99,    72,    73,    68,    74,
+      75,    76,    77,    78,    79,    80,    81,    82,    83,    72,
+      73,    92,    74,    75,    76,    77,    78,    79,    80,    81,
+      82,    83,    72,    69,    94,    74,    75,    76,    77,    78,
+      79,    80,    81,    82,    83,    74,    75,    76,    77,    78,
+      79,    80,    81,    82,    83,    98,    96,   112,   113,   114,
+     115,   117,   137,   118,   120,   123,   125,   -30,   127,   131,
+      47
 };
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-36)))
+  (!!((Yystate) == (-122)))
 
 #define yytable_value_is_error(Yytable_value) \
   YYID (0)
 
-static const yytype_int8 yycheck[] =
+static const yytype_uint8 yycheck[] =
 {
-      18,    10,     0,    10,    12,    27,    28,    29,    30,    16,
-      42,    43,     4,    33,    22,    23,    24,    25,    38,    54,
-      55,    40,    41,    42,    43,     3,     5,    35,    48,    48,
-      49,    40,    41,    42,    43,    44,    45,    46,    47,    48,
-      49,    12,    60,    63,    64,    65,    66,    67,    68,    69,
-      70,    71,    72,    11,    12,    31,     9,    15,    34,    17,
-      18,    19,    34,    40,    41,    42,    43,    85,    40,    41,
-      42,    43,    44,    45,    46,    47,    48,    49,    98,    99,
-       6,    36,    16,   101,   104,    40,    41,    42,    43,    44,
-      45,    46,    47,    48,    49,    36,    35,    12,    12,    40,
-      41,    42,    43,    44,    45,    46,    47,    48,    49,    40,
-      41,    42,    43,    44,    45,    46,    47,    48,    49,    22,
-      23,    24,    25,   114,    12,    35,   117,     7,    10,    10,
-      21,    10,     6,    26,    12,    10,    26,    22,     6,     3,
-      36,     6,    28,    20,     7,    16,    16,    13,     6,    33,
-       7,    20,     7,     7,    10,    -1,    -1,    33
+      19,    32,    11,    12,    35,    14,    10,    16,    17,    18,
+     131,     3,    21,   134,     0,    36,    41,    42,    43,    44,
+      41,    10,    43,     4,    49,    50,    15,    28,    29,    30,
+      31,     5,    53,    54,    38,    39,    12,    41,    42,    43,
+      44,    45,    46,    47,    48,    49,    50,    43,    44,    68,
+       9,    72,    73,    74,    75,    76,    77,    78,    79,    80,
+      81,    82,    83,    41,    42,    43,    44,    23,    24,    25,
+      26,     6,    12,    60,    61,    94,    36,    15,    36,    98,
+      12,    12,    12,    23,    24,    25,    26,    10,     7,    10,
+      36,    20,   113,   114,    10,    12,    36,     6,   117,   120,
+      40,    35,    27,    27,    38,    39,    10,    41,    42,    43,
+      44,    45,    46,    47,    48,    49,    50,    37,    38,    39,
+      22,    41,    42,    43,    44,    45,    46,    47,    48,    49,
+      50,    37,    38,    39,    23,    41,    42,    43,    44,    45,
+      46,    47,    48,    49,    50,    37,    38,    39,     6,    41,
+      42,    43,    44,    45,    46,    47,    48,    49,    50,    38,
+      39,     3,    41,    42,    43,    44,    45,    46,    47,    48,
+      49,    50,    38,    19,     6,    41,    42,    43,    44,    45,
+      46,    47,    48,    49,    50,    41,    42,    43,    44,    45,
+      46,    47,    48,    49,    50,     6,    37,     7,    15,    15,
+      13,     6,    10,     7,    34,     7,     7,    19,     7,    34,
+      31
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -711,18 +729,19 @@ static const yytype_int8 yycheck[] =
 static const yytype_uint8 yystos[] =
 {
        0,    52,    53,     0,     3,    54,     4,     5,    12,     9,
-       6,    11,    12,    15,    17,    18,    19,    55,    56,    57,
-      58,    59,    60,    61,    62,    63,    65,    66,    35,    16,
-      12,    12,    12,    35,     7,    55,    10,    10,    10,    64,
-      21,    67,    60,    12,    22,    23,    24,    25,    35,    68,
-      70,    72,    73,     6,    26,    26,    68,    10,    68,    22,
-       6,    20,    68,    40,    41,    42,    43,    44,    45,    46,
-      47,    48,    49,    27,    28,    29,    30,    69,    69,    69,
-      36,     3,    10,    36,    55,     6,    36,    68,    68,    68,
-      68,    68,    68,    68,    68,    68,    68,     7,    16,    16,
-      13,     6,     7,    55,    33,    68,    68,    55,     7,    68,
-       7,    34,    10,    16,    33,    70,    71,    31,    34,    70,
-      10
+       6,    11,    12,    14,    16,    17,    18,    21,    55,    56,
+      57,    58,    59,    60,    61,    62,    63,    65,    66,    68,
+      69,    36,    15,    12,    12,    12,    36,     7,    55,    10,
+      10,    36,    64,    10,    67,    20,    70,    60,    12,    23,
+      24,    25,    26,    36,    40,    71,    73,    75,    76,     6,
+      27,    27,    71,    10,    71,    22,    71,    23,     6,    19,
+      71,    71,    38,    39,    41,    42,    43,    44,    45,    46,
+      47,    48,    49,    50,    28,    29,    30,    31,    72,    72,
+      72,    37,     3,    37,     6,    10,    37,    55,     6,    37,
+      71,    71,    71,    71,    71,    71,    71,    71,    71,    71,
+      71,    71,     7,    15,    15,    13,    55,     6,     7,    55,
+      34,    71,    71,     7,    55,     7,    71,     7,    35,    10,
+      15,    34,    73,    74,    32,    35,    73,    10
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1524,19 +1543,25 @@ yyreduce:
     {
         case 2:
 /* Line 1792 of yacc.c  */
-#line 89 "parser.y"
+#line 92 "parser.y"
     {TS = initialiserTS(); TQ = initialiserTQ(); P = initialiserP();}
     break;
 
   case 3:
 /* Line 1792 of yacc.c  */
-#line 92 "parser.y"
+#line 95 "parser.y"
     {printf("u got it right\n"); afficherTS(TS); afficherTQ(TQ);}
+    break;
+
+  case 11:
+/* Line 1792 of yacc.c  */
+#line 117 "parser.y"
+    {}
     break;
 
   case 13:
 /* Line 1792 of yacc.c  */
-#line 119 "parser.y"
+#line 122 "parser.y"
     {
         quad = creer_Q("DEC", (yyvsp[(2) - (4)].id) , "","" , quadCounter++);
         inserer_TQ(TQ, quad);
@@ -1552,13 +1577,15 @@ yyreduce:
 
   case 14:
 /* Line 1792 of yacc.c  */
-#line 131 "parser.y"
+#line 134 "parser.y"
     {
+        
+        //printf("id = %s, exptype =  %s \n", $2, $6.value);
         quad = creer_Q("DEC", (yyvsp[(2) - (6)].id) , "", "", quadCounter++);
         inserer_TQ(TQ, quad);
         quad = creer_Q("=", (yyvsp[(6) - (6)].compose).value, "", (yyvsp[(2) - (6)].id), quadCounter++);
         inserer_TQ(TQ, quad);
-       //printf("id = %s, exptype =  %d \n", $2, $6.type);
+        
        if(execute) {
         NODESYMTABLE* identifier = rechercher(TS, (yyvsp[(2) - (6)].id));
             if (identifier == NULL){
@@ -1571,26 +1598,28 @@ yyreduce:
             setValue(TS, (yyvsp[(2) - (6)].id), (yyvsp[(6) - (6)].compose).value);
 
         } else {printf("incompatible type\n"); yyerror('c');}
+        
        }
         //printf("after id = %s, exptype =  %d \n", $2, $6.type);
+        
         }
     break;
 
   case 15:
 /* Line 1792 of yacc.c  */
-#line 152 "parser.y"
+#line 159 "parser.y"
     {setType(TS, (yyvsp[(2) - (9)].id), (yyvsp[(4) - (9)].type)); setTokenType(TS, (yyvsp[(2) - (9)].id), (yyvsp[(1) - (9)].type));}
     break;
 
   case 16:
 /* Line 1792 of yacc.c  */
-#line 153 "parser.y"
+#line 160 "parser.y"
     {setTokenType(TS, (yyvsp[(2) - (13)].id), (yyvsp[(1) - (13)].type));}
     break;
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 158 "parser.y"
+#line 165 "parser.y"
     {
         quad = creer_Q("DEC", (yyvsp[(2) - (6)].id) , "", "", quadCounter++);
         inserer_TQ(TQ, quad);
@@ -1604,7 +1633,7 @@ yyreduce:
         }
         if((yyvsp[(4) - (6)].type) == (yyvsp[(6) - (6)].compose).type || (yyvsp[(4) - (6)].type) == REAL && isNumeric((yyvsp[(6) - (6)].compose).type)) { 
             //if type is the same of if we're assigning a numeric expression (int or real) to real
-            printf("TOKEN TYPE IS %d ", (yyvsp[(1) - (6)].type));
+            //printf("TOKEN TYPE IS %d ", $1);
             setTokenType(TS, (yyvsp[(2) - (6)].id), (yyvsp[(1) - (6)].type));
             setType(TS, (yyvsp[(2) - (6)].id), (yyvsp[(4) - (6)].type));
             setValue(TS, (yyvsp[(2) - (6)].id), (yyvsp[(6) - (6)].compose).value);
@@ -1616,38 +1645,83 @@ yyreduce:
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 182 "parser.y"
+#line 189 "parser.y"
     {
-        //printf("\n execute %d \n", execute);
-        quad = creer_Q("=", (yyvsp[(3) - (3)].compose).value, "", (yyvsp[(1) - (3)].id), quadCounter++);
+        //printf("\n \nidentifier %s %s\n \n", $3.value, $3.id);
+        printf("id being assigned to is %s, it is assigned the value %s %s \n", (yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].compose).value, (yyvsp[(3) - (3)].compose).id);
+        if((yyvsp[(3) - (3)].compose).id != NULL) {
+            quad = creer_Q("=", (yyvsp[(3) - (3)].compose).id, "", (yyvsp[(1) - (3)].id), quadCounter++);
+        } else {
+            quad = creer_Q("=", (yyvsp[(3) - (3)].compose).value, "", (yyvsp[(1) - (3)].id), quadCounter++);
+        }
         inserer_TQ(TQ, quad);
         if(execute) {
             //printf("Im dumb and i look twice \n");
             NODESYMTABLE *node = rechercher(TS, (yyvsp[(1) - (3)].id));
             if(node == NULL) {
-            printf(" \ngirl u cant assign to a non declared variable\n"); yyerror('c');
+            printf(" \ncant assign to a non declared variable\n"); yyerror('c');
             } else if (node->info.TokenType == CONST){
-                printf("\ngirl u cant assign to a constant\n"); yyerror('c');
+                printf("\ncant assign to a constant\n"); yyerror('c');
             } else if((node->info.Type == (yyvsp[(3) - (3)].compose).type || node->info.Type == REAL && isNumeric((yyvsp[(3) - (3)].compose).type)) && node->info.TokenType == VAR) {
                 //if type is the same of if we're assigning a numeric expression (int or real) to real
                 setValue(TS, (yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].compose).value);
                 (yyval.compose).type = (yyvsp[(3) - (3)].compose).type;
                 strcpy((yyval.compose).value, (yyvsp[(1) - (3)].id));
             } else {
-                printf("HRincompatible type\n"); yyerror('c');}
+                printf("incompatible type\n"); yyerror('c');}
             }
+        printf("after : id being assigned to is %s, it is assigned the value %s %s \n", (yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].compose).value, (yyvsp[(3) - (3)].compose).id);
     }
     break;
 
-  case 20:
+  case 21:
 /* Line 1792 of yacc.c  */
-#line 216 "parser.y"
+#line 226 "parser.y"
+    {
+        quad = pop(P);
+        updateEtiq(quad, quadCounter+1);
+
+        //back to first ins with save etiq 
+        char se[255];
+        itoa(saveEtiq, se, 10);
+        quad = creer_Q("BR", se, "" , "", quadCounter++);
+        inserer_TQ(TQ, quad);
+    }
+    break;
+
+  case 22:
+/* Line 1792 of yacc.c  */
+#line 237 "parser.y"
+    {
+        //Save debut address
+        saveEtiq = quadCounter;
+    }
+    break;
+
+  case 23:
+/* Line 1792 of yacc.c  */
+#line 243 "parser.y"
+    {
+        if((yyvsp[(2) - (3)].compose).type != BOOL) {
+            printf("\nwhile loop condition isnt right, there has to be a boolean expression\n"); yyerror('c');
+        }
+        
+        //Quad for jump to end if it's false
+            quad = creer_Q("BZ", "etiq", "", (yyvsp[(2) - (3)].compose).value, quadCounter++);
+            inserer_TQ(TQ, quad);
+            push(P, quad);
+    }
+    break;
+
+  case 24:
+/* Line 1792 of yacc.c  */
+#line 255 "parser.y"
     {
        //we insert a non real assignment expression : index = index + pas 
         //result of increment
         NODESYMTABLE *node = rechercher(TS, (yyvsp[(1) - (7)].id));
         int index = atoi(node->info.Value);
-        printf("index = %d\n", index);
+        //printf("index = %d\n", index);
         int pas = atoi((yyvsp[(3) - (7)].value));
 
         //quad for increment
@@ -1673,9 +1747,9 @@ yyreduce:
     }
     break;
 
-  case 21:
+  case 25:
 /* Line 1792 of yacc.c  */
-#line 247 "parser.y"
+#line 286 "parser.y"
     {
         saveEtiq = quadCounter;
         //check if assignment is integer 
@@ -1686,9 +1760,9 @@ yyreduce:
     }
     break;
 
-  case 22:
+  case 26:
 /* Line 1792 of yacc.c  */
-#line 257 "parser.y"
+#line 296 "parser.y"
     {
         //check if EXP type is boolean 
         if((yyvsp[(2) - (3)].compose).type != BOOL) {
@@ -1700,20 +1774,12 @@ yyreduce:
             inserer_TQ(TQ, quad);
             push(P, quad);
         
-
-
-            /*if(strcmp($3.value, "false") == 0){
-
-            printf("false baby\n");
-                //if the condition is false => skip instruction set
-                execute = 0;
-            } */ //later for when teacher responds to mail
     }
     break;
 
-  case 23:
+  case 27:
 /* Line 1792 of yacc.c  */
-#line 281 "parser.y"
+#line 312 "parser.y"
     {
         //mise a jour d'adresses
         //printf("\nIM HERE\n");
@@ -1724,9 +1790,9 @@ yyreduce:
     }
     break;
 
-  case 24:
+  case 28:
 /* Line 1792 of yacc.c  */
-#line 290 "parser.y"
+#line 321 "parser.y"
     {
         quad = pop(P);
         afficherQ(quad);
@@ -1735,9 +1801,9 @@ yyreduce:
     }
     break;
 
-  case 25:
+  case 29:
 /* Line 1792 of yacc.c  */
-#line 299 "parser.y"
+#line 330 "parser.y"
     {
         if((yyvsp[(3) - (4)].compose).type == BOOL) {
             //make quadruplet for thing 
@@ -1757,9 +1823,9 @@ yyreduce:
     }
     break;
 
-  case 26:
+  case 30:
 /* Line 1792 of yacc.c  */
-#line 318 "parser.y"
+#line 349 "parser.y"
     {
         quad = pop(P);
         afficherQ(quad);
@@ -1781,28 +1847,37 @@ yyreduce:
     }
     break;
 
-  case 27:
+  case 31:
 /* Line 1792 of yacc.c  */
-#line 341 "parser.y"
+#line 372 "parser.y"
     {
         strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value);
         (yyval.compose).type = (yyvsp[(1) - (1)].compose).type;
-
+        if((yyvsp[(1) - (1)].compose).id != NULL){
+            //printf("has an id %s\n", $1.id);
+            strcpy((yyval.compose).id, (yyvsp[(1) - (1)].compose).id); }
         }
     break;
 
-  case 28:
+  case 32:
 /* Line 1792 of yacc.c  */
-#line 347 "parser.y"
+#line 380 "parser.y"
     {
-        printf("\ntypes %s %s \n \n ", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value);
+        printf("SUM : %s %s \n \n", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value);
+        char op1[255];
+        char op2[255];
+        if((yyvsp[(1) - (3)].compose).id != NULL){strcpy(op1, (yyvsp[(1) - (3)].compose).id); } else {strcpy(op1, (yyvsp[(1) - (3)].compose).value);}
+        if((yyvsp[(3) - (3)].compose).id != NULL){strcpy(op2, (yyvsp[(3) - (3)].compose).id);} else {strcpy(op2, (yyvsp[(3) - (3)].compose).value);}
+
         if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
-            
             float val1 = atof((yyvsp[(1) - (3)].compose).value);
             float val2 = atof((yyvsp[(3) - (3)].compose).value);
             float val = val1 + val2;
             char result[255];
 
+            
+            //for quads 
+            //type
             if(ceilf(val) == val){
                 itoa((int)(val), result, 10);
                 (yyval.compose).type = INT;
@@ -1810,124 +1885,15 @@ yyreduce:
                 sprintf(result, "%.2f", val);
                 (yyval.compose).type = REAL;
             }
-            quad = creer_Q("+", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value, result, quadCounter++);
+            //valeur 
+            (yyval.compose).value = result;
+
+            //insertion du quadruplet
+            quad = creer_Q("+", op1, op2, (yyval.compose).value, quadCounter++);
             inserer_TQ(TQ, quad);
-            strcpy((yyval.compose).value, result);
-        } else {
-            printf("Erreur Semantique : Type incompatible\n");
-            yyerror('c');
-        }
-     }
-    break;
 
-  case 29:
-/* Line 1792 of yacc.c  */
-#line 371 "parser.y"
-    {
-        printf("types %d %d \n \n ", (yyvsp[(1) - (3)].compose).type, (yyvsp[(3) - (3)].compose).type);
-        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
-            
-            float val1 = atof((yyvsp[(1) - (3)].compose).value);
-            float val2 = atof((yyvsp[(3) - (3)].compose).value);
-            float val = val1 - val2;
-            char result[255];
-
-            if(ceilf(val) == val){
-                itoa((int)val, result, 10);
-                (yyval.compose).type = INT;
-            } else {
-                sprintf(result, "%.2f", val);
-                (yyval.compose).type = REAL;
-            }
-            quad = creer_Q("-", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value, result, quadCounter++);
-            inserer_TQ(TQ, quad);
-            strcpy((yyval.compose).value, result);
-        } else {
-            printf("Erreur Semantique : Type incompatible\n");
-            yyerror('c');
-        }
-
-     }
-    break;
-
-  case 30:
-/* Line 1792 of yacc.c  */
-#line 396 "parser.y"
-    {
-        printf("types %d %d \n \n ", (yyvsp[(1) - (3)].compose).type, (yyvsp[(3) - (3)].compose).type);
-        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
-            
-            float val1 = atof((yyvsp[(1) - (3)].compose).value);
-            float val2 = atof((yyvsp[(3) - (3)].compose).value);
-            float val = val1 / val2;
-            char result[255];
-
-            if(ceilf(val) == val){
-                itoa((int)(val), result, 10);
-                (yyval.compose).type = INT;
-            } else {
-                sprintf(result, "%.2f", val);
-                (yyval.compose).type = REAL;
-            }
-            quad = creer_Q("%", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value, result, quadCounter++);
-            inserer_TQ(TQ, quad);
-            strcpy((yyval.compose).value, result);
-        } else {
-            printf("Erreur Semantique : Type incompatible\n");
-            yyerror('c');
-        }
-     }
-    break;
-
-  case 31:
-/* Line 1792 of yacc.c  */
-#line 421 "parser.y"
-    {
-        //printf("types %d %d \n \n ", $1.type, $3.type);
-        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
-            
-            float val1 = atof((yyvsp[(1) - (3)].compose).value);
-            float val2 = atof((yyvsp[(3) - (3)].compose).value);
-            float val = val1 * val2;
-            char result[255];
-
-            if(ceilf(val) == val){
-                itoa((int)(val), result, 10);
-                (yyval.compose).type = INT;
-            } else {
-                sprintf(result, "%.2f", val);
-                (yyval.compose).type = REAL;
-            }
-            quad = creer_Q("*", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value, result, quadCounter++);
-            inserer_TQ(TQ, quad);
-            strcpy((yyval.compose).value, result);
-        } else {
-            printf("Erreur Semantique : Type incompatible\n");
-            yyerror('c');
-        }
-     }
-    break;
-
-  case 32:
-/* Line 1792 of yacc.c  */
-#line 462 "parser.y"
-    {
-        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
-            //printf("\nHOUNA \n");
-            (yyval.compose).type = BOOL;
-            float val1 = atof((yyvsp[(1) - (3)].compose).value);
-            float val2 = atof((yyvsp[(3) - (3)].compose).value);
-            char result[255];
-
-            if(val1 > val2) {
-                strcpy(result, "true");
-            } else {
-                strcpy(result, "false");
-            }
-
-            quad = creer_Q(">", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value, result, quadCounter++);
-            inserer_TQ(TQ, quad);
-            strcpy((yyval.compose).value, result);
+            (yyval.compose).id = NULL;
+            printf("SUMAFT : %s %s %s\n \n", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value, (yyval.compose).value);
         } else {
             printf("Erreur Semantique : Type incompatible\n");
             yyerror('c');
@@ -1937,47 +1903,76 @@ yyreduce:
 
   case 33:
 /* Line 1792 of yacc.c  */
-#line 484 "parser.y"
+#line 417 "parser.y"
     {
         if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
-            (yyval.compose).type = BOOL;
+                        //for quads 
+            char op1[255];
+            char op2[255];
+            if((yyvsp[(1) - (3)].compose).id != NULL){strcpy(op1, (yyvsp[(1) - (3)].compose).id); } else {strcpy(op1, (yyvsp[(1) - (3)].compose).value);}
+            if((yyvsp[(3) - (3)].compose).id != NULL){strcpy(op2, (yyvsp[(3) - (3)].compose).id);} else {strcpy(op2, (yyvsp[(3) - (3)].compose).value);}
             float val1 = atof((yyvsp[(1) - (3)].compose).value);
             float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            float val = val1 - val2;
             char result[255];
-            if(val1 >= val2) {
-                //expression is true
-                strcpy(result, "true");
+            
+            //type
+            if(ceilf(val) == val){
+                itoa((int)(val), result, 10);
+                (yyval.compose).type = INT;
             } else {
-                strcpy(result, "false");
+                sprintf(result, "%.2f", val);
+                (yyval.compose).type = REAL;
             }
-            quad = creer_Q(">=", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value, result, quadCounter++);
+            //valeur 
+            (yyval.compose).value = result;
+
+            //insertion du quadruplet
+            quad = creer_Q("-", op1, op2, (yyval.compose).value, quadCounter++);
             inserer_TQ(TQ, quad);
-            strcpy((yyval.compose).value, result);
+            
+            (yyval.compose).id = NULL;
         } else {
             printf("Erreur Semantique : Type incompatible\n");
             yyerror('c');
         }
+
      }
     break;
 
   case 34:
 /* Line 1792 of yacc.c  */
-#line 505 "parser.y"
+#line 451 "parser.y"
     {
         if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
-            (yyval.compose).type = BOOL;
+                        //for quads 
+            char op1[255];
+            char op2[255];
+            if((yyvsp[(1) - (3)].compose).id != NULL){strcpy(op1, (yyvsp[(1) - (3)].compose).id); } else {strcpy(op1, (yyvsp[(1) - (3)].compose).value);}
+            if((yyvsp[(3) - (3)].compose).id != NULL){strcpy(op2, (yyvsp[(3) - (3)].compose).id);} else {strcpy(op2, (yyvsp[(3) - (3)].compose).value);}
+
             float val1 = atof((yyvsp[(1) - (3)].compose).value);
             float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            float val = val1 / val2;
             char result[255];
-            if(val1 < val2) {
-                //expression is true
-                strcpy(result, "true");
+
+            
+            //type
+            if(ceilf(val) == val){
+                itoa((int)(val), result, 10);
+                (yyval.compose).type = INT;
             } else {
-                strcpy(result, "false");
+                sprintf(result, "%.2f", val);
+                (yyval.compose).type = REAL;
             }
-            quad = creer_Q("<", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value, result, quadCounter++);
+            //valeur 
+            (yyval.compose).value = result;
+
+            //insertion du quadruplet
+            quad = creer_Q("%", op1, op2, (yyval.compose).value, quadCounter++);
             inserer_TQ(TQ, quad);
-            strcpy((yyval.compose).value, result);
+            
+            (yyval.compose).id = NULL;
         } else {
             printf("Erreur Semantique : Type incompatible\n");
             yyerror('c');
@@ -1987,164 +1982,486 @@ yyreduce:
 
   case 35:
 /* Line 1792 of yacc.c  */
-#line 525 "parser.y"
+#line 487 "parser.y"
     {
+        printf("MULT: %s %s \n \n", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value);
         if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
-            (yyval.compose).type = BOOL;
+            char op1[255];
+            char op2[255];
+            if((yyvsp[(1) - (3)].compose).id != NULL){strcpy(op1, (yyvsp[(1) - (3)].compose).id); } else {strcpy(op1, (yyvsp[(1) - (3)].compose).value);}
+            if((yyvsp[(3) - (3)].compose).id != NULL){strcpy(op2, (yyvsp[(3) - (3)].compose).id);} else {strcpy(op2, (yyvsp[(3) - (3)].compose).value);}
+
             float val1 = atof((yyvsp[(1) - (3)].compose).value);
             float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            float val = val1 * val2;
             char result[255];
-            if(val1 <= val2) {
-                //expression is true
-                strcpy(result, "true");
+            
+
+            //for quads 
+
+            
+            //type
+            if(ceilf(val) == val){
+                itoa((int)(val), result, 10);
+                (yyval.compose).type = INT;
             } else {
-                strcpy(result, "false");
+                sprintf(result, "%.2f", val);
+                (yyval.compose).type = REAL;
             }
-            quad = creer_Q("<=", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value, result, quadCounter++);
+            //valeur 
+            (yyval.compose).value = result;
+
+            //insertion du quadruplet
+            quad = creer_Q("*", op1, op2, (yyval.compose).value, quadCounter++);
             inserer_TQ(TQ, quad);
-            strcpy((yyval.compose).value, result);
+            
+            (yyval.compose).id = NULL;
         } else {
             printf("Erreur Semantique : Type incompatible\n");
             yyerror('c');
         }
+        printf("SUMBT2 : %s %s %s\n \n", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value, (yyval.compose).value);
      }
     break;
 
   case 36:
 /* Line 1792 of yacc.c  */
-#line 545 "parser.y"
+#line 526 "parser.y"
     {
-        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
-            (yyval.compose).type = BOOL;
-            float val1 = atof((yyvsp[(1) - (3)].compose).value);
-            float val2 = atof((yyvsp[(3) - (3)].compose).value);
-            char result[255];
-            if(val1 == val2) {
-                //expression is true
-                strcpy(result, "true");
+        
+            if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+                char op1[255];
+                char op2[255];
+                if((yyvsp[(1) - (3)].compose).id != NULL){strcpy(op1, (yyvsp[(1) - (3)].compose).id); } else {strcpy(op1, (yyvsp[(1) - (3)].compose).value);}
+                if((yyvsp[(3) - (3)].compose).id != NULL){strcpy(op2, (yyvsp[(3) - (3)].compose).id);} else {strcpy(op2, (yyvsp[(3) - (3)].compose).value);}
+                float val1 = atof((yyvsp[(1) - (3)].compose).value);
+                float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            
+                char result[255];
+                //comapraison 
+                if(val1 > val2) {
+                    //expression is true
+                    strcpy(result, "true");
+                } else {
+                    strcpy(result, "false");
+                }
+                //for quads 
+                
+                //type
+                (yyval.compose).type = BOOL;
+                //valeur 
+                (yyval.compose).value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q(">", op1, op2, (yyval.compose).value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                (yyval.compose).id = NULL;
             } else {
-                strcpy(result, "false");
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
             }
-            quad = creer_Q("==", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value, result, quadCounter++);
-            inserer_TQ(TQ, quad);
-            strcpy((yyval.compose).value, result);
-        } else {
-            printf("Erreur Semantique : Type incompatible\n");
-            yyerror('c');
-        }
+            
      }
     break;
 
   case 37:
 /* Line 1792 of yacc.c  */
-#line 565 "parser.y"
+#line 562 "parser.y"
     {
-        if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
-            (yyval.compose).type = BOOL;
-            float val1 = atof((yyvsp[(1) - (3)].compose).value);
-            float val2 = atof((yyvsp[(3) - (3)].compose).value);
-            char result[255];
-            if(val1 != val2) {
-                //expression is true
-                strcpy(result, "true");
+                    if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+                char op1[255];
+                char op2[255];
+                if((yyvsp[(1) - (3)].compose).id != NULL){strcpy(op1, (yyvsp[(1) - (3)].compose).id); } else {strcpy(op1, (yyvsp[(1) - (3)].compose).value);}
+                if((yyvsp[(3) - (3)].compose).id != NULL){strcpy(op2, (yyvsp[(3) - (3)].compose).id);} else {strcpy(op2, (yyvsp[(3) - (3)].compose).value);}
+                float val1 = atof((yyvsp[(1) - (3)].compose).value);
+                float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            
+                char result[255];
+                //comapraison 
+                if(val1 >= val2) {
+                    //expression is true
+                    strcpy(result, "true");
+                } else {
+                    strcpy(result, "false");
+                }
+                //for quads 
+                
+                //type
+                (yyval.compose).type = BOOL;
+                //valeur 
+                (yyval.compose).value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q(">=", op1, op2, (yyval.compose).value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                (yyval.compose).id = NULL;
             } else {
-                strcpy(result, "false");
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
             }
-            quad = creer_Q("!=", (yyvsp[(1) - (3)].compose).value, (yyvsp[(3) - (3)].compose).value, result, quadCounter++);
-            inserer_TQ(TQ, quad);
-            strcpy((yyval.compose).value, result);
-        } else {
-            printf("Erreur Semantique : Type incompatible\n");
-            yyerror('c');
-        }
+            
      }
     break;
 
   case 38:
 /* Line 1792 of yacc.c  */
-#line 588 "parser.y"
+#line 598 "parser.y"
+    {
+                    if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+                char op1[255];
+                char op2[255];
+                if((yyvsp[(1) - (3)].compose).id != NULL){strcpy(op1, (yyvsp[(1) - (3)].compose).id); } else {strcpy(op1, (yyvsp[(1) - (3)].compose).value);}
+                if((yyvsp[(3) - (3)].compose).id != NULL){strcpy(op2, (yyvsp[(3) - (3)].compose).id);} else {strcpy(op2, (yyvsp[(3) - (3)].compose).value);}
+                float val1 = atof((yyvsp[(1) - (3)].compose).value);
+                float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            
+                char result[255];
+                //comapraison 
+                if(val1 < val2) {
+                    //expression is true
+                    strcpy(result, "true");
+                } else {
+                    strcpy(result, "false");
+                }
+                //for quads 
+                
+                //type
+                (yyval.compose).type = BOOL;
+                //valeur 
+                (yyval.compose).value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q("<", op1, op2, (yyval.compose).value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                (yyval.compose).id = NULL;
+            } else {
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
+            }
+            
+     }
+    break;
+
+  case 39:
+/* Line 1792 of yacc.c  */
+#line 633 "parser.y"
+    {
+                if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+                char op1[255];
+                char op2[255];
+                if((yyvsp[(1) - (3)].compose).id != NULL){strcpy(op1, (yyvsp[(1) - (3)].compose).id); } else {strcpy(op1, (yyvsp[(1) - (3)].compose).value);}
+                if((yyvsp[(3) - (3)].compose).id != NULL){strcpy(op2, (yyvsp[(3) - (3)].compose).id);} else {strcpy(op2, (yyvsp[(3) - (3)].compose).value);}
+                float val1 = atof((yyvsp[(1) - (3)].compose).value);
+                float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            
+                char result[255];
+                //comapraison 
+                if(val1 <= val2) {
+                    //expression is true
+                    strcpy(result, "true");
+                } else {
+                    strcpy(result, "false");
+                }
+                //for quads 
+                
+                //type
+                (yyval.compose).type = BOOL;
+                //valeur 
+                (yyval.compose).value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q("<=", op1, op2, (yyval.compose).value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                (yyval.compose).id = NULL;
+            } else {
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
+            }
+            
+     }
+    break;
+
+  case 40:
+/* Line 1792 of yacc.c  */
+#line 668 "parser.y"
+    {
+            if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+                char op1[255];
+                char op2[255];
+                if((yyvsp[(1) - (3)].compose).id != NULL){strcpy(op1, (yyvsp[(1) - (3)].compose).id); } else {strcpy(op1, (yyvsp[(1) - (3)].compose).value);}
+                if((yyvsp[(3) - (3)].compose).id != NULL){strcpy(op2, (yyvsp[(3) - (3)].compose).id);} else {strcpy(op2, (yyvsp[(3) - (3)].compose).value);}
+                float val1 = atof((yyvsp[(1) - (3)].compose).value);
+                float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            
+                char result[255];
+                //comapraison 
+                if(val1 == val2) {
+                    //expression is true
+                    strcpy(result, "true");
+                } else {
+                    strcpy(result, "false");
+                }
+                //for quads 
+                
+                //type
+                (yyval.compose).type = BOOL;
+                //valeur 
+                (yyval.compose).value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q("==", op1, op2, (yyval.compose).value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                (yyval.compose).id = NULL;
+            } else {
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
+            }
+     }
+    break;
+
+  case 41:
+/* Line 1792 of yacc.c  */
+#line 702 "parser.y"
+    {
+            if(isNumeric((yyvsp[(1) - (3)].compose).type) && isNumeric((yyvsp[(3) - (3)].compose).type)) {
+                char op1[255];
+                char op2[255];
+                if((yyvsp[(1) - (3)].compose).id != NULL){strcpy(op1, (yyvsp[(1) - (3)].compose).id); } else {strcpy(op1, (yyvsp[(1) - (3)].compose).value);}
+                if((yyvsp[(3) - (3)].compose).id != NULL){strcpy(op2, (yyvsp[(3) - (3)].compose).id);} else {strcpy(op2, (yyvsp[(3) - (3)].compose).value);}
+                float val1 = atof((yyvsp[(1) - (3)].compose).value);
+                float val2 = atof((yyvsp[(3) - (3)].compose).value);
+            
+                char result[255];
+                //comapraison 
+                if(val1 != val2) {
+                    //expression is true
+                    strcpy(result, "true");
+                } else {
+                    strcpy(result, "false");
+                }
+                //for quads 
+                
+                //type
+                (yyval.compose).type = BOOL;
+                //valeur 
+                (yyval.compose).value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q("!=", op1, op2, (yyval.compose).value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                (yyval.compose).id = NULL;
+            } else {
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
+            }
+     }
+    break;
+
+  case 42:
+/* Line 1792 of yacc.c  */
+#line 736 "parser.y"
+    {
+        if((yyvsp[(1) - (3)].compose).type == BOOL && (yyvsp[(3) - (3)].compose).type == BOOL) {
+                char op1[255];
+                char op2[255];
+                if((yyvsp[(1) - (3)].compose).id != NULL){strcpy(op1, (yyvsp[(1) - (3)].compose).id); } else {strcpy(op1, (yyvsp[(1) - (3)].compose).value);}
+                if((yyvsp[(3) - (3)].compose).id != NULL){strcpy(op2, (yyvsp[(3) - (3)].compose).id);} else {strcpy(op2, (yyvsp[(3) - (3)].compose).value);}
+            
+                char result[255];
+                //comapraison 
+                if(strcmp((yyvsp[(1) - (3)].compose).value, "false") == 0 || strcmp((yyvsp[(3) - (3)].compose).value, "false") == 0 ) {
+                    //if any of them is false 
+                    //expression is true
+                    strcpy(result, "false");
+                } else {
+                    strcpy(result, "true");
+                }
+                //for quads 
+                
+                //type
+                (yyval.compose).type = BOOL;
+                //valeur 
+                (yyval.compose).value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q("&&", op1, op2, (yyval.compose).value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                (yyval.compose).id = NULL;
+            } else {
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
+            }
+    }
+    break;
+
+  case 43:
+/* Line 1792 of yacc.c  */
+#line 769 "parser.y"
+    {
+        if((yyvsp[(1) - (3)].compose).type == BOOL && (yyvsp[(3) - (3)].compose).type == BOOL) {
+                char op1[255];
+                char op2[255];
+                if((yyvsp[(1) - (3)].compose).id != NULL){strcpy(op1, (yyvsp[(1) - (3)].compose).id); } else {strcpy(op1, (yyvsp[(1) - (3)].compose).value);}
+                if((yyvsp[(3) - (3)].compose).id != NULL){strcpy(op2, (yyvsp[(3) - (3)].compose).id);} else {strcpy(op2, (yyvsp[(3) - (3)].compose).value);}
+            
+                char result[255];
+                //comapraison 
+                if(strcmp((yyvsp[(1) - (3)].compose).value, "true") == 0 || strcmp((yyvsp[(3) - (3)].compose).value, "true") == 0 ) {
+                    strcpy(result, "true");
+                } else {
+                    strcpy(result, "false");
+                }
+                //for quads 
+                
+                //type
+                (yyval.compose).type = BOOL;
+                //valeur 
+                (yyval.compose).value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q("||", op1, op2, (yyval.compose).value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                (yyval.compose).id = NULL;
+            } else {
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
+            }
+    }
+    break;
+
+  case 44:
+/* Line 1792 of yacc.c  */
+#line 800 "parser.y"
+    {
+        if((yyvsp[(2) - (2)].compose).type == BOOL) {
+                char op1[255];
+                if((yyvsp[(2) - (2)].compose).id != NULL){strcpy(op1, (yyvsp[(2) - (2)].compose).id); } else {strcpy(op1, (yyvsp[(2) - (2)].compose).value);}
+            
+                char result[255];
+                //comapraison 
+                if(strcmp((yyvsp[(2) - (2)].compose).value, "true") == 0) {
+                    strcpy(result, "false");
+                } else {
+                    strcpy(result, "true");
+                }
+                //for quads 
+                
+                //type
+                (yyval.compose).type = BOOL;
+                //valeur 
+                (yyval.compose).value = result;
+
+                //insertion du quadruplet
+                quad = creer_Q("!", op1, "", (yyval.compose).value, quadCounter++);
+                inserer_TQ(TQ, quad);
+                
+                (yyval.compose).id = NULL;
+            } else {
+                printf("Erreur Semantique : Type incompatible\n");
+                yyerror('c');
+            }
+
+     }
+    break;
+
+  case 45:
+/* Line 1792 of yacc.c  */
+#line 830 "parser.y"
     {
         (yyval.compose).value = (yyvsp[(2) - (3)].compose).value;
         (yyval.compose).type = (yyvsp[(2) - (3)].compose).type;
      }
     break;
 
-  case 39:
-/* Line 1792 of yacc.c  */
-#line 601 "parser.y"
-    {(yyval.type) = yylval.type;}
-    break;
-
-  case 40:
-/* Line 1792 of yacc.c  */
-#line 602 "parser.y"
-    {(yyval.type) = yylval.type;}
-    break;
-
-  case 41:
-/* Line 1792 of yacc.c  */
-#line 603 "parser.y"
-    {(yyval.type) = yylval.type;}
-    break;
-
-  case 42:
-/* Line 1792 of yacc.c  */
-#line 604 "parser.y"
-    {(yyval.type) = yylval.type;}
-    break;
-
-  case 43:
-/* Line 1792 of yacc.c  */
-#line 608 "parser.y"
-    {(yyval.compose).value = yylval.value; (yyval.compose).type = INT;}
-    break;
-
-  case 44:
-/* Line 1792 of yacc.c  */
-#line 609 "parser.y"
-    {(yyval.compose).value = yylval.value; (yyval.compose).type = BOOL;}
-    break;
-
-  case 45:
-/* Line 1792 of yacc.c  */
-#line 610 "parser.y"
-    {(yyval.compose).value = yylval.value; (yyval.compose).type = REAL;}
-    break;
-
   case 46:
 /* Line 1792 of yacc.c  */
-#line 611 "parser.y"
-    {(yyval.compose).value = yylval.value; (yyval.compose).type = STR;}
+#line 843 "parser.y"
+    {(yyval.type) = yylval.type;}
+    break;
+
+  case 47:
+/* Line 1792 of yacc.c  */
+#line 844 "parser.y"
+    {(yyval.type) = yylval.type;}
+    break;
+
+  case 48:
+/* Line 1792 of yacc.c  */
+#line 845 "parser.y"
+    {(yyval.type) = yylval.type;}
+    break;
+
+  case 49:
+/* Line 1792 of yacc.c  */
+#line 846 "parser.y"
+    {(yyval.type) = yylval.type;}
     break;
 
   case 50:
 /* Line 1792 of yacc.c  */
-#line 620 "parser.y"
-    {
-        strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value);
-        (yyval.compose).type =  (yyvsp[(1) - (1)].compose).type;
-        }
+#line 850 "parser.y"
+    {(yyval.compose).value = yylval.value; (yyval.compose).type = INT;}
     break;
 
   case 51:
 /* Line 1792 of yacc.c  */
-#line 624 "parser.y"
-    { strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value); (yyval.compose).type = (yyvsp[(1) - (1)].compose).type;}
+#line 851 "parser.y"
+    {(yyval.compose).value = yylval.value; (yyval.compose).type = BOOL;}
     break;
 
   case 52:
 /* Line 1792 of yacc.c  */
-#line 628 "parser.y"
+#line 852 "parser.y"
+    {(yyval.compose).value = yylval.value; (yyval.compose).type = REAL;}
+    break;
+
+  case 53:
+/* Line 1792 of yacc.c  */
+#line 853 "parser.y"
+    {(yyval.compose).value = yylval.value; (yyval.compose).type = STR;}
+    break;
+
+  case 57:
+/* Line 1792 of yacc.c  */
+#line 862 "parser.y"
     {
+        (yyval.compose).id = (yyvsp[(1) - (1)].compose).id;
+        (yyval.compose).value =  (yyvsp[(1) - (1)].compose).value;
+        (yyval.compose).type =  (yyvsp[(1) - (1)].compose).type;
+
+
+        }
+    break;
+
+  case 58:
+/* Line 1792 of yacc.c  */
+#line 869 "parser.y"
+    { strcpy((yyval.compose).value, (yyvsp[(1) - (1)].compose).value); (yyval.compose).type = (yyvsp[(1) - (1)].compose).type;}
+    break;
+
+  case 59:
+/* Line 1792 of yacc.c  */
+#line 873 "parser.y"
+    {
+    (yyval.compose).id = (yyvsp[(1) - (1)].id);
     NODESYMTABLE *node = rechercher(TS, (yyvsp[(1) - (1)].id));
-    strcpy((yyval.compose).value, node->info.Value);
+    (yyval.compose).value =  node->info.Value;
     (yyval.compose).type =  node->info.Type;
+
     }
     break;
 
 
 /* Line 1792 of yacc.c  */
-#line 2148 "parser.tab.c"
+#line 2465 "parser.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2376,7 +2693,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 634 "parser.y"
+#line 881 "parser.y"
 
 int yyerror(const char *s) {
   printf("error %s\n",s);

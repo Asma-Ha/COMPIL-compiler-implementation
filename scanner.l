@@ -22,13 +22,16 @@ BOOL "true"|"false"
 STRING \".*\"
 
 %x comment 
-
-
 %%
-
 "#" return (KEY);
 "program" return (PROGKEY);
 "def" return (SECTDEFKEY);
+"$" {BEGIN(comment); /*start comment state*/}
+<comment>"$" {BEGIN(INITIAL); /*when finding a $ => go back to regular state*/}
+<comment>\n {/* do nothing */}
+<comment>. {/* do nothing */}
+
+
 "end" return (ENDPROG);
 "{" return (CURLYSTART);
 "}" return (CURLYEND);
@@ -46,15 +49,12 @@ STRING \".*\"
 "<=" return (INFEQ);
 "==" return (EQ);
 "!=" return (NEQ);
-"∧" return (AND);
-"∨" return (OR);
+"&&" return (AND);
+"||" return (OR);
 "!" return(NOT);
 
 ";" return (END);
-"$" {BEGIN(comment); /*start comment state*/}
-<comment>"$" {BEGIN(INITIAL); /*when finding a $ => go back to regular state*/}
-<comment>\n {/* do nothing */}
-<comment>. {/* do nothing */}
+
 {MODELS} return (MODELS);
 {MAIN} return (MAIN);
 {blank}  { /* ignore whitespace */ }
@@ -66,6 +66,8 @@ STRING \".*\"
     yylval.type = CONST;
     return (KEYCONST);}
 "for" return (KEYFOR);
+"while" return (KEYWHILE);
+"do" return (KEYDO);
 "if" return (KEYIF);
 "then" return (KEYTHEN);
 "else" return (KEYELSE);
@@ -121,6 +123,7 @@ STRING \".*\"
     //printf(yylval.value);
     return (TYPEBOOL);
 }
+
 {STRING} {
     yylval.value = strdup(yytext);
     //printf(yylval.value);
@@ -131,6 +134,7 @@ STRING \".*\"
     yylval.id =  strdup(yytext);
     return (IDENTIFIER);
 }
+
 
 
 . {

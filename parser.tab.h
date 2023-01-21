@@ -57,43 +57,43 @@ extern int yydebug;
      KEYFOR = 266,
      IDENTIFIER = 267,
      ENDPROG = 268,
-     token = 269,
-     KEYARRAY = 270,
-     ASSIGN = 271,
-     KEYVAR = 272,
-     KEYCONST = 273,
-     KEYIF = 274,
-     KEYELSE = 275,
-     KEYTHEN = 276,
-     TYPEINT = 277,
-     TYPEREAL = 278,
-     TYPEBOOL = 279,
-     TYPESTR = 280,
-     TWODOTS = 281,
-     DECINT = 282,
-     DECREAL = 283,
-     DECBOOL = 284,
-     DECSTR = 285,
-     COMMA = 286,
-     RETURNKEY = 287,
-     BRACKETSTART = 288,
-     BRACKETEND = 289,
-     PARENTESESTART = 290,
-     PARENTESEEND = 291,
-     AND = 292,
-     OR = 293,
-     NOT = 294,
-     PLUS = 295,
-     MINUS = 296,
-     MULT = 297,
-     DIV = 298,
-     SUP = 299,
-     SUPEQ = 300,
-     INF = 301,
-     INFEQ = 302,
-     EQ = 303,
-     NEQ = 304,
-     NEG = 305
+     KEYARRAY = 269,
+     ASSIGN = 270,
+     KEYVAR = 271,
+     KEYCONST = 272,
+     KEYIF = 273,
+     KEYELSE = 274,
+     KEYTHEN = 275,
+     KEYWHILE = 276,
+     KEYDO = 277,
+     TYPEINT = 278,
+     TYPEREAL = 279,
+     TYPEBOOL = 280,
+     TYPESTR = 281,
+     TWODOTS = 282,
+     DECINT = 283,
+     DECREAL = 284,
+     DECBOOL = 285,
+     DECSTR = 286,
+     COMMA = 287,
+     RETURNKEY = 288,
+     BRACKETSTART = 289,
+     BRACKETEND = 290,
+     PARENTESESTART = 291,
+     PARENTESEEND = 292,
+     AND = 293,
+     OR = 294,
+     NOT = 295,
+     PLUS = 296,
+     MINUS = 297,
+     MULT = 298,
+     DIV = 299,
+     SUP = 300,
+     SUPEQ = 301,
+     INF = 302,
+     INFEQ = 303,
+     EQ = 304,
+     NEQ = 305
    };
 #endif
 
@@ -109,6 +109,7 @@ typedef union YYSTYPE
     int type;
     struct {
         char* value;
+        char* id;
         int type;
     } compose;
 
@@ -116,7 +117,7 @@ typedef union YYSTYPE
 
 
 /* Line 2058 of yacc.c  */
-#line 120 "parser.tab.h"
+#line 121 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
