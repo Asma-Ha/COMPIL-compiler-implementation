@@ -13,7 +13,7 @@ def main{
 
     o = 7 <= 6;
 
-    var l : str = "false bitch";
+    var l : str = "false"
 
 
 };
